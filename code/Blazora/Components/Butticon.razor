@@ -1,0 +1,28 @@
+﻿
+
+<div class="div32 @(action != null ? "activable" : "")" @onclick="@action">    
+    
+    @if (picture_filename != null)
+    {
+        <img class="icon32" style="
+            top: 2px;
+            left: 2px;
+            position: absolute;
+            " 
+            src="Images/@picture_filename"/>
+    }
+
+    @if (val > 0)
+    {
+        <div class="text_white_black" style="
+        position: absolute;
+        bottom: 2px;
+        right: 2px;
+        line-height: 10px;
+        font-family: MONOSPACE;
+    ">@val</div>
+    }
+</div>
+
+
+

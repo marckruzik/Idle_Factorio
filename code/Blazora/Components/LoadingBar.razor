@@ -1,0 +1,67 @@
+﻿
+
+<style>
+    .progressbar_container
+    {
+        position: relative;
+        background-color: lightgrey;
+        border: 1px solid black;
+    }
+
+    .progressbar_content
+    {
+        position: absolute;
+        top: 0px;
+        left: 0px;
+        background-color: forestgreen;
+    }
+</style>
+
+<div class="progressbar_container" style="
+    height: @(height)px;
+    width: @(width)px;">
+
+    <div class="progressbar_content" style="
+        height: @(height-2)px;
+        width: @(get_content_width())px;">
+
+
+    </div>
+
+</div>
+
+
+
+@code {
+
+    [Parameter] public int val_current { get; set; } = 0;
+    [Parameter] public int val_max { get; set; } = 100;
+    [Parameter] public int width { get; set; }
+    [Parameter] public int height { get; set; }
+
+    public int get_content_width ()
+    {
+        int val = this.val_current;
+        if (val < 0)
+        {
+            val = 0;
+        }
+        else if (val > this.val_max)
+        {
+            val = this.val_max;
+        }
+
+        float percentage = this.val_current / (float)this.val_max;
+
+        float content_width_original = percentage * (this.width - 1);
+        content_width_original = (float)Math.Ceiling (content_width_original);
+        if (content_width_original > this.width - 1)
+        {
+            content_width_original = this.width - 1;
+        }
+        int content_width = (int)content_width_original;
+
+        return content_width;
+    }
+
+}

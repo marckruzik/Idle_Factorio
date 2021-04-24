@@ -1,0 +1,48 @@
+﻿
+
+#game {
+    
+}
+
+    #game button:disabled
+    {
+        background-color: #667380;
+        border-color: #667380;
+    }
+
+
+
+    .icon32
+    {
+        width: 32px;
+        height: 32px;
+    }
+
+.div32
+{
+    width: 36px;
+    height: 36px;
+    border: 1px solid #444444;
+    background-color: #b2b1b1;
+    position: relative;
+}
+
+
+@media (hover: hover) and (pointer: fine)
+{
+    .div32.activable:hover
+    {
+        background-color: #dbdbdb;
+    }
+}
+
+.activable
+{
+    cursor: pointer;
+}
+
+.text_white_black
+{
+    color: white;
+    text-shadow: -1px 1px 0 #000, 1px 1px 0 #000, 1px -1px 0 #000, -1px -1px 0 #000;
+}

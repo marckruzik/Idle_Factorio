@@ -1,0 +1,53 @@
+﻿@page "/factorio" 
+
+@implements IDisposable
+@inherits Game
+
+@using Blazora.Components
+@using NS_Manager_Resource
+@using NS_Game_Engine
+
+
+
+@code{
+    
+}
+
+
+
+<h3>Factorio</h3>
+
+<div style="display: inline-block;">
+    <Butticon picture_filename="pickaxe.png" action="@MR("coal").increment" />
+</div>
+
+<div style="display: inline-block; margin-left: 16px; margin-right: 16px;">
+    <LoadingBar width="100" height="16" val_current="@MR("coal").amount" val_max="10"/>
+</div>
+
+<div style="display: inline-block;">
+    <Butticon picture_filename="mine_coal.png" />
+</div>
+
+<div>
+    Coal: @MR("coal").amount
+</div>
+
+<div>
+    <Chest picture_filename="coal.png" val="@MR("coal").amount"/>
+</div>
+
+<div>
+    <LoadingBar width="100" height="16" val_current="@(MR("coal").amount/2)" val_max="10"/>
+</div>
+
+
+@code{
+
+    public static Resource MR(string resource_name)
+    {
+        return Game_Engine.self.manager_resource.from_resource_name_get_resource (resource_name);
+    }
+
+
+}
