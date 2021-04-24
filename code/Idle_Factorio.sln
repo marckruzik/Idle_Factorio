@@ -9,6 +9,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Manager_Resource", "Manager
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Game_Engine", "Game_Engine\Game_Engine.csproj", "{5C5D0C01-FF0D-4797-88CE-858F484A247E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test_Idle_Factorio", "Test_Idle_Factorio\Test_Idle_Factorio.csproj", "{0A3524BF-D9F8-4E08-9EBA-0624A735C712}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{5C5D0C01-FF0D-4797-88CE-858F484A247E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5C5D0C01-FF0D-4797-88CE-858F484A247E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5C5D0C01-FF0D-4797-88CE-858F484A247E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0A3524BF-D9F8-4E08-9EBA-0624A735C712}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0A3524BF-D9F8-4E08-9EBA-0624A735C712}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0A3524BF-D9F8-4E08-9EBA-0624A735C712}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0A3524BF-D9F8-4E08-9EBA-0624A735C712}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

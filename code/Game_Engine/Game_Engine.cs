@@ -7,11 +7,16 @@ using NS_Manager_Resource;
 
 namespace NS_Game_Engine
 {
-    public class Game_Engine
+    public partial class Game_Engine
     {
         public static Game_Engine self;
 
         public Manager_Resource manager_resource;
+        public Manager_Job manager_job;
+
+
+        public long clock = 0;
+
 
         public static void start ()
         {
@@ -23,6 +28,7 @@ namespace NS_Game_Engine
             Game_Engine.self = new Game_Engine ();
 
             Game_Engine.self.manager_resource = create_manager_resource ();
+            Game_Engine.self.manager_job = create_manager_job ();
 
 
         }
@@ -37,5 +43,14 @@ namespace NS_Game_Engine
 
             return manager_resource;
         }
+
+
+        private static Manager_Job create_manager_job ()
+        {
+            Manager_Job manager_job = new Manager_Job ();
+
+            return manager_job;
+        }
+
     }
 }

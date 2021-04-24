@@ -1,4 +1,5 @@
-﻿using System.Threading;
+﻿using NS_Game_Engine;
+using System.Threading;
 using System.Threading.Tasks;
 
 
@@ -42,7 +43,7 @@ namespace Blazora.Pages
 
         public virtual void update_logical ()
         {
-
+            Game_Engine.self.update_logical ();
         }
 
 

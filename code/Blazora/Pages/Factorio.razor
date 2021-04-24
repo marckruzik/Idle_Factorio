@@ -21,8 +21,13 @@
     <Butticon picture_filename="pickaxe.png" action="@MR("coal").increment" />
 </div>
 
+<div style="display: inline-block;">
+    <Butticon picture_filename="pickaxe.png" action="@(() => crafting("coal*1 + time*5 => coal*2"))" />
+</div>
+
+
 <div style="display: inline-block; margin-left: 16px; margin-right: 16px;">
-    <LoadingBar width="100" height="16" val_current="@MR("coal").amount" val_max="10"/>
+    <LoadingBar width="100" height="16" val_current="@MR("coal").quantity" val_max="10"/>
 </div>
 
 <div style="display: inline-block;">
@@ -30,24 +35,45 @@
 </div>
 
 <div>
-    Coal: @MR("coal").amount
+    Coal: @MR("coal").quantity
 </div>
 
 <div>
-    <Chest picture_filename="coal.png" val="@MR("coal").amount"/>
+    <Chest picture_filename="coal.png" val="@MR("coal").quantity"/>
 </div>
 
 <div>
-    <LoadingBar width="100" height="16" val_current="@(MR("coal").amount/2)" val_max="10"/>
+    <LoadingBar width="100" height="16" val_current="@get_job_time_percentage()" val_max="100"/>
 </div>
 
 
 @code{
 
-    public static Resource MR(string resource_name)
+    public static Resource_Stack MR(string resource_name)
     {
-        return Game_Engine.self.manager_resource.from_resource_name_get_resource (resource_name);
+        return Game_Engine.self.manager_resource.from_resource_name_get_resource_stack (resource_name);
     }
 
 
+    public void crafting (string recipe_text)
+    {
+        Recipe recipe = Recipe.from_recipe_text_get_recipe (recipe_text);
+
+        Game_Engine.self.from_recipe_crafting_add_job (recipe);
+    }
+
+
+    public int get_job_time_percentage ()
+    {
+        if (Game_Engine.self.manager_job.list_job.Count == 0)
+        {
+            return 0;
+        }
+
+        Job job = Game_Engine.self.manager_job.list_job.Last ();
+        float percentage_done = job.get_percentage_done ();
+        int perc = (int)(percentage_done*100);
+
+        return perc;
+    }
 }
