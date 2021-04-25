@@ -3,17 +3,17 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 
-
+using System.Timers;
 
 
 namespace Blazora.Pages
 {
     public partial class Game_Page
     {
-        private Timer timer_refresh;
-        private Timer timer_logic;
+        private System.Timers.Timer timer_refresh;
+        private System.Timers.Timer timer_logic;
 
-        public static event Action OnChange;
+        public static event Action graphical_action;
 
         protected override async Task OnInitializedAsync ()
         {
@@ -25,7 +25,7 @@ namespace Blazora.Pages
         {
             base.OnInitialized ();
 
-            Blazora.Pages.Game_Page.OnChange += StateHasChanged;
+            Blazora.Pages.Game_Page.graphical_action += StateHasChanged;
         }
 
 
@@ -33,34 +33,44 @@ namespace Blazora.Pages
         {
             if (this.timer_logic == null)
             {
-                this.timer_logic = new Timer (new TimerCallback (_ =>
-                {
-                    update_logical ();
-                }), null, 1000, 1000);
+                this.timer_logic = new System.Timers.Timer (15);
+                this.timer_logic.Elapsed += NotifyTimerElapsed;
+                this.timer_logic.AutoReset = true;
+                this.timer_logic.Enabled = true;
             }
 
 
-            this.timer_refresh = new Timer (new TimerCallback (_ =>
-            {
-                update_graphical ();
-            }), null, 100, 100);
-
+            this.timer_refresh = new System.Timers.Timer (100);
+            this.timer_refresh.Elapsed += NotifyTimerElapsedGraphical;
+            this.timer_refresh.AutoReset = true;
+            this.timer_refresh.Enabled = true;
 
         }
 
 
-        public virtual void update_logical ()
+        private void NotifyTimerElapsed (object source, ElapsedEventArgs e)
         {
-            Game_Engine.self.update_logical ();
+            logical_update ();
+        }
+
+        private void NotifyTimerElapsedGraphical (object source, ElapsedEventArgs e)
+        {
+            graphical_update ();
         }
 
 
-        public virtual void update_graphical ()
+        public virtual void logical_update ()
         {
-            Game_Engine.self.update_graphical ();
+            Game_Engine.self.logical_update ();
+        }
+
+
+        public virtual void graphical_update ()
+        {
+            Game_Engine.self.graphical_update ();
             //InvokeAsync (StateHasChanged);
 
-            Game_Page.OnChange?.Invoke ();
+            Game_Page.graphical_action?.Invoke ();
         }
 
 
@@ -70,7 +80,7 @@ namespace Blazora.Pages
             this.timer_refresh.Dispose ();
             this.timer_logic.Dispose ();
             this.timer_logic = null;
-            Blazora.Pages.Game_Page.OnChange -= StateHasChanged;
+            Blazora.Pages.Game_Page.graphical_action -= StateHasChanged;
         }
 
 

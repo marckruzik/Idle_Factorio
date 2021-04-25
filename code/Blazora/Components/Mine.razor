@@ -15,7 +15,7 @@
 
 
 <div style="display: inline-block; margin-left: 16px; margin-right: 16px;">
-    <LoadingBar width="100" height="16" val_current="@MR(this.resource_name).quantity" val_max="10"/>
+    <LoadingBar width="100" height="16" val_func="@(() => MR(this.resource_name).quantity)" val_max="10"/>
 </div>
 
 <div style="display: inline-block;">
@@ -31,7 +31,7 @@
 </div>
 
 <div>
-    <LoadingBar width="100" height="16" val_current="@get_job_time_percentage()" val_max="100"/>
+    <LoadingBar width="100" height="16" val_func="@get_job_time_percentage" val_max="100"/>
 </div>
 
 
@@ -51,12 +51,17 @@
     public void increment (string resource_name)
     {
         MR (resource_name).increment ();
-        
+
     }
 
 
     public void crafting (string recipe_text)
     {
+        Job job = get_job ();
+        if (job != null)
+        {
+            return;
+        }
         string job_id = get_job_id ();
         crafting (recipe_text, job_id);
     }
@@ -96,6 +101,28 @@
 
         return perc;
     }
+
+
+
+
+    protected override void OnInitialized ()
+    {
+        base.OnInitialized ();
+        
+    }
+
+
+
+    public override void listener_setup ()
+    {
+        base.listener_setup ();
+        listener_add (() => MR(this.resource_name).quantity);
+    }
+
+
+
+
+
 
 
 }

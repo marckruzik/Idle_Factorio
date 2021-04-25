@@ -28,7 +28,7 @@ namespace NS_Game_Engine
             return job;
         }
 
-        public void update_logical ()
+        public void logical_update ()
         {
             time_remaining_check ();
             time_remaining_update ();

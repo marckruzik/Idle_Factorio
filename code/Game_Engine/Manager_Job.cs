@@ -29,11 +29,11 @@ namespace NS_Game_Engine
 
 
 
-        public void update_logical ()
+        public void logical_update ()
         {
             foreach (Job job in this.list_job)
             {
-                job.update_logical ();
+                job.logical_update ();
             }
 
             from_list_job_remove_job_dead ();
