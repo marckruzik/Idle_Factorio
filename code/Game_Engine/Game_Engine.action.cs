@@ -6,7 +6,7 @@ namespace NS_Game_Engine
     public partial class Game_Engine
     {
         
-        public void from_recipe_crafting_add_job (Recipe recipe)
+        public Job from_recipe_crafting_and_job_id_add_job (Recipe recipe, string job_id)
         {
             int? time_quantity = Recipe.from_recipe_get_time_quantity (recipe);
             if (time_quantity == null)
@@ -24,7 +24,10 @@ namespace NS_Game_Engine
             }; 
 
 
-            this.manager_job.from_action_and_time_total_add_job (action, time);
+            Job job = this.manager_job.from_action_and_time_total_add_job (action, time);
+            job.id = job_id;
+
+            return job;
         }
 
 

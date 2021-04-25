@@ -1,0 +1,14 @@
+﻿@implements IDisposable
+
+@code {
+    protected override void OnInitialized()
+    {
+        base.OnInitialized ();
+        Blazora.Pages.Game_Page.OnChange += StateHasChanged;
+    }
+
+    public void Dispose()
+    {
+        Blazora.Pages.Game_Page.OnChange -= StateHasChanged;
+    }
+}

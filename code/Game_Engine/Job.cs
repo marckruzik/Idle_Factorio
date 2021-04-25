@@ -13,6 +13,7 @@ namespace NS_Game_Engine
         public int time_total;
         public int time_remaining;
         public bool alive = true;
+        public string id;
 
         public static Job from_action_and_date_start_and_time_total_get_job (
             Action action, 

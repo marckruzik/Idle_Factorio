@@ -10,5 +10,13 @@
             this.clock += 1;
         }
 
+
+        public void update_graphical ()
+        {
+            
+        }
+
+
+
     }
 }

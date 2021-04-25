@@ -1,4 +1,4 @@
-﻿
+﻿@inherits Game_Component
 
 
 <style>
@@ -15,7 +15,10 @@
     }
 </style>
 
+
+
 <div class="chest">
+
     @for (int i = 0; i < 16; i++)
     {
         string pic_filename = null;
@@ -23,7 +26,6 @@
         {
             pic_filename = this.picture_filename;
         }
-
         <div class="chest_cell">
             <Butticon picture_filename=@pic_filename/>
         </div>
@@ -36,5 +38,8 @@
 
     [Parameter] public int val { get; set; }
     [Parameter] public string picture_filename { get; set; }
+
+
+
 
 }

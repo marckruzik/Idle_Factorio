@@ -2,7 +2,7 @@
 
 namespace Blazora.Components
 {
-    public partial class Butticon : ComponentBase
+    public partial class Butticon : Game_Component
     {
 
         [Parameter]
@@ -13,6 +13,8 @@ namespace Blazora.Components
 
         [Parameter]
         public int val { get; set; }
+
+
 
     }
 }

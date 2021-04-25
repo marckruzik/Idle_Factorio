@@ -11,14 +11,21 @@ namespace NS_Game_Engine
         public long clock;
 
 
-        public void from_action_and_time_total_add_job (Action action, int time_total)
+        public Job from_action_and_time_total_add_job (Action action, int time_total)
         {
             long date_start = this.clock;
             Job job = Job.from_action_and_date_start_and_time_total_get_job (action, date_start, time_total);
 
             this.list_job.Add (job);
+
+            return job;
         }
 
+
+        public Job from_job_id_find_job (string job_id)
+        {
+            return this.list_job.Find (job => job.id == job_id);
+        }
 
 
 

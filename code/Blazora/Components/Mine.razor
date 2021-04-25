@@ -1,0 +1,101 @@
+﻿
+@using NS_Manager_Resource
+@using NS_Game_Engine
+
+@using Blazora.Components
+@inherits Game_Component
+
+<div style="display: inline-block;">
+    <Butticon picture_filename="pickaxe.png" action="@(() => increment(this.resource_name))" />
+</div>
+
+<div style="display: inline-block;">
+    <Butticon picture_filename="pickaxe.png" action="@(() => crafting(this.hand_recipe_text))" />
+</div>
+
+
+<div style="display: inline-block; margin-left: 16px; margin-right: 16px;">
+    <LoadingBar width="100" height="16" val_current="@MR(this.resource_name).quantity" val_max="10"/>
+</div>
+
+<div style="display: inline-block;">
+    <Butticon picture_filename="@($"mine_{this.resource_name}.png")" />
+</div>
+
+<div>
+    Coal: @MR(this.resource_name).quantity
+</div>
+
+<div>
+    <Chest picture_filename="@($"{this.resource_name}.png")" val="@MR(this.resource_name).quantity"/>
+</div>
+
+<div>
+    <LoadingBar width="100" height="16" val_current="@get_job_time_percentage()" val_max="100"/>
+</div>
+
+
+
+
+@code {
+
+    [Parameter] public string resource_name { get; set; }
+    [Parameter] public string hand_recipe_text { get; set; }
+
+
+    public static Resource_Stack MR(string resource_name)
+    {
+        return Game_Engine.self.manager_resource.from_resource_name_get_resource_stack (resource_name);
+    }
+
+    public void increment (string resource_name)
+    {
+        MR (resource_name).increment ();
+        
+    }
+
+
+    public void crafting (string recipe_text)
+    {
+        string job_id = get_job_id ();
+        crafting (recipe_text, job_id);
+    }
+
+    public void crafting (string recipe_text, string job_id)
+    {
+        Recipe recipe = Recipe.from_recipe_text_get_recipe (recipe_text);
+
+        Game_Engine.self.from_recipe_crafting_and_job_id_add_job (recipe, job_id);
+    }
+
+    public string get_job_id ()
+    {
+        return $"mine_{this.resource_name}";
+    }
+
+
+    public Job get_job ()
+    {
+        string job_id = get_job_id ();
+        Job job = Game_Engine.self.manager_job.from_job_id_find_job (job_id);
+
+        return job;
+    }
+
+
+    public int get_job_time_percentage ()
+    {
+        Job job = get_job ();
+        if (job == null)
+        {
+            return 0;
+        }
+
+        float percentage_done = job.get_percentage_done ();
+        int perc = (int)(percentage_done*100);
+
+        return perc;
+    }
+
+
+}
