@@ -5,25 +5,23 @@
 @using Blazora.Components
 @inherits Game_Component
 
-<div style="display: inline-block;">
-    <Butticon picture_filename="pickaxe.png" action="@(() => increment(this.resource_name))" />
-</div>
+
 
 <div style="display: inline-block;">
-    <Butticon picture_filename="pickaxe.png" action="@(() => crafting(this.hand_recipe_text))" />
+    <Butticon picture_filename="pickaxe.png" action="@(() => hand_crafting(this.hand_recipe_text))" />
 </div>
-
 
 <div style="display: inline-block; margin-left: 16px; margin-right: 16px;">
-    <LoadingBar width="100" height="16" val_func="@(() => MR(this.resource_name).quantity)" val_max="10"/>
+    <LoadingBar width="100" height="16" val_func="@get_job_time_percentage" val_max="100"/>
 </div>
 
 <div style="display: inline-block;">
     <Butticon picture_filename="@($"mine_{this.resource_name}.png")" />
 </div>
 
-<div>
-    Coal: @MR(this.resource_name).quantity
+
+<div style="display: inline-block;">
+    <Butticon picture_filename="pickaxe.png" action="@(() => increment(this.resource_name))" />
 </div>
 
 <div>
@@ -31,8 +29,10 @@
 </div>
 
 <div>
-    <LoadingBar width="100" height="16" val_func="@get_job_time_percentage" val_max="100"/>
+    @(this.resource_name): @MR(this.resource_name).quantity
 </div>
+
+
 
 
 
@@ -55,13 +55,21 @@
     }
 
 
-    public void crafting (string recipe_text)
+    public void hand_crafting (string recipe_text)
     {
         Job job = get_job ();
         if (job != null)
         {
             return;
         }
+
+        Resource_Stack resource_stack = Game_Engine.self.manager_resource
+            .from_resource_name_get_resource_stack (this.resource_name);
+        if (resource_stack.amount_max_reached () == true)
+        {
+            return;
+        }
+
         string job_id = get_job_id ();
         crafting (recipe_text, job_id);
     }
@@ -108,7 +116,7 @@
     protected override void OnInitialized ()
     {
         base.OnInitialized ();
-        
+
     }
 
 

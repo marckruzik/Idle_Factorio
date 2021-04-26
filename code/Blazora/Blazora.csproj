@@ -15,12 +15,12 @@
 
   <ItemGroup>
     <Folder Include="script\" />
-    <Folder Include="wwwroot\Images\" />
+    <Folder Include="wwwroot\images\" />
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="wwwroot\Images\coal.png" />
-    <None Include="wwwroot\Images\sprite-sheet-3d3a8d8b3ece0e13191a2ea142d21131.png" />
+    <None Include="wwwroot\images\coal.png" />
+    <None Include="wwwroot\images\sprite-sheet-3d3a8d8b3ece0e13191a2ea142d21131.png" />
   </ItemGroup>
 
   <ItemGroup>

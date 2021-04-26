@@ -33,14 +33,14 @@ namespace Blazora.Pages
         {
             if (this.timer_logic == null)
             {
-                this.timer_logic = new System.Timers.Timer (15);
+                this.timer_logic = new System.Timers.Timer (16);
                 this.timer_logic.Elapsed += NotifyTimerElapsed;
                 this.timer_logic.AutoReset = true;
                 this.timer_logic.Enabled = true;
             }
 
 
-            this.timer_refresh = new System.Timers.Timer (100);
+            this.timer_refresh = new System.Timers.Timer (16);
             this.timer_refresh.Elapsed += NotifyTimerElapsedGraphical;
             this.timer_refresh.AutoReset = true;
             this.timer_refresh.Enabled = true;
