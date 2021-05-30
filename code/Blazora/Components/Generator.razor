@@ -1,0 +1,120 @@
+﻿@using BlazorApp.Shared.Models
+
+
+<style>
+
+</style>
+
+@code{
+    int s = 36;
+}
+
+
+<div style="
+    width: 256px;
+    height: 196px;
+    position: relative;
+    ">
+
+    <!-- Line 1 -->
+
+    <Cellicon picture_filename="iron_ore.png"
+                position=@(new Position (s*0, s*0, s, s))
+                text_bottom_right="199" 
+                />
+    <!--
+    <Cellicon picture_filename="inserter_1.png"
+                position=@(new Position (s*1, s*0, s, s))
+                action="@(() => Console.WriteLine("iron_inserter"))"
+                text_bottom_right="2"
+                />
+    
+    <Cellicon picture_filename="transport_belt_1.png"
+                position=@(new Position (s*2, s*0, s, s))
+                action="@(() => Console.WriteLine("iron_transport"))"
+                text_top_left="O10" 
+                text_bottom_right="1"
+                />
+    -->
+    <Cellicon picture_filename="iron_ore.png"
+                position=@(new Position (s*3, s*0, s, s))
+                action="@(() => Console.WriteLine("iron_furnace"))"
+                text_bottom_right="1/1"
+                />
+
+    <Cellicon picture_filename="furnace_stone.png"
+                position=@(new Position (s*4, s*0, s, s))
+                action="@(() => Console.WriteLine("furnace_stone"))"
+                text_bottom_right="1"
+                />
+
+    <Cellicon picture_filename="iron_plate.png"
+                position=@(new Position (s*5, s*0, s, s))
+                text_top_left="+1"
+                />
+
+
+    <!-- Line 2 -->
+    
+    <Cellicon picture_filename="coal_ore.png"
+                position=@(new Position (s*0, s*1, s, s))
+                text_bottom_right="74" 
+                />
+    <!--
+    <Cellicon picture_filename="inserter_1.png"
+                position=@(new Position (s*1, s*1, s, s))
+                action="@(() => Console.WriteLine("coal_inserter"))"
+                text_bottom_right="5"
+                />
+
+    <Cellicon picture_filename="transport_belt_1.png"
+                position=@(new Position (s*2, s*1, s, s))
+                action="@(() => Console.WriteLine("coal_transport"))"
+                text_top_left="O9.8" 
+                text_bottom_right="2"
+                />
+    -->
+    <Cellicon picture_filename="coal_ore.png"
+                position=@(new Position (s*3, s*1, s, s))
+                action="@(() => Console.WriteLine("coal_furnace"))"
+                text_bottom_right="5/1"
+                />
+
+    <Cellicon picture_filename="iron_plate.png"
+            position=@(new Position (s*7, s*1, s, s))
+            action="@(() => Console.WriteLine("chest_upgrade"))"
+            text_top_right="32"
+            text_bottom_right="16"
+            />
+
+    <!-- Line 3 -->
+    <!-- Line 4 -->
+
+    <Chest 
+           picture_filename="iron_plate.png"
+           position=@(new Position (s*0, s*2, s*8, s*2))
+           cell_size=s />
+
+    
+    <!-- Line 5 -->
+
+    
+    <Cellicon picture_filename="time.png"
+                position=@(new Position (s*0, s*4, s, s))
+                action="@(() => Console.WriteLine("time"))"
+                text_bottom_right="5"
+                />
+
+
+
+
+
+
+    </div>
+
+
+
+
+@code {
+
+}

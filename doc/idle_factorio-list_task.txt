@@ -1,0 +1,34 @@
+
+- progress bar
+
+
+- action authorized
+
+- design, generator with pickaxe
+
+- generator with pickaxe
+
+- global configuration
+ - cell size
+ 
+- Manager Resource
+ 
+- Generator furnace, working
+- Generator pickaxe, working
+
+- Generator, recipe link
+- Generator, identifier
+- Generator, manager resource
+- Generator, generation automatic
+
+
+- Pack, indicator
+
+- resource button, add
+- resource button, consume from global stock
+
+- time button, job launch
+
+- chest upgrade, pack upgrade
+
+- global resource, display

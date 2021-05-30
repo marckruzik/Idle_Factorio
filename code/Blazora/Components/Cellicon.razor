@@ -1,0 +1,220 @@
+﻿@inherits Game_Component
+@inject IJSRuntime JSRuntime
+@using BlazorApp.Shared.Models
+
+<style>
+    .layer
+    {
+        top: 0px;
+        left: 0px;
+        position: absolute;
+        width: 100%;
+        height: 100%;
+    }
+
+    .text_wb
+    {
+        color: white;
+        text-shadow: -1px 1px 0 #000, 1px 1px 0 #000, 1px -1px 0 #000, -1px -1px 0 #000;
+        line-height: 10px;
+        font-family: MONOSPACE;
+        position: absolute;
+    }
+
+    .activable2:hover
+    {
+        cursor: pointer;
+        background-color: rgba(255, 255, 255, 0.3);
+    }
+
+
+</style>
+
+
+@{ 
+    if (action != null)
+    {
+        border = true;
+    }
+}
+
+
+<div class="container2" style="
+    position: absolute;
+    @(position != null ? $"left: {position.x}px" : "");
+    @(position != null ? $"top: {position.y}px" : "");
+    @(position != null ? $"width: {position.width}px" : "");
+    @(position != null ? $"height: {position.height}px" : "");
+    ">
+
+    <!-- background -->
+
+
+    <div class="layer" style="background-color: @(get_background_color());" />
+
+    @if (action != null)
+    {
+        <div @ref="layer_highlight" class="layer" style="" />
+    }
+
+
+    <!-- picture -->
+    @if (picture_filename != null)
+    {
+        <img class="layer" style=""
+             src="images/@picture_filename" />
+    }
+
+
+    <!-- value top left -->
+    @if (text_top_left != "")
+    {
+        <div class="layer">
+            <div class="text_wb" style="
+            top: 2px;
+            left: 2px;
+            ">
+                @text_top_left
+            </div>
+        </div>
+    }
+    <!-- value top right -->
+    @if (text_top_right != "")
+    {
+        <div class="layer">
+            <div class="text_wb" style="
+            top: 2px;
+            right: 2px;
+            ">
+                @text_top_right
+            </div>
+        </div>
+    }
+    <!-- value bottom left -->
+    @if (text_bottom_left != "")
+    {
+        <div class="layer">
+            <div class="text_wb" style="
+            bottom: 2px;
+            left: 2px;
+            ">
+                @text_bottom_left
+            </div>
+        </div>
+    }
+    <!-- value bottom right -->
+    @if (text_bottom_right != "")
+    {
+        <div class="layer">
+            <div class="text_wb" style="
+            bottom: 2px;
+            right: 2px;
+            ">
+                @text_bottom_right
+            </div>
+        </div>
+    }
+
+
+    <!-- border -->
+    @if (border == true)
+    {
+        <div class="layer" style="outline: 1px solid black; outline-offset: -1px;" />
+    }
+
+    <!-- action -->
+    @if (action != null)
+    {
+        <div class="layer" style="" @onclick="@action" @onmouseover="mouse_in" @onmouseout="mouse_out" />
+    }
+
+
+
+</div>
+
+
+
+
+@code {
+
+
+
+    [Parameter]
+    public string picture_filename { get; set; }
+
+    [Parameter]
+    public System.Action action { get; set; }
+
+    [Parameter]
+    public string text_top_left { get; set; } = "";
+    [Parameter]
+    public string text_top_right { get; set; } = "";
+    [Parameter]
+    public string text_bottom_left { get; set; } = "";
+    [Parameter]
+    public string text_bottom_right { get; set; } = "";
+    [Parameter]
+    public Position position { get; set; }
+    [Parameter]
+    public string background_color_default { get; set; } = "transparent";
+    [Parameter]
+    public bool border { get; set; } = false;
+
+
+    ElementReference layer_highlight;
+
+    public async void mouse_in()
+    {
+        await JSRuntime.InvokeVoidAsync("hover_color_set", layer_highlight, "rgba(255, 255, 255, 0.3)");
+    }
+
+    public async void mouse_out ()
+    {
+        await JSRuntime.InvokeVoidAsync("hover_color_set", layer_highlight, "transparent");
+    }
+
+    public string get_background_color()
+    {
+        if (this.action != null)
+        {
+            if (is_action_authorized() == true)
+            {
+                return "#9D99FF";
+            }
+            else
+            {
+                return "#FF6060";
+            }
+        }
+        else
+        {
+            return this.background_color_default;
+        }
+    }
+
+
+
+    public bool is_action_authorized()
+    {
+        return true;
+    }
+
+
+    public override void listener_setup ()
+    {
+        base.listener_setup ();
+        listener_add (() => Cellicon.from_text_get_val(this.text_top_right));
+    }
+
+    public static int from_text_get_val(string text)
+    {
+        if (text == "")
+        {
+            return 0;
+        }
+        int val = 0;
+        int.TryParse (text, out val);
+        return val;
+    }
+
+}

@@ -18,7 +18,7 @@
         height: 32px;
     }
 
-.div32
+.div36
 {
     width: 36px;
     height: 36px;
@@ -30,7 +30,7 @@
 
 @media (hover: hover) and (pointer: fine)
 {
-    .div32.activable:hover
+    .div36.activable:hover
     {
         background-color: #dbdbdb;
     }

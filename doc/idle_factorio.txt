@@ -1,0 +1,44 @@
+
+
+Item
+- id (0°)
+- image (0°)
+- known (10°)
+- quantity total (100°)
+- quantity maximum (50°)
+- pack quantity maximum (50°)
+
+Recipe
+- list result-Pack (0°)
+- list component-Pack (0°)
+- time (0°)
+- iteration (0°)
+- list tool_kind-Item
+
+Item Pack
+- Item (0°)
+- quantity (80°)
+
+Chest
+- Cell (30°)
+
+Cell
+- Pack (70°)
+
+Generator
+- Recipe (0°)
+- list tool-Pack (50°)
+- Progress Bar (100°)
+- Chest (0°)
+
+Item Theme
+- id (0°)
+- image (0°)
+- list Item (0°)
+
+
+
+
+
+
+

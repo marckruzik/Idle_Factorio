@@ -1,45 +1,144 @@
 ﻿@inherits Game_Component
+@using BlazorApp.Shared.Models
 
 
 <style>
-    .chest
-    {
-        display: grid;
-        grid-template-rows: 35px 35px;
-        grid-template-columns: repeat(8, 35px);
-    }
 
-    .chest_cell
-    {
-        display: inline-block;
-    }
 </style>
 
 
 
-<div class="chest">
+<div class="chest" style="
+    position: absolute;
+    @(position != null ? $"left: {position.x}px" : "");
+    @(position != null ? $"top: {position.y}px" : "");
+    @(position != null ? $"width: {position.width}px" : "");
+    @(position != null ? $"height: {position.height}px" : "");
+    ">
+
+    @{ 
+    }
 
     @for (int i = 0; i < 16; i++)
     {
-        string pic_filename = null;
-        if (i < this.val)
-        {
-            pic_filename = this.picture_filename;
-        }
-        <div class="chest_cell">
-            <Butticon picture_filename=@pic_filename/>
-        </div>
+        int x = i % 8;
+        int y = i / 8;
+
+        var i2 = i;
+
+        <Cellicon 
+                  @ref="arr_cellicon[i2]"
+                  picture_filename=@(get_picture_filename(i))
+                  position=@(new Position (cell_size * x, cell_size * y, cell_size, cell_size))
+                  text_bottom_right=@(get_val_str(i))
+                  background_color_default="#B2B1B1"
+                  border=true
+                  />
+
     }
+
+
+    @{ 
+
+    }
+
+
+
+
+
 </div>
 
 
 
 @code {
 
-    [Parameter] public int val { get; set; }
-    [Parameter] public string picture_filename { get; set; }
+        [Parameter] public Position position { get; set; }
+
+        [Parameter] public int cell_size { get; set; }
+        [Parameter] public int val { get; set; }
+        [Parameter] public string item_id { get; set; }
+        [Parameter] public string picture_filename { get; set; }
+
+    private Cellicon cellicon;
+
+
+    private Cellicon[] arr_cellicon { get; set; } = new Cellicon[16];
+
+
+    public override void graphical_update ()
+    {
+        base.graphical_update ();
+
+        for(int i=0; i<16; i++)
+        {
+            Cellicon r = arr_cellicon[i];
+            int val = get_val (i);
+            set_val (r, val);
+        }
+    }
 
 
 
+
+    public void set_val(Cellicon r, int val)
+    {
+        if (val > 0)
+        {
+            r.text_bottom_right = $"{val}";
+            r.picture_filename = this.picture_filename;
+        }
+        else
+        {
+            r.text_bottom_right = "";
+            r.picture_filename = null;
+        }
+
+    }
+
+
+    public int get_val (int number)
+    {
+        int resource_total = 19;
+        int pack_max = 16;
+
+        int resource_previous = pack_max * number;
+
+        int resource_amount = resource_total - resource_previous;
+        if (resource_amount < 0)
+        {
+            return 0;
+        }
+        int resource_current = Math.Min (resource_amount, pack_max);
+
+        return resource_current;
+    }
+
+
+    public string get_picture_filename(int number)
+    {
+        int val = get_val (number);
+        if (val > 0)
+        {
+            return this.picture_filename;
+        }
+        else
+        {
+            return null;
+        }
+    }
+
+
+    public string get_val_str (int number)
+    {
+        int val = get_val (number);
+        if (val > 0)
+        {
+            return val.ToString ();
+        }
+        else
+        {
+            return "";
+        }
+    }
 
 }
