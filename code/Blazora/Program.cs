@@ -13,6 +13,9 @@ namespace Blazora
 {
     public class Program
     {
+        public static int cell_size = 36;
+
+
         public static async Task Main (string[] args)
         {
             Game_Engine.start ();

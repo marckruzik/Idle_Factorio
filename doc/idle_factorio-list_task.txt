@@ -13,11 +13,24 @@
 
 - Pack, indicator
 - Pack, limit
-- chest upgrade, pack upgrade
 
+- chest upgrade, icon upgrade
 
 - Generator furnace, working
 - Generator pickaxe, working
 
-- global configuration
- - cell size
+- Resource Total
+
+- manager resource, maximum
+
+
+
+- Generator pickaxe, iron ore
+- Generator pickaxe, coal ore
+- Generator pickaxe, stone ore
+- image, stone ore
+- Generator, furnace stone
+
+- Factorio 2 rename into Factorio
+- Factorio on Home
+

@@ -7,7 +7,7 @@ namespace NS_Manager_Resource
         public int quantity = 0;
         public int quantity_max = 16;
         public Resource resource;
-        public string resource_name { get { return this.resource.name; } }
+        public string resource_name { get { return this.resource.resource_name; } }
 
 
         public string get_text ()
@@ -73,6 +73,15 @@ namespace NS_Manager_Resource
         public bool amount_max_reached ()
         {
             return this.quantity >= this.quantity_max;
+        }
+
+
+        public static Resource_Stack operator * (Resource_Stack resource_stack, int multiplier)
+        {
+            Resource_Stack result = new Resource_Stack ();
+            result.resource = resource_stack.resource;
+            result.quantity = resource_stack.quantity * multiplier;
+            return result;
         }
 
     }

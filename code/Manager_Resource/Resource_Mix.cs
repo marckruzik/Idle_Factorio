@@ -44,5 +44,17 @@ namespace NS_Manager_Resource
 
             return resource_stack;
         }
+
+
+        public static Resource_Mix operator * (Resource_Mix resource_mix, int multiplier)
+        {
+            Resource_Mix result = new Resource_Mix ();
+            result.list_resource_stack = 
+                resource_mix
+                .list_resource_stack
+                .Select (resource_stack => resource_stack * multiplier)
+                .ToList ();
+            return result;
+        }
     }
 }

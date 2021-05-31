@@ -2,7 +2,6 @@
 @using BlazorApp.Shared.Models
 @using NS_Manager_Resource
 @using NS_Game_Engine
-@using NS_Manager_Resource
 
 @code {
     [Parameter] public Recipe2 recipe { get; set; }
@@ -22,8 +21,7 @@
 </style>
 
 @code{
-    int s = 36;
-    
+    int s = Program.cell_size;
 }
 
 
@@ -43,6 +41,9 @@
 }
 
 
+@{ 
+
+}
 
 <div style="
     width: 256px;
@@ -71,7 +72,7 @@
 
 
         int loc_val = this.generator.manager_resource.from_resource_name_get_resource_stack (component_stack.resource_name).quantity;
-        int loc_min = component_stack.quantity;
+        int loc_min = get_stack_tool ().quantity;
 
         <Cellicon picture_filename=@(Resource.from_resource_name_get_resource_filename (component_stack.resource_name))
                     position=@(new Position (s * 3, s * i, s, s))
@@ -92,55 +93,69 @@
 
     }
 
-
     @{ 
-        Resource resource_tool = recipe.list_tool_kind[0];
+        Resource_Stack stack_tool = get_stack_tool ();
     }
 
+
     <!-- Line 1 -->
-    <Cellicon picture_filename=@(Resource.from_resource_name_get_resource_filename (resource_tool.name))
+    <Cellicon picture_filename=@(Resource.from_resource_name_get_resource_filename (stack_tool.resource_name))
                 position=@(new Position (s*4, s*0, s, s))
-                action=@(() => Console.WriteLine($"{resource_tool.name}"))
-                text_bottom_right="1"
+                action=@(() => 
+                         { 
+                             Console.WriteLine ($"tool {stack_tool.resource_name}"); 
+                             Manager_Resource.resource_transfer (
+                                Game_Engine.self.manager_resource,
+                                this.generator.manager_resource,
+                                stack_tool.resource_name, 
+                                1);
+                             this.need_refresh = true;
+                         })
+                text_bottom_right=@(stack_tool.quantity.ToString ())
                 />
     @{ 
         Resource_Stack stack_result = recipe.mix_result.list_resource_stack[0];
     }
 
-    <Cellicon picture_filename=@(Resource.from_resource_name_get_resource_filename (stack_result.resource_name))
-                position=@(new Position (s*5, s*0, s, s))
-                text_top_left=@($"+{stack_result.quantity}")
-                />
 
 
     <!-- Line 2 -->
 
     @{ int start_line = recipe.get_component_count () - 1;}
 
+    @{ 
+        int stack_resource_quantity_max = Resource.from_resource_name_get_stack_resource_quantity_max (stack_result.resource_name);
+    }
+
     <Cellicon picture_filename=@(Resource.from_resource_name_get_resource_filename (stack_result.resource_name))
             position=@(new Position (s*7, s*(start_line+0), s, s))
-            action=@(() => Console.WriteLine("chest_upgrade"))
-            text_top_right="32"
-            text_bottom_right="16"
+            action=@(() => 
+                     {
+                         Console.WriteLine ("chest_upgrade");
+                         action_upgrade ();
+                         this.need_refresh = true;
+                     })
+            action_authorize=action_upgrade_is_ready
+            text_top_right=@((stack_resource_quantity_max*2).ToString ())
+            text_bottom_right=@(stack_resource_quantity_max.ToString ())
             />
 
     <!-- Line 3 -->
-    <!-- Line 4 -->
 
     
 
     <Chest 
            resource_name=@(stack_result.resource_name)
-           position=@(new Position (s*0, s*(start_line+1), s*8, s*2))
+           position=@(new Position (s*0, s*(start_line+1), s*8, s*1))
            cell_size=s 
            />
 
     
-    <!-- Line 5 -->
+    <!-- Line 4 -->
 
     
     <Cellicon picture_filename="time.png"
-                position=@(new Position (s*0, s*(start_line+3), s, s))
+                position=@(new Position (s*0, s*(start_line+2), s, s))
                 action=hand_crafting
                 action_authorize=action_is_ready
                 text_bottom_right=@((this.recipe.time / 60).ToString ())
@@ -151,11 +166,15 @@
     }
 
     <LoadingBar 
-                position=@(new Position (s*1, s*(start_line+3)+quarter, s*7, s-quarter*2))
+                position=@(new Position (s*1, s*(start_line+2)+quarter, s*6, s-quarter*2))
                 val_func="@get_job_time_percentage" 
                 val_max="100"
                 />
 
+    <Cellicon picture_filename=@(Resource.from_resource_name_get_resource_filename (stack_result.resource_name))
+                position=@(new Position (s*7, s*(start_line+2), s, s))
+                text_top_left=@($"+{stack_result.quantity * stack_tool.quantity}")
+                />
 
 
     </div>
@@ -172,17 +191,46 @@
             return false;
         }
 
+        Resource_Stack stack_tool = get_stack_tool ();
+
+        if (stack_tool.quantity == 0)
+        {
+            return false;
+        }
+
         Generator generator = Game_Engine.self
-            .manager_generator.from_recipe_get_generator(this.recipe);
-        bool ready = generator.manager_resource.can_craft (this.recipe);
+            .manager_generator.from_recipe_get_generator (this.recipe);
+
+
+        bool ready = generator.manager_resource.can_craft (this.recipe.mix_component * stack_tool.quantity);
 
 
         return ready;
     }
 
 
+    public bool action_upgrade_is_ready ()
+    {
+        Resource_Stack stack_result = recipe.mix_result.list_resource_stack[0];
+        string resource_name = stack_result.resource_name;
+        int stock_resource_quantity_max = Game_Engine.self.manager_resource.from_resource_name_get_stock_resource_quantity_max (
+            resource_name);
+        int stock_resource_quantity = Game_Engine.self.manager_resource.from_resource_name_get_resource_quantity (resource_name);
+        return (stock_resource_quantity >= stock_resource_quantity_max);
+    }
 
 
+    public void action_upgrade ()
+    {
+        Resource_Stack stack_result = recipe.mix_result.list_resource_stack[0];
+        int stack_resource_quantity_max = Resource.from_resource_name_get_stack_resource_quantity_max (stack_result.resource_name);
+        int stack_resource_quantity_max_future = stack_resource_quantity_max * 2;
+
+        Resource.dico_resource_name_plus_stack_resource_quantity_max[stack_result.resource_name] =
+            stack_resource_quantity_max_future;
+        Game_Engine.self.manager_resource.from_resource_name_and_resource_quantity_set_resource_quantity (
+            stack_result.resource_name, stack_resource_quantity_max_future);
+    }
 
 
 
@@ -201,14 +249,14 @@
             return;
         }
 
+        Resource_Stack stack_tool = get_stack_tool ();
 
-
-        this.generator.manager_resource.from_resource_mix_remove_resource (recipe.mix_component);
+        this.generator.manager_resource.from_resource_mix_remove_resource (recipe.mix_component * stack_tool.quantity);
         this.need_refresh = true;
 
         Action action = delegate ()
         {
-            Game_Engine.self.manager_resource.from_resource_mix_add_resource (recipe.mix_result);
+            Game_Engine.self.manager_resource.from_resource_mix_add_resource (recipe.mix_result * stack_tool.quantity);
             this.need_refresh = true;
         };
 
@@ -218,6 +266,13 @@
 
     }
 
+
+    public Resource_Stack get_stack_tool ()
+    {
+        Resource resource_tool = this.recipe.list_tool_kind[0];
+        Resource_Stack stack_tool = this.generator.manager_resource.from_resource_name_get_resource_stack (resource_tool.resource_name);
+        return stack_tool;
+    }
 
     public string get_job_id ()
     {

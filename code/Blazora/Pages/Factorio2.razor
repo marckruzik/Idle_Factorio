@@ -67,10 +67,12 @@
     {
         Game_Engine.self.manager_resource.from_resource_name_and_resource_quantity_add_resource ("iron_ore", 199);
         Game_Engine.self.manager_resource.from_resource_name_and_resource_quantity_add_resource ("coal_ore", 50);
+        Game_Engine.self.manager_resource.from_resource_name_and_resource_quantity_add_resource ("furnace_stone", 4);
 
         Manager_Resource mr = new Manager_Resource ();
         mr.from_resource_name_add_resource ("coal_ore");
         mr.from_resource_name_add_resource ("iron_ore");
+        mr.from_resource_name_add_resource ("furnace_stone");
 
         NS_Manager_Resource.Generator generator = new NS_Manager_Resource.Generator ();
         generator.recipe = recipe;

@@ -1,48 +1,25 @@
 ﻿
 
-#game {
-    
-}
 
-    #game button:disabled
-    {
-        background-color: #667380;
-        border-color: #667380;
-    }
-
-
-
-    .icon32
-    {
-        width: 32px;
-        height: 32px;
-    }
-
-.div36
+.layer
 {
-    width: 36px;
-    height: 36px;
-    border: 1px solid #444444;
-    background-color: #b2b1b1;
-    position: relative;
+    top: 0px;
+    left: 0px;
+    position: absolute;
+    width: 100%;
+    height: 100%;
 }
 
-
-@media (hover: hover) and (pointer: fine)
-{
-    .div36.activable:hover
-    {
-        background-color: #dbdbdb;
-    }
-}
-
-.activable
-{
-    cursor: pointer;
-}
-
-.text_white_black
+.text_wb
 {
     color: white;
     text-shadow: -1px 1px 0 #000, 1px 1px 0 #000, 1px -1px 0 #000, -1px -1px 0 #000;
+    line-height: 10px;
+    font-family: MONOSPACE;
+    position: absolute;
+}
+
+.activable:hover
+{
+    cursor: pointer;
 }

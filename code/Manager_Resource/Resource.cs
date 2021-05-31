@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Linq;
 
 namespace NS_Manager_Resource
 {
     public class Resource
     {
-        public string name;
+        public string resource_name;
 
         public static List<string> list_resource_name = new List<string>
         {
@@ -16,7 +17,16 @@ namespace NS_Manager_Resource
             "iron_plate",
             "furnace_stone"
         };
+        public static Dictionary<string, int> dico_resource_name_plus_stack_resource_quantity_max = 
+            list_resource_name.
+            ToDictionary (x => x, x => 1);
 
+        public static int chest_size = 8;
+
+        public static int from_resource_name_get_stack_resource_quantity_max (string resource_name)
+        {
+            return dico_resource_name_plus_stack_resource_quantity_max[resource_name];
+        }
 
         public static string from_resource_name_get_resource_filename (string resource_name)
         {
@@ -44,7 +54,7 @@ namespace NS_Manager_Resource
             from_resource_name_check_resource_name (resource_name);
 
             Resource resource = new Resource ();
-            resource.name = resource_name;
+            resource.resource_name = resource_name;
             return resource;
         }
 

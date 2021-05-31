@@ -49,7 +49,7 @@ namespace Test_Idle_Factorio
             Resource resource = Resource.from_resource_text_get_resource (ressource_text);
             string resource_name = Resource.from_resource_text_get_resource_name (ressource_text);
 
-            Assert.AreEqual (resource_name, resource.name);
+            Assert.AreEqual (resource_name, resource.resource_name);
         }
 
 
@@ -106,9 +106,9 @@ namespace Test_Idle_Factorio
         {
             Resource_Mix resource_mix = Resource_Mix.from_resource_mix_text_get_resource_mix (resource_mix_text);
 
-            Assert.AreEqual (name1, resource_mix.list_resource_stack[0].resource.name);
+            Assert.AreEqual (name1, resource_mix.list_resource_stack[0].resource.resource_name);
             Assert.AreEqual (quantity1, resource_mix.list_resource_stack[0].quantity);
-            Assert.AreEqual (name2, resource_mix.list_resource_stack[1].resource.name);
+            Assert.AreEqual (name2, resource_mix.list_resource_stack[1].resource.resource_name);
             Assert.AreEqual (quantity2, resource_mix.list_resource_stack[1].quantity);
         }
 
@@ -119,7 +119,7 @@ namespace Test_Idle_Factorio
         {
             Resource_Mix resource_mix = Resource_Mix.from_resource_mix_text_get_resource_mix (resource_mix_text);
 
-            Assert.AreEqual (name1, resource_mix.list_resource_stack[0].resource.name);
+            Assert.AreEqual (name1, resource_mix.list_resource_stack[0].resource.resource_name);
             Assert.AreEqual (quantity1, resource_mix.list_resource_stack[0].quantity);
         }
 
@@ -130,9 +130,9 @@ namespace Test_Idle_Factorio
         {
             Resource_Mix resource_mix_before = Recipe.from_recipe_text_get_resource_mix_before (recipe_text);
 
-            Assert.AreEqual (name1, resource_mix_before.list_resource_stack[0].resource.name);
+            Assert.AreEqual (name1, resource_mix_before.list_resource_stack[0].resource.resource_name);
             Assert.AreEqual (quantity1, resource_mix_before.list_resource_stack[0].quantity);
-            Assert.AreEqual (name2, resource_mix_before.list_resource_stack[1].resource.name);
+            Assert.AreEqual (name2, resource_mix_before.list_resource_stack[1].resource.resource_name);
             Assert.AreEqual (quantity2, resource_mix_before.list_resource_stack[1].quantity);
         }
 
@@ -143,7 +143,7 @@ namespace Test_Idle_Factorio
         {
             Resource_Mix resource_mix_before = Recipe.from_recipe_text_get_resource_mix_after (recipe_text);
 
-            Assert.AreEqual (name1, resource_mix_before.list_resource_stack[0].resource.name);
+            Assert.AreEqual (name1, resource_mix_before.list_resource_stack[0].resource.resource_name);
             Assert.AreEqual (quantity1, resource_mix_before.list_resource_stack[0].quantity);
         }
 

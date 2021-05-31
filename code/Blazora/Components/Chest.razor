@@ -10,6 +10,9 @@
     [Parameter] public string item_id { get; set; }
     [Parameter] public string resource_name { get; set; }
 
+    private Cellicon[] arr_cellicon { get; set; } = new Cellicon[Resource.chest_size];
+
+
 }
 
 <style>
@@ -32,7 +35,7 @@
     @{ 
     }
 
-    @for (int i = 0; i < 16; i++)
+    @for (int i = 0; i < arr_cellicon.Length; i++)
     {
         int x = i % 8;
         int y = i / 8;
@@ -66,17 +69,13 @@
 @code {
 
 
-    private Cellicon cellicon;
-
-
-    private Cellicon[] arr_cellicon { get; set; } = new Cellicon[16];
 
 
     public override void graphical_update ()
     {
         base.graphical_update ();
 
-        for(int i=0; i<16; i++)
+        for(int i=0; i<arr_cellicon.Length; i++)
         {
             Cellicon r = arr_cellicon[i];
             int val = get_val (i);
@@ -106,7 +105,7 @@
     public int get_val (int number)
     {
         int resource_total = Game_Engine.self.manager_resource.from_resource_name_get_resource_quantity (this.resource_name);
-        int pack_max = 1;
+        int pack_max = Resource.from_resource_name_get_stack_resource_quantity_max (this.resource_name);
 
         int resource_previous = pack_max * number;
 
