@@ -9,6 +9,13 @@ namespace NS_Manager_Resource
         public Resource resource;
         public string resource_name { get { return this.resource.name; } }
 
+
+        public string get_text ()
+        {
+            return $"{this.resource_name} * {this.quantity}";
+        }
+
+
         public static Resource_Stack from_resource_name_get_resource_stack (string resource_name)
         {
             Resource resource = Resource.from_resource_name_get_resource (resource_name);
@@ -17,7 +24,7 @@ namespace NS_Manager_Resource
             return resource_stack;
         }
 
-        public static Resource_Stack from_resource_name__and_resource_quantity_get_resource_stack (
+        public static Resource_Stack from_resource_name_and_resource_quantity_get_resource_stack (
             string resource_name, int resource_quantity)
         {
             Resource_Stack resource_stack = Resource_Stack.from_resource_name_get_resource_stack (resource_name);
@@ -31,7 +38,7 @@ namespace NS_Manager_Resource
             string resource_name = Resource_Stack.from_resource_stack_text_get_resource_name (resource_stack_text);
             int resource_quantity = Resource_Stack.from_resource_stack_text_get_resource_quantity (resource_stack_text);
 
-            Resource_Stack resource_stack = Resource_Stack.from_resource_name__and_resource_quantity_get_resource_stack (
+            Resource_Stack resource_stack = Resource_Stack.from_resource_name_and_resource_quantity_get_resource_stack (
                 resource_name, resource_quantity);
             
             return resource_stack;

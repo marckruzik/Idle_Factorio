@@ -2,6 +2,24 @@
 @inject IJSRuntime JSRuntime
 @using BlazorApp.Shared.Models
 
+@code{
+    
+    [Parameter] public string picture_filename { get; set; }
+    
+    [Parameter] public System.Action action { get; set; }
+    [Parameter] public System.Func<bool> action_authorize { get; set; }
+
+    [Parameter] public string text_top_left { get; set; } = "";
+    [Parameter] public string text_top_right { get; set; } = "";
+    [Parameter] public string text_bottom_left { get; set; } = "";
+    [Parameter] public string text_bottom_right { get; set; } = "";
+
+    [Parameter] public string background_color_default { get; set; } = "transparent";
+    [Parameter] public bool border { get; set; } = false;
+
+}
+
+
 <style>
     .layer
     {
@@ -125,7 +143,7 @@
     <!-- action -->
     @if (action != null)
     {
-        <div class="layer" style="" @onclick="@action" @onmouseover="mouse_in" @onmouseout="mouse_out" />
+        <div class="layer" style="" @onclick="@action_click" @onmouseover="mouse_in" @onmouseout="mouse_out" />
     }
 
 
@@ -138,27 +156,6 @@
 @code {
 
 
-
-    [Parameter]
-    public string picture_filename { get; set; }
-
-    [Parameter]
-    public System.Action action { get; set; }
-
-    [Parameter]
-    public string text_top_left { get; set; } = "";
-    [Parameter]
-    public string text_top_right { get; set; } = "";
-    [Parameter]
-    public string text_bottom_left { get; set; } = "";
-    [Parameter]
-    public string text_bottom_right { get; set; } = "";
-    [Parameter]
-    public Position position { get; set; }
-    [Parameter]
-    public string background_color_default { get; set; } = "transparent";
-    [Parameter]
-    public bool border { get; set; } = false;
 
 
     ElementReference layer_highlight;
@@ -177,13 +174,14 @@
     {
         if (this.action != null)
         {
-            if (is_action_authorized() == true)
+            if (is_action_authorized () == true)
             {
                 return "#9D99FF";
             }
             else
             {
-                return "#FF6060";
+                //return "#FF6060";
+                return "#3F3F3F";
             }
         }
         else
@@ -193,17 +191,31 @@
     }
 
 
+    public void action_click ()
+    {
+        if (is_action_authorized () == false)
+        {
+            return;
+        }
+        this.action ();
+    }
+
 
     public bool is_action_authorized()
     {
-        return true;
+        if (this.action_authorize == null)
+        {
+            return true;
+        }
+        return this.action_authorize ();
     }
 
 
     public override void listener_setup ()
     {
         base.listener_setup ();
-        listener_add (() => Cellicon.from_text_get_val(this.text_top_right));
+        listener_add (() => this.text_top_right);
+        listener_add (() => is_action_authorized ().ToString ());
     }
 
     public static int from_text_get_val(string text)

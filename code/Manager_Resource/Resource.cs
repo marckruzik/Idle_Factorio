@@ -10,12 +10,18 @@ namespace NS_Manager_Resource
 
         public static List<string> list_resource_name = new List<string>
         {
-            "coal",
-            "wood",
-            "time",
+            "coal_ore",
+            "wood_ore",
             "iron_ore",
-            "iron_plate"
+            "iron_plate",
+            "furnace_stone"
         };
+
+
+        public static string from_resource_name_get_resource_filename (string resource_name)
+        {
+            return $"{resource_name}.png";
+        }
 
         public static void from_list_resource_name_and_resource_name_check_resource_name (
             List<string> list_resource_name, string resource_name)

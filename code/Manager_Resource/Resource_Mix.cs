@@ -9,6 +9,13 @@ namespace NS_Manager_Resource
     {
         public List<Resource_Stack> list_resource_stack = new List<Resource_Stack> ();
 
+
+        public string get_text ()
+        {
+            return string.Join (" + ", list_resource_stack
+                .Select (resource_stack => resource_stack.get_text ()));
+        }
+
         public static Resource_Mix from_resource_mix_text_get_resource_mix (string resource_mix_text)
         {
             List<string> list_resource_stack_text = from_resource_mix_text_get_list_resource_stack_text (resource_mix_text);

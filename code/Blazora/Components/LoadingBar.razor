@@ -18,11 +18,15 @@
 </style>
 
 <div class="progressbar_container" style="
-    height: @(height)px;
-    width: @(width)px;">
+    position: absolute;
+    @(position != null ? $"left: {position.x}px" : "");
+    @(position != null ? $"top: {position.y}px" : "");
+    @(position != null ? $"width: {position.width}px" : "");
+    @(position != null ? $"height: {position.height}px" : "");
+    ">
 
     <div class="progressbar_content" style="
-        height: @(height-2)px;
+        height: @(this.position.height-2)px;
         width: @(get_content_width())px;">
 
 
@@ -35,8 +39,6 @@
 @code {
 
     [Parameter] public int val_max { get; set; } = 100;
-    [Parameter] public int width { get; set; }
-    [Parameter] public int height { get; set; }
     [Parameter] public Func<int> val_func { get; set; }
 
     public int get_content_width ()
@@ -55,11 +57,11 @@
 
         float percentage = val_current / (float)this.val_max;
 
-        float content_width_original = percentage * (this.width - 1);
+        float content_width_original = percentage * (this.position.width - 1);
         content_width_original = (float)Math.Ceiling (content_width_original);
-        if (content_width_original > this.width - 1)
+        if (content_width_original > this.position.width - 1)
         {
-            content_width_original = this.width - 1;
+            content_width_original = this.position.width - 1;
         }
         int content_width = (int)content_width_original;
 

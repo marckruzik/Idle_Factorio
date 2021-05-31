@@ -1,0 +1,258 @@
+﻿@inherits Game_Component
+@using BlazorApp.Shared.Models
+@using NS_Manager_Resource
+@using NS_Game_Engine
+@using NS_Manager_Resource
+
+@code {
+    [Parameter] public Recipe2 recipe { get; set; }
+
+
+
+    private Generator generator;
+}
+
+@{ 
+    Console.WriteLine ("generate Blazor Generator");
+}
+
+
+<style>
+
+</style>
+
+@code{
+    int s = 36;
+    
+}
+
+
+
+@{ 
+    
+    this.generator = Game_Engine.self
+        .manager_generator.from_recipe_get_generator(this.recipe);
+}
+
+
+
+@{ 
+
+    int chest_height = (3 + recipe.get_component_count ()) * s;
+
+}
+
+
+
+<div style="
+    width: 256px;
+    height: @(chest_height)px;
+    position: relative;
+    ">
+
+
+
+    @for (int i = 0; i < this.recipe.get_component_count (); i++)
+    {
+        Resource_Stack component_stack = this.recipe.mix_component.list_resource_stack[i];
+
+        // Global stock
+        int glob_val = Game_Engine.self
+            .manager_resource
+            .from_resource_name_get_resource_stack (component_stack.resource_name)
+            .quantity;
+
+        <Cellicon picture_filename=@(Resource.from_resource_name_get_resource_filename (component_stack.resource_name))
+                    position=@(new Position (s * 0, s * i, s, s))
+                    text_bottom_right=@(glob_val.ToString ())
+                    />
+
+
+
+
+        int loc_val = this.generator.manager_resource.from_resource_name_get_resource_stack (component_stack.resource_name).quantity;
+        int loc_min = component_stack.quantity;
+
+        <Cellicon picture_filename=@(Resource.from_resource_name_get_resource_filename (component_stack.resource_name))
+                    position=@(new Position (s * 3, s * i, s, s))
+                    action=@(() =>
+                              {
+                                  Console.WriteLine ($"{component_stack.resource_name}_in_tool_kind");
+                                  Manager_Resource.resource_transfer (
+                                      Game_Engine.self.manager_resource,
+                                      this.generator.manager_resource,
+                                      component_stack.resource_name, 
+                                      1);
+                                  this.need_refresh = true;
+                              })
+                    text_bottom_right=@($"{loc_val}/{loc_min}")
+                    />
+
+
+
+    }
+
+
+    @{ 
+        Resource resource_tool = recipe.list_tool_kind[0];
+    }
+
+    <!-- Line 1 -->
+    <Cellicon picture_filename=@(Resource.from_resource_name_get_resource_filename (resource_tool.name))
+                position=@(new Position (s*4, s*0, s, s))
+                action=@(() => Console.WriteLine($"{resource_tool.name}"))
+                text_bottom_right="1"
+                />
+    @{ 
+        Resource_Stack stack_result = recipe.mix_result.list_resource_stack[0];
+    }
+
+    <Cellicon picture_filename=@(Resource.from_resource_name_get_resource_filename (stack_result.resource_name))
+                position=@(new Position (s*5, s*0, s, s))
+                text_top_left=@($"+{stack_result.quantity}")
+                />
+
+
+    <!-- Line 2 -->
+
+    @{ int start_line = recipe.get_component_count () - 1;}
+
+    <Cellicon picture_filename=@(Resource.from_resource_name_get_resource_filename (stack_result.resource_name))
+            position=@(new Position (s*7, s*(start_line+0), s, s))
+            action=@(() => Console.WriteLine("chest_upgrade"))
+            text_top_right="32"
+            text_bottom_right="16"
+            />
+
+    <!-- Line 3 -->
+    <!-- Line 4 -->
+
+    
+
+    <Chest 
+           resource_name=@(stack_result.resource_name)
+           position=@(new Position (s*0, s*(start_line+1), s*8, s*2))
+           cell_size=s 
+           />
+
+    
+    <!-- Line 5 -->
+
+    
+    <Cellicon picture_filename="time.png"
+                position=@(new Position (s*0, s*(start_line+3), s, s))
+                action=hand_crafting
+                action_authorize=action_is_ready
+                text_bottom_right=@((this.recipe.time / 60).ToString ())
+                />
+
+    @{ 
+        int quarter = s / 4;
+    }
+
+    <LoadingBar 
+                position=@(new Position (s*1, s*(start_line+3)+quarter, s*7, s-quarter*2))
+                val_func="@get_job_time_percentage" 
+                val_max="100"
+                />
+
+
+
+    </div>
+
+
+
+
+@code{
+
+    public bool action_is_ready ()
+    {
+        if (get_job () != null)
+        {
+            return false;
+        }
+
+        Generator generator = Game_Engine.self
+            .manager_generator.from_recipe_get_generator(this.recipe);
+        bool ready = generator.manager_resource.can_craft (this.recipe);
+
+
+        return ready;
+    }
+
+
+
+
+
+
+
+    public void hand_crafting ()
+    {
+        Job job_current = get_job ();
+        if (job_current != null)
+        {
+            return;
+        }
+
+        Resource_Stack resource_stack = Game_Engine.self.manager_resource
+            .from_resource_name_get_resource_stack (get_resource_name ());
+        if (resource_stack.amount_max_reached () == true)
+        {
+            return;
+        }
+
+
+
+        this.generator.manager_resource.from_resource_mix_remove_resource (recipe.mix_component);
+        this.need_refresh = true;
+
+        Action action = delegate ()
+        {
+            Game_Engine.self.manager_resource.from_resource_mix_add_resource (recipe.mix_result);
+            this.need_refresh = true;
+        };
+
+
+        Job job = Game_Engine.self.manager_job.from_action_and_time_total_add_job (action, recipe.time);
+        job.id = get_job_id ();
+
+    }
+
+
+    public string get_job_id ()
+    {
+        return this.recipe.get_text ();
+    }
+
+
+    public Job get_job ()
+    {
+        string job_id = get_job_id ();
+        Job job = Game_Engine.self.manager_job.from_job_id_find_job (job_id);
+
+        return job;
+    }
+
+
+    public int get_job_time_percentage ()
+    {
+        Job job = get_job ();
+        if (job == null)
+        {
+            return 0;
+        }
+
+        float percentage_done = job.get_percentage_done ();
+        int perc = (int)(percentage_done*100);
+
+        return perc;
+    }
+
+
+    public string get_resource_name ()
+    {
+        return this.recipe.mix_result.list_resource_stack[0].resource_name;
+    }
+
+
+}

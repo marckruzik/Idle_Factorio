@@ -11,8 +11,8 @@ namespace Test_Idle_Factorio
         {
         }
 
-        [TestCase ("coal")]
-        [TestCase ("wood")]
+        [TestCase ("coal_ore")]
+        [TestCase ("wood_ore")]
         public void when_resource_name_is_correct (string resource_name)
         {
             Assert.DoesNotThrow (() => { Resource.from_resource_name_check_resource_name (resource_name); });
@@ -26,7 +26,7 @@ namespace Test_Idle_Factorio
 
 
         [TestCase ("before => after", "before")]
-        [TestCase ("coal*1 + iron_ore*1 => iron_plate*1", "coal*1 + iron_ore*1")]
+        [TestCase ("coal_ore*1 + iron_ore*1 => iron_plate*1", "coal_ore*1 + iron_ore*1")]
         public void when_recipe__get_recipe_left (string recipe_text, string expected_recipe_text_left)
         {
             string recipe_text_left = Recipe.from_recipe_text_get_resource_mix_text_before (recipe_text);
@@ -34,7 +34,7 @@ namespace Test_Idle_Factorio
         }
 
         [TestCase ("before => after", "after")]
-        [TestCase ("coal*1 + iron_ore*1 => iron_plate*1", "iron_plate*1")]
+        [TestCase ("coal_ore*1 + iron_ore*1 => iron_plate*1", "iron_plate*1")]
         public void when_recipe__get_recipe_right (string recipe_text, string expected_recipe_text_left)
         {
             string recipe_text_left = Recipe.from_recipe_text_get_resource_mix_text_after (recipe_text);
@@ -42,8 +42,8 @@ namespace Test_Idle_Factorio
         }
 
 
-        [TestCase ("coal")]
-        [TestCase ("wood")]
+        [TestCase ("coal_ore")]
+        [TestCase ("wood_ore")]
         public void when_resource_text__get_resource (string ressource_text)
         {
             Resource resource = Resource.from_resource_text_get_resource (ressource_text);
@@ -53,13 +53,13 @@ namespace Test_Idle_Factorio
         }
 
 
-        [TestCase ("coal", "coal")]
-        [TestCase ("coal ", "coal")]
-        [TestCase (" coal", "coal")]
-        [TestCase (" coal ", "coal")]
-        [TestCase ("  coal ", "coal")]
-        [TestCase ("Coal", "coal")]
-        [TestCase ("COAL", "coal")]
+        [TestCase ("coal_ore", "coal_ore")]
+        [TestCase ("coal_ore ", "coal_ore")]
+        [TestCase (" coal_ore", "coal_ore")]
+        [TestCase (" coal_ore ", "coal_ore")]
+        [TestCase ("  coal_ore ", "coal_ore")]
+        [TestCase ("coal_ore", "coal_ore")]
+        [TestCase ("coal_ore", "coal_ore")]
         public void when_resource_text__get_resource_name (string ressource_text, string expected_resource_name)
         {
             string resource_name = Resource.from_resource_text_get_resource_name (ressource_text);
@@ -68,12 +68,12 @@ namespace Test_Idle_Factorio
         }
 
 
-        [TestCase ("coal*1", "coal")]
-        [TestCase (" coal*1", "coal")]
-        [TestCase ("coal*1 ", "coal")]
-        [TestCase ("coal *1", "coal")]
-        [TestCase ("coal* 1", "coal")]
-        [TestCase ("coal * 1", "coal")]
+        [TestCase ("coal_ore*1", "coal_ore")]
+        [TestCase (" coal_ore*1", "coal_ore")]
+        [TestCase ("coal_ore*1 ", "coal_ore")]
+        [TestCase ("coal_ore *1", "coal_ore")]
+        [TestCase ("coal_ore* 1", "coal_ore")]
+        [TestCase ("coal_ore * 1", "coal_ore")]
         public void when_resource_stack_text_good__get_resource_stack_name (
             string resource_stack_text, string expected_resource_stack_name)
         {
@@ -83,13 +83,13 @@ namespace Test_Idle_Factorio
         }
 
 
-        [TestCase ("coal*1", 1)]
-        [TestCase (" coal*1", 1)]
-        [TestCase ("coal*1 ", 1)]
-        [TestCase ("coal *1", 1)]
-        [TestCase ("coal* 1", 1)]
-        [TestCase ("coal * 1", 1)]
-        [TestCase ("coal * 99", 99)]
+        [TestCase ("coal_ore*1", 1)]
+        [TestCase (" coal_ore*1", 1)]
+        [TestCase ("coal_ore*1 ", 1)]
+        [TestCase ("coal_ore *1", 1)]
+        [TestCase ("coal_ore* 1", 1)]
+        [TestCase ("coal_ore * 1", 1)]
+        [TestCase ("coal_ore * 99", 99)]
         public void when_resource_stack_text_good__get_resource_stack_quantity (
             string resource_stack_text, int expected_resource_stack_quantity)
         {
@@ -99,8 +99,8 @@ namespace Test_Idle_Factorio
         }
 
 
-        [TestCase ("coal * 1 + wood * 2", "coal", 1, "wood", 2)]
-        [TestCase ("coal*1+wood*2", "coal", 1, "wood", 2)]
+        [TestCase ("coal_ore * 1 + wood_ore * 2", "coal_ore", 1, "wood_ore", 2)]
+        [TestCase ("coal_ore*1+wood_ore*2", "coal_ore", 1, "wood_ore", 2)]
         public void when_resource_mix_text2__get_resource_mix (
             string resource_mix_text, string name1, int quantity1, string name2, int quantity2)
         {
@@ -112,8 +112,8 @@ namespace Test_Idle_Factorio
             Assert.AreEqual (quantity2, resource_mix.list_resource_stack[1].quantity);
         }
 
-        [TestCase ("coal * 1", "coal", 1)]
-        [TestCase ("coal*1", "coal", 1)]
+        [TestCase ("coal_ore * 1", "coal_ore", 1)]
+        [TestCase ("coal_ore*1", "coal_ore", 1)]
         public void when_resource_mix_text1__get_resource_mix (
             string resource_mix_text, string name1, int quantity1)
         {
@@ -124,7 +124,7 @@ namespace Test_Idle_Factorio
         }
 
 
-        [TestCase ("coal*1 + iron_ore*1 => iron_plate*1", "coal", 1, "iron_ore", 1)]
+        [TestCase ("coal_ore*1 + iron_ore*1 => iron_plate*1", "coal_ore", 1, "iron_ore", 1)]
         public void when_recipe_text__get_resource_mix_before (
             string recipe_text, string name1, int quantity1, string name2, int quantity2)
         {
@@ -137,7 +137,7 @@ namespace Test_Idle_Factorio
         }
 
 
-        [TestCase ("coal*1 + iron_ore*1 => iron_plate*1", "iron_plate", 1)]
+        [TestCase ("coal_ore*1 + iron_ore*1 => iron_plate*1", "iron_plate", 1)]
         public void when_recipe_text__get_resource_mix_after (
             string recipe_text, string name1, int quantity1)
         {
@@ -148,23 +148,17 @@ namespace Test_Idle_Factorio
         }
 
 
-        [TestCase ("iron_ore*1 + time*10 => iron_plate*1", 10)]
-        public void when_recipe_text__get_time_quantity_correct (string recipe_text, int expected_time_quantity)
+        [TestCase ("coal_ore*1 + iron_ore*1 => iron_plate*1", "coal_ore * 1 + iron_ore * 1 => iron_plate * 1")]
+        public void when_recipe_text__get_recipe_text (
+            string recipe_text, string recipe_text_2)
         {
-            Recipe recipe = Recipe.from_recipe_text_get_recipe (recipe_text);
-            int? time_quantity = Recipe.from_recipe_get_time_quantity (recipe);
+            Recipe2 recipe = Recipe2.from_recipe_text_get_recipe (recipe_text);
+            string recipe_text_redo = recipe.get_text ();
 
-            Assert.AreEqual (expected_time_quantity, time_quantity);
+            Assert.AreEqual (recipe_text_2, recipe_text_redo);
         }
 
 
-        [TestCase ("iron_ore*1 => iron_plate*1")]
-        public void when_recipe_text__get_time_quantity_incorrect (string recipe_text)
-        {
-            Recipe recipe = Recipe.from_recipe_text_get_recipe (recipe_text);
-            int? time_quantity = Recipe.from_recipe_get_time_quantity (recipe);
 
-            Assert.AreEqual (null, time_quantity);
-        }
     }
 }

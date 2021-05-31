@@ -7,13 +7,7 @@
 
 
 
-<div style="display: inline-block;">
-    <Butticon picture_filename="pickaxe.png" action="@(() => hand_crafting(this.hand_recipe_text))" />
-</div>
 
-<div style="display: inline-block; margin-left: 16px; margin-right: 16px;">
-    <LoadingBar width="100" height="16" val_func="@get_job_time_percentage" val_max="100"/>
-</div>
 
 <div style="display: inline-block;">
     <Butticon picture_filename="@($"mine_{this.resource_name}.png")" />
@@ -53,63 +47,6 @@
         MR (resource_name).increment ();
 
     }
-
-
-    public void hand_crafting (string recipe_text)
-    {
-        Job job = get_job ();
-        if (job != null)
-        {
-            return;
-        }
-
-        Resource_Stack resource_stack = Game_Engine.self.manager_resource
-            .from_resource_name_get_resource_stack (this.resource_name);
-        if (resource_stack.amount_max_reached () == true)
-        {
-            return;
-        }
-
-        string job_id = get_job_id ();
-        crafting (recipe_text, job_id);
-    }
-
-    public void crafting (string recipe_text, string job_id)
-    {
-        Recipe recipe = Recipe.from_recipe_text_get_recipe (recipe_text);
-
-        Game_Engine.self.from_recipe_crafting_and_job_id_add_job (recipe, job_id);
-    }
-
-    public string get_job_id ()
-    {
-        return $"mine_{this.resource_name}";
-    }
-
-
-    public Job get_job ()
-    {
-        string job_id = get_job_id ();
-        Job job = Game_Engine.self.manager_job.from_job_id_find_job (job_id);
-
-        return job;
-    }
-
-
-    public int get_job_time_percentage ()
-    {
-        Job job = get_job ();
-        if (job == null)
-        {
-            return 0;
-        }
-
-        float percentage_done = job.get_percentage_done ();
-        int perc = (int)(percentage_done*100);
-
-        return perc;
-    }
-
 
 
 

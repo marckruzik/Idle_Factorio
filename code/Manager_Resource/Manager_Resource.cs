@@ -10,6 +10,42 @@ namespace NS_Manager_Resource
         Dictionary<string, Resource_Stack> dico_resource_name_plus_resource_stack = new Dictionary<string, Resource_Stack> ();
 
 
+        public bool can_craft (Recipe2 recipe)
+        {
+            foreach (Resource_Stack component in recipe.mix_component.list_resource_stack)
+            {
+                if (from_resource_name_contain_resource_stack (component.resource_name) == false)
+                {
+                    return false;
+                }
+                int resource_quantity = from_resource_name_get_resource_quantity (component.resource_name);
+                if (component.quantity > resource_quantity)
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        public static void resource_transfer (
+            Manager_Resource manager_resource_source, 
+            Manager_Resource manager_resource_destination, 
+            string resource_name, 
+            int quantity)
+        {
+            quantity = Math.Min (manager_resource_source.from_resource_name_get_resource_quantity (resource_name), quantity);
+
+            manager_resource_source.from_resource_name_and_resource_quantity_add_resource (resource_name, -quantity);
+
+            manager_resource_destination.from_resource_name_and_resource_quantity_add_resource (resource_name, quantity);
+        }
+
+
+        public int from_resource_name_get_resource_quantity (string resource_name)
+        {
+            return from_resource_name_get_resource_stack (resource_name).quantity;
+        }
+
         public void from_resource_name_add_resource (string resource_name)
         {
             bool contain_resource = from_resource_name_contain_resource_stack (resource_name);
@@ -19,7 +55,7 @@ namespace NS_Manager_Resource
             }
             Resource_Stack resource_stack = Resource_Stack.from_resource_name_get_resource_stack (resource_name);
             resource_stack.quantity = 0;
-            resource_stack.quantity_max = 16;
+            resource_stack.quantity_max = 999;
             dico_resource_name_plus_resource_stack.Add (resource_name, resource_stack);
         }
 

@@ -1,11 +1,24 @@
 ﻿@inherits Game_Component
 @using BlazorApp.Shared.Models
+@using NS_Game_Engine
+@using NS_Manager_Resource
 
+@code{
+
+    [Parameter] public int cell_size { get; set; }
+    [Parameter] public int val { get; set; }
+    [Parameter] public string item_id { get; set; }
+    [Parameter] public string resource_name { get; set; }
+
+}
 
 <style>
 
 </style>
 
+@{ 
+    Console.WriteLine ("generate Blazor Chest");
+}
 
 
 <div class="chest" style="
@@ -29,7 +42,7 @@
         <Cellicon 
                   @ref="arr_cellicon[i2]"
                   picture_filename=@(get_picture_filename(i))
-                  position=@(new Position (cell_size * x, cell_size * y, cell_size, cell_size))
+                  position=@(new Position (this.cell_size * x, this.cell_size * y, this.cell_size, this.cell_size))
                   text_bottom_right=@(get_val_str(i))
                   background_color_default="#B2B1B1"
                   border=true
@@ -52,12 +65,6 @@
 
 @code {
 
-        [Parameter] public Position position { get; set; }
-
-        [Parameter] public int cell_size { get; set; }
-        [Parameter] public int val { get; set; }
-        [Parameter] public string item_id { get; set; }
-        [Parameter] public string picture_filename { get; set; }
 
     private Cellicon cellicon;
 
@@ -85,7 +92,7 @@
         if (val > 0)
         {
             r.text_bottom_right = $"{val}";
-            r.picture_filename = this.picture_filename;
+            r.picture_filename = Resource.from_resource_name_get_resource_filename (this.resource_name);
         }
         else
         {
@@ -98,8 +105,8 @@
 
     public int get_val (int number)
     {
-        int resource_total = 19;
-        int pack_max = 16;
+        int resource_total = Game_Engine.self.manager_resource.from_resource_name_get_resource_quantity (this.resource_name);
+        int pack_max = 1;
 
         int resource_previous = pack_max * number;
 
@@ -119,7 +126,7 @@
         int val = get_val (number);
         if (val > 0)
         {
-            return this.picture_filename;
+            return Resource.from_resource_name_get_resource_filename (this.resource_name);
         }
         else
         {

@@ -25,7 +25,7 @@ namespace Blazora.Pages
         {
             base.OnInitialized ();
 
-            Blazora.Pages.Game_Page.graphical_action += StateHasChanged;
+            //Blazora.Pages.Game_Page.graphical_action += StateHasChanged;
         }
 
 
@@ -80,7 +80,7 @@ namespace Blazora.Pages
             this.timer_refresh.Dispose ();
             this.timer_logic.Dispose ();
             this.timer_logic = null;
-            Blazora.Pages.Game_Page.graphical_action -= StateHasChanged;
+            //Blazora.Pages.Game_Page.graphical_action -= StateHasChanged;
         }
 
 
