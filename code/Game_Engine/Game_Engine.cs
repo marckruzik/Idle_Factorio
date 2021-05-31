@@ -15,6 +15,7 @@ namespace NS_Game_Engine
         public Manager_Generator manager_generator;
         public Manager_Job manager_job;
 
+        public bool initialized = false;
 
         public long clock = 0;
 

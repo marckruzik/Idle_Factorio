@@ -1,0 +1,49 @@
+﻿@inherits Game_Component
+@using BlazorApp.Shared.Models
+@using NS_Manager_Resource
+@using NS_Game_Engine
+
+@code {
+    [Parameter] public Recipe2 recipe { get; set; }
+    [Parameter] public BGenerator bgenerator { get; set; }
+
+    
+    private Generator generator;
+}
+
+@{ 
+    this.generator = Game_Engine.self
+        .manager_generator.from_recipe_get_generator(this.recipe);
+    int s = Program.cell_size;
+}
+
+
+
+<!-- Source -->
+
+@for (int i = 0; i < this.recipe.get_component_count (); i++)
+{
+    Resource_Stack component_stack = this.recipe.mix_component.list_resource_stack[i];
+
+    int stock_quantity = Game_Engine.self.manager_resource.from_resource_name_get_resource_quantity (component_stack.resource_name);
+
+    <Cellicon picture_filename=@(Resource.from_resource_name_get_resource_filename (component_stack.resource_name))
+                position=@(new Position (s * 0, s * i, s, s))
+                text_bottom_right=@("inf")
+                />
+
+}
+
+<!-- Pickaxe -->
+
+@{ 
+    Resource_Stack stack_tool = this.bgenerator.get_stack_tool ();
+}
+
+
+
+<!-- Line 1 -->
+<Cellicon picture_filename=@(Resource.from_resource_name_get_resource_filename (stack_tool.resource_name))
+            position=@(new Position (s*1, s*0, s, s))
+            />
+

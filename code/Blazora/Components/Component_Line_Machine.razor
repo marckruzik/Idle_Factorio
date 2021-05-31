@@ -1,0 +1,84 @@
+﻿@inherits Game_Component
+@using BlazorApp.Shared.Models
+@using NS_Manager_Resource
+@using NS_Game_Engine
+
+
+@code{
+    [Parameter] public Recipe2 recipe { get; set; }
+    [Parameter] public BGenerator bgenerator { get; set; }
+
+    
+    private Generator generator;
+}
+
+
+@{ 
+    this.generator = Game_Engine.self
+        .manager_generator.from_recipe_get_generator(this.recipe);
+    int s = Program.cell_size;
+}
+
+
+@for (int i = 0; i < this.recipe.get_component_count (); i++)
+{
+    Resource_Stack component_stack = this.recipe.mix_component.list_resource_stack[i];
+
+    // Global stock
+    int glob_val = Game_Engine.self
+        .manager_resource
+        .from_resource_name_get_resource_stack (component_stack.resource_name)
+        .quantity;
+
+    <Cellicon picture_filename=@(Resource.from_resource_name_get_resource_filename (component_stack.resource_name))
+                position=@(new Position (s * 0, s * i, s, s))
+                text_bottom_right=@(glob_val.ToString ())
+                />
+
+    int loc_val = this.generator.manager_resource.from_resource_name_get_resource_stack (component_stack.resource_name).quantity;
+    int loc_min = component_stack.quantity * this.bgenerator.get_stack_tool ().quantity;
+
+    <Cellicon picture_filename=@(Resource.from_resource_name_get_resource_filename (component_stack.resource_name))
+                position=@(new Position (s * 3, s * i, s, s))
+                action=@(() =>
+                            {
+                                Console.WriteLine ($"{component_stack.resource_name}_in_tool_kind");
+                                Manager_Resource.resource_transfer (
+                                    Game_Engine.self.manager_resource,
+                                    this.generator.manager_resource,
+                                    component_stack.resource_name, 
+                                    1);
+                                this.bgenerator.need_refresh = true;
+                            })
+                text_bottom_right=@($"{loc_val}/{loc_min}")
+                />
+
+}
+
+
+@{ 
+    Resource_Stack stack_tool = this.bgenerator.get_stack_tool ();
+}
+
+
+@{ 
+
+
+}
+
+<!-- Line 1 -->
+<Cellicon picture_filename=@(Resource.from_resource_name_get_resource_filename (stack_tool.resource_name))
+            position=@(new Position (s*4, s*0, s, s))
+            action=@(() => 
+                        { 
+                            Console.WriteLine ($"tool {stack_tool.resource_name}"); 
+                            Manager_Resource.resource_transfer (
+                                Game_Engine.self.manager_resource,
+                                this.generator.manager_resource,
+                                stack_tool.resource_name, 
+                                1);
+                            this.need_refresh = true;
+                        })
+            text_bottom_right=@(stack_tool.quantity.ToString ())
+            />
+

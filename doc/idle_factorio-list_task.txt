@@ -1,36 +1,18 @@
 
 
 
-- design, generator with pickaxe
-
-- generator with pickaxe
-
-
-- Generator, line global, generation automatic
-- Generator, pickaxe, generation automatic
-
 
 
 - Pack, indicator
-- Pack, limit
+
 
 - chest upgrade, icon upgrade
 
-- Generator furnace, working
-- Generator pickaxe, working
-
 - Resource Total
 
-- manager resource, maximum
 
 
 
-- Generator pickaxe, iron ore
-- Generator pickaxe, coal ore
-- Generator pickaxe, stone ore
-- image, stone ore
-- Generator, furnace stone
+- Generator hand
 
-- Factorio 2 rename into Factorio
-- Factorio on Home
 

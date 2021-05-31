@@ -15,13 +15,22 @@ namespace NS_Manager_Resource
             "wood_ore",
             "iron_ore",
             "iron_plate",
-            "furnace_stone"
+            "furnace_stone",
+            "coal_ore_mine",
+            "wood_ore_mine",
+            "iron_ore_mine",
+            "pickaxe",
+            "hand",
+            "stone_ore",
+            "stone_ore_mine"
         };
         public static Dictionary<string, int> dico_resource_name_plus_stack_resource_quantity_max = 
             list_resource_name.
             ToDictionary (x => x, x => 1);
 
         public static int chest_size = 8;
+
+
 
         public static int from_resource_name_get_stack_resource_quantity_max (string resource_name)
         {

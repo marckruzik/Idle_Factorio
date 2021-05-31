@@ -6,9 +6,8 @@ namespace NS_Manager_Resource
 {
     public class Manager_Resource
     {
-
         Dictionary<string, Resource_Stack> dico_resource_name_plus_resource_stack = new Dictionary<string, Resource_Stack> ();
-
+        public int chest_size = 1;
 
         public bool can_craft (Resource_Mix mix_component)
         {
@@ -35,9 +34,13 @@ namespace NS_Manager_Resource
         {
             quantity = Math.Min (manager_resource_source.from_resource_name_get_resource_quantity (resource_name), quantity);
 
-            manager_resource_source.from_resource_name_and_resource_quantity_add_resource (resource_name, -quantity);
-
+            int destination_before = manager_resource_destination.from_resource_name_get_resource_quantity (resource_name);
             manager_resource_destination.from_resource_name_and_resource_quantity_add_resource (resource_name, quantity);
+            int destination_after = manager_resource_destination.from_resource_name_get_resource_quantity (resource_name);
+
+            int change = destination_after - destination_before;
+
+            manager_resource_source.from_resource_name_and_resource_quantity_add_resource (resource_name, -change);
         }
 
 
@@ -100,7 +103,7 @@ namespace NS_Manager_Resource
         public int from_resource_name_get_stock_resource_quantity_max (string resource_name)
         {
             int stack_resource_quantity_max = Resource.from_resource_name_get_stack_resource_quantity_max (resource_name);
-            int chest_size = Resource.chest_size;
+            int chest_size = this.chest_size;
             int stock_resource_quantity_max = stack_resource_quantity_max * chest_size;
             return stock_resource_quantity_max;
         }
