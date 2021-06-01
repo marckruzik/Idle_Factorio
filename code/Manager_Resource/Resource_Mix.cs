@@ -16,6 +16,13 @@ namespace NS_Manager_Resource
                 .Select (resource_stack => resource_stack.get_text ()));
         }
 
+        public Resource_Stack from_resource_name_get_resource_stack (string resource_name)
+        {
+            return this.list_resource_stack
+                .FirstOrDefault (resource_stack => resource_stack.resource_name == resource_name);
+        }
+
+
         public static Resource_Mix from_resource_mix_text_get_resource_mix (string resource_mix_text)
         {
             List<string> list_resource_stack_text = from_resource_mix_text_get_list_resource_stack_text (resource_mix_text);

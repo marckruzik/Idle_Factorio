@@ -3,12 +3,11 @@
 @using NS_Manager_Resource
 @using NS_Game_Engine
 @using Pages
-@implements IDisposable
 
 
 
 @{ 
-    Console.WriteLine ("generate Blazor Generator");
+    Console.WriteLine ("generate Blazor Generator\n" + this.recipe.get_text ());
     
 }
 
@@ -16,7 +15,7 @@
 
 @{ 
 
-    int chest_height = (3 + recipe.get_component_count ()) * s;
+    int chest_height = (3 + this.recipe.get_component_count ()) * s;
 
 }
 
@@ -43,26 +42,25 @@
 
 
     @{ 
-        Resource_Stack stack_result = recipe.mix_result.list_resource_stack[0];
+        string result_resource_name = get_result_resource_name ();
     }
 
 
 
     <!-- Line 2 -->
 
-    @{ int start_line = recipe.get_component_count () - 1;}
+    @{ int start_line = this.recipe.get_component_count () - 1;}
 
     @{ 
-        int stack_resource_quantity_max = Resource.from_resource_name_get_stack_resource_quantity_max (stack_result.resource_name);
+        int stack_resource_quantity_max = Resource.from_resource_name_get_stack_resource_quantity_max (result_resource_name);
     }
 
-    <Cellicon picture_filename=@(Resource.from_resource_name_get_resource_filename (stack_result.resource_name))
+    <Cellicon picture_filename=@(Resource.from_resource_name_get_resource_filename (result_resource_name))
             position=@(new Position (s*7, s*(start_line+0), s, s))
             action=@(() => 
                      {
                          Console.WriteLine ("chest_upgrade");
                          action_upgrade ();
-                         this.need_refresh = true;
                      })
             action_authorize=action_upgrade_is_ready
             text_top_right=@((stack_resource_quantity_max*2).ToString ())
@@ -74,7 +72,7 @@
     
 
     <Chest 
-           resource_name=@(stack_result.resource_name)
+           resource_name=@(result_resource_name)
            position=@(new Position (s*0, s*(start_line+1), s*8, s*1))
            cell_size=s 
            />
@@ -101,9 +99,9 @@
                 />
 
 
-    <Cellicon picture_filename=@(Resource.from_resource_name_get_resource_filename (stack_result.resource_name))
+    <Cellicon picture_filename=@(Resource.from_resource_name_get_resource_filename (result_resource_name))
                 position=@(new Position (s*7, s*(start_line+2), s, s))
-                text_top_left=@($"+{stack_result.quantity * stack_tool.quantity}")
+                text_top_left=@($"+{get_result_val ()}")
                 />
 
 
@@ -114,21 +112,6 @@
 
 @code{
 
-
-    protected override void OnInitialized()
-    {
-        base.OnInitialized ();
-        Console.WriteLine ("OnInitialized");
-
-        if (Factorio.dico_generator_plus_bgenerator.ContainsKey (this.generator) == false)
-        {
-            Factorio.dico_generator_plus_bgenerator.Add (this.generator, this);
-        }
-        else
-        {
-            Factorio.dico_generator_plus_bgenerator[this.generator] = this;
-        }
-    }
 
 
     public bool craft_is_ready ()
@@ -187,19 +170,17 @@
 
         Resource_Stack stack_tool = get_stack_tool ();
 
-        this.generator.manager_resource.from_resource_mix_remove_resource (recipe.mix_component * stack_tool.quantity);
-        this.need_refresh = true;
+        this.generator.manager_resource.from_resource_mix_remove_resource (this.recipe.mix_component * stack_tool.quantity);
 
-        Resource_Mix mix_result = recipe.mix_result * stack_tool.quantity;
+        Resource_Mix mix_result = this.recipe.mix_result * stack_tool.quantity;
 
         Action action = delegate ()
         {
             Game_Engine.self.manager_resource.from_resource_mix_add_resource (mix_result);
-            this.need_refresh = true;
         };
 
 
-        Job job = Game_Engine.self.manager_job.from_action_and_time_total_add_job (action, recipe.time);
+        Job job = Game_Engine.self.manager_job.from_action_and_time_total_add_job (action, this.recipe.time);
         job.id = get_job_id ();
 
     }
@@ -207,8 +188,7 @@
 
     public bool action_upgrade_is_ready ()
     {
-        Resource_Stack stack_result = recipe.mix_result.list_resource_stack[0];
-        string resource_name = stack_result.resource_name;
+        string resource_name = get_result_resource_name ();
         int stock_resource_quantity_max = Game_Engine.self.manager_resource.from_resource_name_get_stock_resource_quantity_max (
             resource_name);
         int stock_resource_quantity = Game_Engine.self.manager_resource.from_resource_name_get_resource_quantity (resource_name);
@@ -218,24 +198,17 @@
 
     public void action_upgrade ()
     {
-        Resource_Stack stack_result = recipe.mix_result.list_resource_stack[0];
-        int stack_resource_quantity_max = Resource.from_resource_name_get_stack_resource_quantity_max (stack_result.resource_name);
+        string resource_name = get_result_resource_name ();
+        int stack_resource_quantity_max = Resource.from_resource_name_get_stack_resource_quantity_max (resource_name);
         int stack_resource_quantity_max_future = stack_resource_quantity_max * 2;
 
-        Resource.dico_resource_name_plus_stack_resource_quantity_max[stack_result.resource_name] =
+        Resource.dico_resource_name_plus_stack_resource_quantity_max[resource_name] =
             stack_resource_quantity_max_future;
         //Game_Engine.self.manager_resource.from_resource_name_and_resource_quantity_set_resource_quantity (
         //    stack_result.resource_name, stack_resource_quantity_max_future);
     }
 
 
-
-    public Resource_Stack get_stack_tool ()
-    {
-        Resource resource_tool = this.recipe.list_tool_kind[0];
-        Resource_Stack stack_tool = this.generator.manager_resource.from_resource_name_get_resource_stack (resource_tool.resource_name);
-        return stack_tool;
-    }
 
     public string get_job_id ()
     {
@@ -267,32 +240,14 @@
     }
 
 
-    public string get_result_resource_name ()
-    {
-        return this.recipe.mix_result.list_resource_stack[0].resource_name;
-    }
 
 
     public override void listener_setup ()
     {
         base.listener_setup ();
-        List<string> list_resource_name =
-            this.recipe.mix_component.list_resource_stack
-            .Concat (this.recipe.mix_result.list_resource_stack)
-            .Select (resource_stack => resource_stack.resource_name)
-            .ToList ();
-
-        foreach (string resource_name in list_resource_name)
-        {
-            listener_add (() => Game_Engine.self.manager_resource.from_resource_name_get_resource_quantity (resource_name));
-        }
+        listener_add (() => get_stack_tool ().quantity);
     }
 
 
-    public override void Dispose ()
-    {
-        base.Dispose ();
-        Factorio.dico_generator_plus_bgenerator.Remove (this.generator);
-    }
 
 }

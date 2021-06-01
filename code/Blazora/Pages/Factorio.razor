@@ -12,7 +12,7 @@
 
 
 @code{
-    public static Dictionary<Generator, BGenerator> dico_generator_plus_bgenerator;
+
 }
 
 <style>
@@ -109,31 +109,34 @@
 
     if (Game_Engine.self.initialized == false)
     {
+        // Configuration
+        Game_Engine.self.manager_resource.chest_size = Resource.chest_size;
 
+        // Mine
+        Resource.dico_resource_name_plus_stack_resource_quantity_max["iron_ore_mine"] = 999;
+        Game_Engine.self.manager_resource.from_resource_name_and_resource_quantity_set_resource_quantity ("iron_ore_mine", 999);
+        Resource.dico_resource_name_plus_stack_resource_quantity_max["coal_ore_mine"] = 999;
+        Game_Engine.self.manager_resource.from_resource_name_and_resource_quantity_set_resource_quantity ("coal_ore_mine", 999);
+        Resource.dico_resource_name_plus_stack_resource_quantity_max["stone_ore_mine"] = 999;
+        Game_Engine.self.manager_resource.from_resource_name_and_resource_quantity_set_resource_quantity ("stone_ore_mine", 999);
+
+        // Special item
+        Game_Engine.self.manager_resource.from_resource_name_and_resource_quantity_set_resource_quantity ("pickaxe", 1);
+        Game_Engine.self.manager_resource.from_resource_name_and_resource_quantity_set_resource_quantity ("hand", 1);
+
+        // Recipe
         add_generator ("iron_ore_mine * 1 => iron_ore * 1", 2, "pickaxe");
         add_generator ("coal_ore_mine * 1 => coal_ore * 1", 2, "pickaxe");
         add_generator ("stone_ore_mine * 1 => stone_ore * 1", 2, "pickaxe");
         add_generator ("iron_ore * 1 + coal_ore * 1 => iron_plate * 1", 2, "furnace_stone");
         add_generator ("stone_ore * 10 => furnace_stone * 1", 2, "hand");
-        
 
-        Resource.dico_resource_name_plus_stack_resource_quantity_max["iron_ore_mine"] = 999;
-        Resource.dico_resource_name_plus_stack_resource_quantity_max["coal_ore_mine"] = 999;
-        Resource.dico_resource_name_plus_stack_resource_quantity_max["stone_ore_mine"] = 999;
-
-        Game_Engine.self.manager_resource.chest_size = Resource.chest_size;
-
+        // Quickstart
         Game_Engine.self.manager_resource.from_resource_name_and_resource_quantity_set_resource_quantity ("iron_ore", 8);
         Game_Engine.self.manager_resource.from_resource_name_and_resource_quantity_set_resource_quantity ("coal_ore", 8);
         Game_Engine.self.manager_resource.from_resource_name_and_resource_quantity_set_resource_quantity ("stone_ore", 8);
         Game_Engine.self.manager_resource.from_resource_name_and_resource_quantity_set_resource_quantity ("furnace_stone", 4);
-        Game_Engine.self.manager_resource.from_resource_name_and_resource_quantity_set_resource_quantity ("pickaxe", 1);
-        Game_Engine.self.manager_resource.from_resource_name_and_resource_quantity_set_resource_quantity ("hand", 1);
-        Game_Engine.self.manager_resource.from_resource_name_and_resource_quantity_set_resource_quantity ("iron_ore_mine", 999);
-        Game_Engine.self.manager_resource.from_resource_name_and_resource_quantity_set_resource_quantity ("coal_ore_mine", 999);
-        Game_Engine.self.manager_resource.from_resource_name_and_resource_quantity_set_resource_quantity ("stone_ore_mine", 999);
 
-        Factorio.dico_generator_plus_bgenerator = new Dictionary<Generator, BGenerator> ();
     }
 
 

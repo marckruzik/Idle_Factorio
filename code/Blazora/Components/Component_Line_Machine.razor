@@ -9,7 +9,7 @@
 <Component_Line_Stock />
 
 @{ 
-    Resource_Stack stack_tool = this.bgenerator.get_stack_tool ();
+    Resource_Stack stack_tool = get_stack_tool ();
 }
 
 
@@ -24,8 +24,15 @@
                                 this.generator.manager_resource,
                                 stack_tool.resource_name, 
                                 1);
-                            this.need_refresh = true;
                         })
             text_bottom_right=@(stack_tool.quantity.ToString ())
             />
 
+
+@code{      
+    public override void listener_setup ()
+    {
+        base.listener_setup ();
+        listener_add (() => get_stack_tool ().quantity);
+    }
+}

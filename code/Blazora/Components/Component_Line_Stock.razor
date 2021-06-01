@@ -3,40 +3,69 @@
 @using NS_Manager_Resource
 @using NS_Game_Engine
 
+@using Pages
 
-
+@{ 
+    Console.WriteLine ("generate Blazor Line Stock\n" + this.recipe.get_text ());
+}
 
 @for (int i = 0; i < this.recipe.get_component_count (); i++)
 {
     Resource_Stack component_stack = this.recipe.mix_component.list_resource_stack[i];
 
-    // Global stock
-    int glob_val = Game_Engine.self
-        .manager_resource
-        .from_resource_name_get_resource_stack (component_stack.resource_name)
-        .quantity;
+    string resource_name = component_stack.resource_name;
 
+    // Global stock
     <Cellicon picture_filename=@(Resource.from_resource_name_get_resource_filename (component_stack.resource_name))
                 position=@(new Position (s * 0, s * i, s, s))
-                text_bottom_right=@(glob_val.ToString ())
+                text_bottom_right=@(get_stock_val (resource_name).ToString ())
                 />
-
-    int loc_val = this.generator.manager_resource.from_resource_name_get_resource_stack (component_stack.resource_name).quantity;
-    int loc_min = component_stack.quantity * this.bgenerator.get_stack_tool ().quantity;
 
     <Cellicon picture_filename=@(Resource.from_resource_name_get_resource_filename (component_stack.resource_name))
                 position=@(new Position (s * 3, s * i, s, s))
                 action=@(() =>
-                            {
-                                Console.WriteLine ($"{component_stack.resource_name}_in_tool_kind");
-                                Manager_Resource.resource_transfer (
-                                    Game_Engine.self.manager_resource,
-                                    this.generator.manager_resource,
-                                    component_stack.resource_name, 
-                                    1);
-                                this.bgenerator.need_refresh = true;
-                            })
-                text_bottom_right=@($"{loc_val}/{loc_min}")
+                         {
+                             Console.WriteLine ($"{component_stack.resource_name}_in_tool_kind");
+                             Manager_Resource.resource_transfer (
+                                 Game_Engine.self.manager_resource,
+                                 this.generator.manager_resource,
+                                 component_stack.resource_name,
+                                 1);
+                         })
+                text_bottom_right=@($"{get_loc_val (resource_name)}/{get_loc_min (resource_name)}")
                 />
 
 }
+
+
+@{
+
+
+
+}
+
+
+@code{        
+
+    public override void listener_setup ()
+    {
+        base.listener_setup ();
+
+        List<string> list_resource_name = this.recipe.mix_component.list_resource_stack
+            .Select (resource_stack => resource_stack.resource_name)
+            .ToList ();
+
+        foreach (string resource_name in list_resource_name)
+        {
+            listener_add (() => get_loc_val (resource_name));
+            listener_add (() => get_loc_min (resource_name));
+            listener_add (() => get_stock_val (resource_name));
+        }
+
+        listener_add (() => get_tool_val ());
+    }
+
+
+
+}
+
