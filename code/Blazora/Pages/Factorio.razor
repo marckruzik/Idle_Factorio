@@ -141,13 +141,15 @@
 }
 
 
+
     @foreach (Generator generator in Game_Engine.self.manager_generator.Values)
     {
-        <BGenerator recipe=@(generator.recipe) /> 
+        <CascadingValue Value=generator.recipe>
+            <BGenerator /> 
+        </CascadingValue>
 
         <div><br /></div>
     }
-
 
 
 </div>

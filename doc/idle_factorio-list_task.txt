@@ -16,3 +16,4 @@
 - Generator hand
 
 
+- Google analytics
