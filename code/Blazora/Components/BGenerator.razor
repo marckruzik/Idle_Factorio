@@ -1,35 +1,15 @@
-﻿@inherits Game_Component
+﻿@inherits BGenerator_Component
 @using BlazorApp.Shared.Models
 @using NS_Manager_Resource
 @using NS_Game_Engine
-
-@code {
-    [Parameter] public Recipe2 recipe { get; set; }
-
+@using Pages
+@implements IDisposable
 
 
-    private Generator generator;
-}
 
 @{ 
     Console.WriteLine ("generate Blazor Generator");
-}
-
-
-<style>
-
-</style>
-
-@{
-    int s = Program.cell_size;
-}
-
-
-
-@{ 
     
-    this.generator = Game_Engine.self
-        .manager_generator.from_recipe_get_generator(this.recipe);
 }
 
 
@@ -54,17 +34,11 @@
 
     @if (stack_tool.resource_name != "pickaxe")
     {
-        <Component_Line_Machine 
-                            recipe=@(this.recipe) 
-                            bgenerator=@(this)
-                            />
+        <Component_Line_Machine recipe=@(this.recipe) />
     }
     else
     {
-        <Component_Line_Pickaxe
-                            recipe=@(this.recipe) 
-                            bgenerator=@(this)
-                            />
+        <Component_Line_Pickaxe recipe=@(this.recipe) />
     }
 
 
@@ -139,6 +113,23 @@
 
 
 @code{
+
+
+    protected override void OnInitialized()
+    {
+        base.OnInitialized ();
+        Console.WriteLine ("OnInitialized");
+
+        if (Factorio.dico_generator_plus_bgenerator.ContainsKey (this.generator) == false)
+        {
+            Factorio.dico_generator_plus_bgenerator.Add (this.generator, this);
+        }
+        else
+        {
+            Factorio.dico_generator_plus_bgenerator[this.generator] = this;
+        }
+    }
+
 
     public bool craft_is_ready ()
     {
@@ -295,6 +286,13 @@
         {
             listener_add (() => Game_Engine.self.manager_resource.from_resource_name_get_resource_quantity (resource_name));
         }
+    }
+
+
+    public override void Dispose ()
+    {
+        base.Dispose ();
+        Factorio.dico_generator_plus_bgenerator.Remove (this.generator);
     }
 
 }

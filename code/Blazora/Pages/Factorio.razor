@@ -12,7 +12,7 @@
 
 
 @code{
-    
+    public static Dictionary<Generator, BGenerator> dico_generator_plus_bgenerator;
 }
 
 <style>
@@ -115,7 +115,7 @@
         add_generator ("stone_ore_mine * 1 => stone_ore * 1", 2, "pickaxe");
         add_generator ("iron_ore * 1 + coal_ore * 1 => iron_plate * 1", 2, "furnace_stone");
         add_generator ("stone_ore * 10 => furnace_stone * 1", 2, "hand");
-        //add_generator ("iron_ore * 2 => iron_plate * 2", 2, "furnace_stone");
+        
 
         Resource.dico_resource_name_plus_stack_resource_quantity_max["iron_ore_mine"] = 999;
         Resource.dico_resource_name_plus_stack_resource_quantity_max["coal_ore_mine"] = 999;
@@ -132,6 +132,8 @@
         Game_Engine.self.manager_resource.from_resource_name_and_resource_quantity_set_resource_quantity ("iron_ore_mine", 999);
         Game_Engine.self.manager_resource.from_resource_name_and_resource_quantity_set_resource_quantity ("coal_ore_mine", 999);
         Game_Engine.self.manager_resource.from_resource_name_and_resource_quantity_set_resource_quantity ("stone_ore_mine", 999);
+
+        Factorio.dico_generator_plus_bgenerator = new Dictionary<Generator, BGenerator> ();
     }
 
 

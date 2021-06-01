@@ -1,0 +1,42 @@
+﻿@inherits Game_Component
+@using BlazorApp.Shared.Models
+@using NS_Manager_Resource
+@using NS_Game_Engine
+@using Pages
+
+@code {
+    [Parameter] public Recipe2 recipe { get; set; }
+}
+
+
+
+
+@code{
+
+
+
+
+    public Generator generator
+    {
+        get
+        {
+            return Game_Engine.self.manager_generator.from_recipe_get_generator (this.recipe);
+        }
+    }
+
+    public BGenerator bgenerator
+    {
+        get
+        {
+            return Factorio.dico_generator_plus_bgenerator[generator];
+        } 
+    }
+
+    public int s
+    {
+        get
+        {
+            return Program.cell_size;
+        }
+    }
+}

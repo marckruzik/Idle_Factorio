@@ -1,21 +1,13 @@
-﻿@inherits Game_Component
+﻿@inherits BGenerator_Component
 @using BlazorApp.Shared.Models
 @using NS_Manager_Resource
 @using NS_Game_Engine
 
 @code {
-    [Parameter] public Recipe2 recipe { get; set; }
-    [Parameter] public BGenerator bgenerator { get; set; }
 
     
-    private Generator generator;
 }
 
-@{ 
-    this.generator = Game_Engine.self
-        .manager_generator.from_recipe_get_generator(this.recipe);
-    int s = Program.cell_size;
-}
 
 
 
