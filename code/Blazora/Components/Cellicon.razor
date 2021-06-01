@@ -3,9 +3,9 @@
 @using BlazorApp.Shared.Models
 
 @code{
-    
+
     [Parameter] public string picture_filename { get; set; }
-    
+
     [Parameter] public System.Action action { get; set; }
     [Parameter] public System.Func<bool> action_authorize { get; set; }
 
@@ -17,13 +17,14 @@
     [Parameter] public string background_color_default { get; set; } = "transparent";
     [Parameter] public bool border { get; set; } = false;
 
+    [Parameter] public Func<int> stack_func_current { get; set; }
+    [Parameter] public Func<int> stack_func_max { get; set; }
+    
+
 }
 
 
-<style>
 
-
-</style>
 
 
 @{ 
@@ -31,6 +32,9 @@
     {
         border = true;
     }
+
+    int s = position.width;
+
 }
 
 
@@ -90,7 +94,7 @@
     {
         <div class="layer">
             <div class="text_wb" style="
-            bottom: 2px;
+            bottom: 4px;
             left: 2px;
             ">
                 @text_bottom_left
@@ -102,7 +106,7 @@
     {
         <div class="layer">
             <div class="text_wb" style="
-            bottom: 2px;
+            bottom: 4px;
             right: 2px;
             ">
                 @text_bottom_right
@@ -110,7 +114,18 @@
         </div>
     }
 
-
+    <!-- Stack bar -->
+    @if(stack_func_current != null)
+    {
+        <ProgressBar 
+                     position=@(new Position (0, s-3, s, 2))
+                     val_func="@(stack_func_current)"
+                     val_max=@(stack_func_max ())
+                     background_color="#FF0000"
+                     fill_color="#00FF00"
+                     />
+    }
+	
     <!-- border -->
     @if (border == true)
     {
@@ -193,6 +208,8 @@
         base.listener_setup ();
         listener_add (() => this.text_top_right);
         listener_add (() => is_action_authorized ().ToString ());
+        listener_add (this.stack_func_current);
+        listener_add (this.stack_func_max);
     }
 
     public static int from_text_get_val (string text)

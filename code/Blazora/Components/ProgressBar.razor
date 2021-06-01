@@ -1,0 +1,83 @@
+﻿@inherits Game_Component
+
+
+
+@code{
+
+    [Parameter] public string background_color { get; set; }
+    [Parameter] public string fill_color { get; set; }
+    [Parameter] public bool border { get; set; }
+
+}
+
+
+
+
+<div class="progressbar_container" style="
+    position: absolute;
+    @(position != null ? $"left: {position.x}px;" : "")
+    @(position != null ? $"top: {position.y}px;" : "")
+    @(position != null ? $"width: {position.width}px;" : "")
+    @(position != null ? $"height: {position.height}px;" : "")
+    @(border == true ? "border: 1px solid black;" : "")
+    @(background_color != null ? $"background-color: {background_color};" : "")
+    ">
+
+    <div class="progressbar_content" style="        
+        position: absolute;
+        height: @($"{this.position.height}px");
+        width: @($"{get_content_width ()}px");
+        top: 0px;
+        left: 0px;
+        @(fill_color != null ? $"background-color: {fill_color};" : "")
+    ">
+
+
+    </div>
+
+</div>
+
+
+
+@code {
+
+    [Parameter] public int val_max { get; set; } = 100;
+    [Parameter] public Func<int> val_func { get; set; }
+
+    public int get_content_width ()
+    {
+        int val_current = this.val_func ();
+
+        int val = val_current;
+        if (val < 0)
+        {
+            val = 0;
+        }
+        else if (val > this.val_max)
+        {
+            val = this.val_max;
+        }
+
+        float percentage = val_current / (float)this.val_max;
+
+        float content_width_original = percentage * (this.position.width);
+        content_width_original = (float)Math.Ceiling (content_width_original);
+        if (content_width_original > this.position.width)
+        {
+            content_width_original = this.position.width;
+        }
+        int content_width = (int)content_width_original;
+
+        return content_width;
+    }
+
+
+    public override void listener_setup ()
+    {
+        base.listener_setup ();
+        listener_add (this.val_func);
+        listener_add (() => this.val_max);
+    }
+
+
+}

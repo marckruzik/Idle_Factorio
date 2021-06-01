@@ -26,6 +26,8 @@
                                 1);
                         })
             text_bottom_right=@(stack_tool.quantity.ToString ())
+            stack_func_current=@(() => get_loc_val (stack_tool.resource_name))
+            stack_func_max=@(() => get_pack_max (stack_tool.resource_name))
             />
 
 

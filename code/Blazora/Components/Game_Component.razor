@@ -11,9 +11,9 @@
 
 
 @code {
-    
-    List<KeyValuePair<Func<int>, int>> list_kvp_func_val_number = new List<KeyValuePair<Func<int>, int>> ();
-    List<KeyValuePair<Func<string>, string>> list_kvp_func_val_text = new List<KeyValuePair<Func<string>, string>> ();
+
+        List<KeyValuePair<Func<int>, int>> list_kvp_func_val_number = new List<KeyValuePair<Func<int>, int>> ();
+        List<KeyValuePair<Func<string>, string>> list_kvp_func_val_text = new List<KeyValuePair<Func<string>, string>> ();
 
 
     protected override void OnInitialized()
@@ -44,15 +44,21 @@
     {
 
     }
-    
+
     public void listener_add (Func<int> func)
     {
-        list_kvp_func_val_number.Add (new KeyValuePair<Func<int>, int> (func, 0));
+        if (func != null)
+        {
+            list_kvp_func_val_number.Add (new KeyValuePair<Func<int>, int> (func, 0));
+        }
     }
 
     public void listener_add (Func<string> func)
     {
-        list_kvp_func_val_text.Add (new KeyValuePair<Func<string>, string> (func, ""));
+        if (func != null)
+        {
+            list_kvp_func_val_text.Add (new KeyValuePair<Func<string>, string> (func, ""));
+        }
     }
 
     public void listener_update ()

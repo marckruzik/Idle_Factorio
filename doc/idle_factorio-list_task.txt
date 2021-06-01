@@ -3,9 +3,6 @@
 
 
 
-- Pack, indicator
-
-
 - chest upgrade, icon upgrade
 
 - Resource Total
@@ -13,7 +10,6 @@
 
 
 
-- Generator hand
 
 
 
@@ -21,9 +17,7 @@
 
 
 
-
-
-
+- quest
 
 - Google analytics
 
