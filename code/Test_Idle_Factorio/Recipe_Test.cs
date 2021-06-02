@@ -152,7 +152,7 @@ namespace Test_Idle_Factorio
         public void when_recipe_text__get_recipe_text (
             string recipe_text, string recipe_text_2)
         {
-            Recipe2 recipe = Recipe2.from_recipe_text_get_recipe (recipe_text);
+            Recipe recipe = Recipe.from_recipe_text_get_recipe (recipe_text);
             string recipe_text_redo = recipe.get_text ();
 
             Assert.AreEqual (recipe_text_2, recipe_text_redo);

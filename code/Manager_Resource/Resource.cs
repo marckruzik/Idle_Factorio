@@ -28,6 +28,25 @@ namespace NS_Manager_Resource
             list_resource_name.
             ToDictionary (x => x, x => 1);
 
+        public static List<string> list_mine_resource_name = new List<string>
+        {
+            "coal_ore_mine",
+            "wood_ore_mine",
+            "iron_ore_mine",
+            "stone_ore_mine"
+        };
+
+        public static List<string> list_unique_resource_name = new List<string>
+        {
+            "pickaxe",
+            "hand"
+        };
+
+        public static List<string> list_can_craft_stock_resource_name = new List<string>
+        {
+            "pickaxe"
+        };
+
         public static int chest_size = 8;
 
 

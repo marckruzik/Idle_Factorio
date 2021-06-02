@@ -1,5 +1,5 @@
 ﻿@inherits Game_Component
-@inject IJSRuntime JSRuntime
+
 @using BlazorApp.Shared.Models
 
 @code{
@@ -10,6 +10,8 @@
     [Parameter] public System.Func<bool> action_authorize { get; set; }
 
     [Parameter] public string text_top_left { get; set; } = "";
+    [Parameter] public string text_middle_left { get; set; } = "";
+    [Parameter] public string text_middle_right { get; set; } = "";
     [Parameter] public string text_top_right { get; set; } = "";
     [Parameter] public string text_bottom_left { get; set; } = "";
     [Parameter] public string text_bottom_right { get; set; } = "";
@@ -19,7 +21,8 @@
 
     [Parameter] public Func<int> stack_func_current { get; set; }
     [Parameter] public Func<int> stack_func_max { get; set; }
-    
+
+    [Parameter] public bool hover { get; set; }
 
 }
 
@@ -53,7 +56,7 @@
 
     @if (action != null)
     {
-        <div @ref="layer_highlight" class="layer" style="" />
+        <div class="layer" style="background-color:@(this.hover == true ? "rgba(255, 255, 255, 0.3)" : "transparent");" />
     }
 
 
@@ -89,6 +92,30 @@
             </div>
         </div>
     }
+    <!-- value middle left -->
+    @if (text_middle_left != "")
+    {
+        <div class="layer">
+            <div class="text_wb" style="
+            @(position != null ? $"top: {(int)(position.height*0.4)}px;" : "")
+            left: 2px;
+            ">
+                @text_middle_left
+            </div>
+        </div>
+    }
+    <!-- value middle right -->
+    @if (text_middle_right != "")
+    {
+        <div class="layer">
+            <div class="text_wb" style="
+            @(position != null ? $"top: {(int)(position.height*0.4)}px;" : "")
+            right: 2px;
+            ">
+                @text_middle_right
+            </div>
+        </div>
+    }
     <!-- value bottom left -->
     @if (text_bottom_left != "")
     {
@@ -115,17 +142,15 @@
     }
 
     <!-- Stack bar -->
-    @if(stack_func_current != null)
+    @if (stack_func_current != null)
     {
-        <ProgressBar 
-                     position=@(new Position (0, s-3, s, 2))
+        <ProgressBar position=@(new Position (0, s-3, s, 2))
                      val_func="@(stack_func_current)"
                      val_max=@(stack_func_max ())
                      background_color="#FF0000"
-                     fill_color="#00FF00"
-                     />
+                     fill_color="#00FF00" />
     }
-	
+
     <!-- border -->
     @if (border == true)
     {
@@ -150,16 +175,14 @@
 
 
 
-    ElementReference layer_highlight;
-
-    public async void mouse_in ()
+    public void mouse_in ()
     {
-        await JSRuntime.InvokeVoidAsync ("hover_color_set", layer_highlight, "rgba(255, 255, 255, 0.3)");
+        this.hover = true;
     }
 
-    public async void mouse_out ()
+    public void mouse_out ()
     {
-        await JSRuntime.InvokeVoidAsync ("hover_color_set", layer_highlight, "transparent");
+        this.hover = false;
     }
 
     public string get_background_color ()
@@ -173,7 +196,8 @@
             else
             {
                 //return "#FF6060";
-                return "#3F3F3F";
+                //return "#3F3F3F";
+                return "#A33E42";
             }
         }
         else
@@ -210,6 +234,7 @@
         listener_add (() => is_action_authorized ().ToString ());
         listener_add (this.stack_func_current);
         listener_add (this.stack_func_max);
+        listener_add (() => this.hover.ToString ());
     }
 
     public static int from_text_get_val (string text)

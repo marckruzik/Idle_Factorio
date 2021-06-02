@@ -5,7 +5,7 @@
 @using Pages
 
 @code {
-    [CascadingParameter] public Recipe2 recipe { get; set; }
+    [CascadingParameter] public Recipe recipe { get; set; }
 
 }
 
@@ -43,41 +43,31 @@
         return Game_Engine.self.manager_resource.from_resource_name_get_resource_quantity (resource_name);
     }
 
-    public int get_loc_val (string resource_name)
-    {
-        return this.generator.manager_resource.from_resource_name_get_resource_stack (resource_name).quantity;
-    }
 
-    public int get_loc_min (string resource_name)
-    {
-        int component_quantity = this.recipe.mix_component.from_resource_name_get_resource_stack (resource_name).quantity;
-        return component_quantity * get_tool_val ();
-    }
 
-    public int get_tool_val ()
-    {
-        return get_stack_tool ().quantity;
-    }
-
-    public int get_pack_max (string resource_name)
+    public int get_stack_max (string resource_name)
     {
         return Resource.from_resource_name_get_stack_resource_quantity_max (resource_name);
     }
 
+
+
+    public int get_loc_val (string resource_name)
+        => this.generator.get_loc_val (resource_name);
+
+    public int get_loc_min (string resource_name)
+        => this.generator.get_loc_min (resource_name);
+    
+    public int get_tool_val ()
+        => this.generator.get_tool_val ();
+    
     public Resource_Stack get_stack_tool ()
-    {
-        return this.generator.get_stack_tool ();
-    }
-
+        => this.generator.get_stack_tool ();
+    
     public string get_result_resource_name ()
-    {
-        return this.recipe.mix_result.list_resource_stack[0].resource_name;
-    }
-
+        => this.generator.get_result_resource_name ();
+    
     public int get_result_val ()
-    {
-        string result_resource_name = get_result_resource_name ();
-        int result_quantity = this.recipe.mix_result.from_resource_name_get_resource_stack (result_resource_name).quantity;
-        return result_quantity * get_tool_val ();
-    }
+        => this.generator.get_result_val ();
+    
 }

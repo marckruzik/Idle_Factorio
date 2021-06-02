@@ -6,7 +6,7 @@ namespace NS_Manager_Resource
 {
     public class Generator
     {
-        public Recipe2 recipe;
+        public Recipe recipe;
         public Manager_Resource manager_resource;
 
 
@@ -17,6 +17,95 @@ namespace NS_Manager_Resource
             return stack_tool;
         }
 
+        public int get_result_val ()
+        {
+            string result_resource_name = get_result_resource_name ();
+            int result_quantity = this.recipe.mix_result.from_resource_name_get_resource_stack (result_resource_name).quantity;
+            return result_quantity * get_tool_val ();
+        }
+
+        public int get_tool_val ()
+        {
+            return get_stack_tool ().quantity;
+        }
+
+        public int get_loc_val (string resource_name)
+        {
+            return this.manager_resource.from_resource_name_get_resource_stack (resource_name).quantity;
+        }
+
+        public int get_loc_min (string resource_name)
+        {
+            int component_quantity = this.recipe.mix_component.from_resource_name_get_resource_stack (resource_name).quantity;
+            return component_quantity * get_tool_val ();
+        }
+
+
+
+        public static Generator from_recipe_get_generator (Recipe recipe)
+        {
+            Manager_Resource mr = new Manager_Resource ();
+            foreach (Resource_Stack component_stack in recipe.mix_component.list_resource_stack)
+            {
+                mr.from_resource_name_add_resource (component_stack.resource_name);
+            }
+            foreach (Resource tool_kind in recipe.list_tool_kind)
+            {
+                mr.from_resource_name_add_resource (tool_kind.resource_name);
+                if (Resource.list_unique_resource_name.Contains (tool_kind.resource_name) == true)
+                {
+                    mr.from_resource_name_and_resource_quantity_set_resource_quantity (tool_kind.resource_name, 1);
+                }
+            }
+
+            Generator generator = new NS_Manager_Resource.Generator ();
+            generator.recipe = recipe;
+            generator.manager_resource = mr;
+
+            return generator;
+        }
+
+
+        public string get_result_resource_name ()
+        {
+            return this.recipe.mix_result.list_resource_stack[0].resource_name;
+        }
+
+
+        public bool can_craft (Manager_Resource stock_manager_resource)
+        {
+            Resource_Stack stack_tool = get_stack_tool ();
+
+            if (stack_tool.quantity == 0)
+            {
+                return false;
+            }
+
+            string result_resource_name = get_result_resource_name ();
+            int result_quantity_max = stock_manager_resource.from_resource_name_get_stock_resource_quantity_max (result_resource_name);
+            int result_quantity = stock_manager_resource.from_resource_name_get_resource_quantity (result_resource_name);
+
+            if (result_quantity >= result_quantity_max)
+            {
+                return false;
+            }
+
+            if (must_craft_locally () == true)
+            {
+                bool ready = this.manager_resource.can_craft (this.recipe.mix_component * stack_tool.quantity);
+                return ready;
+            }
+            else
+            {
+                bool ready = stock_manager_resource.can_craft (this.recipe.mix_component * stack_tool.quantity);
+                return ready;
+            }
+        }
+
+        public bool must_craft_locally ()
+        {
+            return (Resource.list_can_craft_stock_resource_name.Contains (get_stack_tool ().resource_name) == false);
+        }
 
 
     }

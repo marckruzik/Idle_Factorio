@@ -15,90 +15,18 @@
 
 }
 
-<style>
-    .noselect *::selection
-    {
-        color: none;
-        background: none;
-    }
 
-    .noselect *::-moz-selection
-    {
-        color: none;
-        background: none;
-    }
-
-</style>
 
 
 <div class="noselect">
 
 <h3>Factorio</h3>
 
-    
 
 @code{
 
-    public Recipe2 get_recipe (string recipe_text, int time, string tool_kind_name)
-    {
-        Recipe2 recipe = new Recipe2 ();
-
-        string component_text = Recipe2.from_recipe_text_get_resource_mix_text_before (recipe_text);
-        string result_text = Recipe2.from_recipe_text_get_resource_mix_text_after (recipe_text);
-
-        recipe.mix_component = Resource_Mix.from_resource_mix_text_get_resource_mix (component_text);
-        recipe.time = time * 60;
-        recipe.mix_result = Resource_Mix.from_resource_mix_text_get_resource_mix (result_text);
-
-        recipe.list_tool_kind = new List<Resource> ()
-        {
-            Resource.from_resource_name_get_resource(tool_kind_name)
-        };
-
-        return recipe;
-    }
 
 
-    public void add_generator (string recipe_text, int time, string tool_kind_name)
-    {
-        Recipe2 recipe = get_recipe (recipe_text, time, tool_kind_name);
-        from_recipe_add_generator (recipe);
-    }
-
-
-    public void from_recipe_add_generator (Recipe2 recipe)
-    {
-        if (Game_Engine.self.manager_generator.ContainsKey (recipe.get_text ()) == true)
-        {
-            return;
-        }
-
-        Manager_Resource mr = new Manager_Resource ();
-        foreach (Resource_Stack component_stack in recipe.mix_component.list_resource_stack)
-        {
-            mr.from_resource_name_add_resource (component_stack.resource_name);
-        }
-        foreach (Resource tool_kind in recipe.list_tool_kind)
-        {
-            mr.from_resource_name_add_resource (tool_kind.resource_name);
-            if (tool_kind.resource_name == "pickaxe")
-            {
-                mr.from_resource_name_and_resource_quantity_set_resource_quantity ("pickaxe", 1);
-            }
-            if (tool_kind.resource_name == "hand")
-            {
-                mr.from_resource_name_and_resource_quantity_set_resource_quantity ("hand", 1);
-            }
-        }
-
-        NS_Manager_Resource.Generator generator = new NS_Manager_Resource.Generator ();
-        generator.recipe = recipe;
-        generator.manager_resource = mr;
-
-        Game_Engine.self.manager_generator.Add (recipe.get_text (), generator);
-
-
-    }
 
 }
 
@@ -106,41 +34,9 @@
 
 @{ 
 
-
-    if (Game_Engine.self.initialized == false)
-    {
-        // Configuration
-        Game_Engine.self.manager_resource.chest_size = Resource.chest_size;
-
-        // Mine
-        Resource.dico_resource_name_plus_stack_resource_quantity_max["iron_ore_mine"] = 999;
-        Game_Engine.self.manager_resource.from_resource_name_and_resource_quantity_set_resource_quantity ("iron_ore_mine", 999);
-        Resource.dico_resource_name_plus_stack_resource_quantity_max["coal_ore_mine"] = 999;
-        Game_Engine.self.manager_resource.from_resource_name_and_resource_quantity_set_resource_quantity ("coal_ore_mine", 999);
-        Resource.dico_resource_name_plus_stack_resource_quantity_max["stone_ore_mine"] = 999;
-        Game_Engine.self.manager_resource.from_resource_name_and_resource_quantity_set_resource_quantity ("stone_ore_mine", 999);
-
-        // Special item
-        Game_Engine.self.manager_resource.from_resource_name_and_resource_quantity_set_resource_quantity ("pickaxe", 1);
-        Game_Engine.self.manager_resource.from_resource_name_and_resource_quantity_set_resource_quantity ("hand", 1);
-
-        // Recipe
-        add_generator ("iron_ore_mine * 1 => iron_ore * 1", 2, "pickaxe");
-        add_generator ("coal_ore_mine * 1 => coal_ore * 1", 2, "pickaxe");
-        add_generator ("stone_ore_mine * 1 => stone_ore * 1", 2, "pickaxe");
-        add_generator ("iron_ore * 1 + coal_ore * 1 => iron_plate * 1", 2, "furnace_stone");
-        add_generator ("stone_ore * 5 => furnace_stone * 1", 2, "hand");
-
-        // Quickstart
-        Game_Engine.self.manager_resource.from_resource_name_and_resource_quantity_set_resource_quantity ("iron_ore", 8);
-        Game_Engine.self.manager_resource.from_resource_name_and_resource_quantity_set_resource_quantity ("coal_ore", 8);
-        Game_Engine.self.manager_resource.from_resource_name_and_resource_quantity_set_resource_quantity ("stone_ore", 8);
-        Game_Engine.self.manager_resource.from_resource_name_and_resource_quantity_set_resource_quantity ("furnace_stone", 4);
-
-    }
+    Game_Setup.setup ();
 
 
-    Game_Engine.self.initialized = true;
 }
 
 
@@ -157,8 +53,3 @@
 
 </div>
 
-@code{
-
-
-
-}

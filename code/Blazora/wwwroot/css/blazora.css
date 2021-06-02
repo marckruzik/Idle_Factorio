@@ -1,5 +1,18 @@
 ﻿
 
+.noselect *::selection
+{
+    color: none;
+    background: none;
+}
+
+.noselect *::-moz-selection
+{
+    color: none;
+    background: none;
+}
+
+
 
 .layer
 {

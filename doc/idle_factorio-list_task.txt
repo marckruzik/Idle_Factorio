@@ -1,23 +1,33 @@
 
+- Listener generic
+- Listener Manager
+
+- Recipe, loading CSV
+
+- Resource, loading CSV
 
 
+--------------------------------------
+
+- iron gear
+- burning drill
 
 
-- chest upgrade, icon upgrade
+- Line Pickaxe
+ - burning drill, when flag true, display
+ - Pickaxe, when local burning drill >= 1, hide
 
-- Resource Total
+- time on / off
+ - time, when local burning drill >= 1, on off
+ 
 
-
-
-
-
-
-
-
-
-
+--------------------------------------
 
 - quest
 
+- save JSON
+- load JSON
+
 - Google analytics
 
+- feedback when impossible

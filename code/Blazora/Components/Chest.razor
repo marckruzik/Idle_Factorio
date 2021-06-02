@@ -72,7 +72,7 @@
     {
         base.listener_setup ();
         listener_add (() => get_stock_val (this.resource_name));
-        listener_add (() => get_pack_max (this.resource_name));
+        listener_add (() => get_stack_max (this.resource_name));
     }
 
 
@@ -110,16 +110,16 @@
     public int get_val (int number)
     {
         int resource_total = Game_Engine.self.manager_resource.from_resource_name_get_resource_quantity (this.resource_name);
-        int pack_max = Resource.from_resource_name_get_stack_resource_quantity_max (this.resource_name);
+        int stack_max = Resource.from_resource_name_get_stack_resource_quantity_max (this.resource_name);
 
-        int resource_previous = pack_max * number;
+        int resource_previous = stack_max * number;
 
         int resource_amount = resource_total - resource_previous;
         if (resource_amount < 0)
         {
             return 0;
         }
-        int resource_current = Math.Min (resource_amount, pack_max);
+        int resource_current = Math.Min (resource_amount, stack_max);
 
         return resource_current;
     }

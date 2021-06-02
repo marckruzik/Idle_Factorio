@@ -68,10 +68,13 @@
                        })
               action_authorize=action_upgrade_is_ready
               text_top_right=@((stack_resource_quantity_max*2).ToString ())
+              text_middle_right="^"
               text_bottom_right=@($"Lv{stack_resource_quantity_max}")
               stack_func_current=@(() => get_stock_val (result_resource_name))
               stack_func_max=@(() => get_stock_max (result_resource_name))
             />
+
+
 
     <!-- Line 3 -->
 
@@ -110,7 +113,8 @@
 
     <Cellicon picture_filename=@(Resource.from_resource_name_get_resource_filename (result_resource_name))
                 position=@(new Position (s*7, s*(start_line+2), s, s))
-                text_top_left=@($"+{get_result_val ()}")
+                text_top_right=@($"+{get_result_val ()}")
+                text_bottom_right=@(get_stock_val (result_resource_name).ToString ())
                 />
 
 
@@ -130,36 +134,7 @@
             return false;
         }
 
-        Resource_Stack stack_tool = get_stack_tool ();
-
-        if (stack_tool.quantity == 0)
-        {
-            return false;
-        }
-
-        string result_resource_name = get_result_resource_name ();
-        int result_quantity_max = Game_Engine.self.manager_resource.from_resource_name_get_stock_resource_quantity_max (result_resource_name);
-        int result_quantity = Game_Engine.self.manager_resource.from_resource_name_get_resource_quantity (result_resource_name);
-
-        if (result_quantity >= result_quantity_max)
-        {
-            return false;
-        }
-
-        if (stack_tool.resource_name != "pickaxe")
-        {
-            Generator generator = Game_Engine.self
-                .manager_generator.from_recipe_get_generator (this.recipe);
-
-            bool ready = generator.manager_resource.can_craft (this.recipe.mix_component * stack_tool.quantity);
-            return ready;
-        }
-        else
-        {
-            bool ready = Game_Engine.self.manager_resource.can_craft (this.recipe.mix_component * stack_tool.quantity);
-            return ready;
-        }
-
+        return this.generator.can_craft (Game_Engine.self.manager_resource);
     }
 
 
@@ -254,6 +229,7 @@
         base.listener_setup ();
         listener_add (() => get_stack_tool ().quantity);
         listener_add (() => craft_is_ready ().ToString ());
+        listener_add (() => get_stock_val (get_result_resource_name ()));
     }
 
 
