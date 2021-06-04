@@ -1,9 +1,13 @@
 ﻿@using BlazorApp.Shared.Models
+@using NS_Game_Engine
 @implements IDisposable
 
 @code{
     
     [Parameter] public Position position { get; set; }
+
+
+    Manager_Listener manager_listener = new Manager_Listener ();
 
 }
 
@@ -12,8 +16,8 @@
 
 @code {
 
-        List<KeyValuePair<Func<int>, int>> list_kvp_func_val_number = new List<KeyValuePair<Func<int>, int>> ();
-        List<KeyValuePair<Func<string>, string>> list_kvp_func_val_text = new List<KeyValuePair<Func<string>, string>> ();
+
+    List<KeyValuePair<Func<string>, string>> list_kvp_func_val_text = new List<KeyValuePair<Func<string>, string>> ();
 
 
     protected override void OnInitialized()
@@ -45,49 +49,19 @@
 
     }
 
-    public void listener_add (Func<int> func)
-    {
-        if (func != null)
-        {
-            list_kvp_func_val_number.Add (new KeyValuePair<Func<int>, int> (func, 0));
-        }
-    }
 
-    public void listener_add (Func<string> func)
+
+    public void listener_add<T> (Func<T> func)
     {
-        if (func != null)
-        {
-            list_kvp_func_val_text.Add (new KeyValuePair<Func<string>, string> (func, ""));
-        }
+        this.manager_listener.add (func);
     }
 
     public void listener_update ()
     {
-        for (int i=0; i<this.list_kvp_func_val_number.Count; i++)
+        bool need_update = this.manager_listener.need_update ();
+        if (need_update == true)
         {
-            KeyValuePair<Func<int>, int> kvp_func_val = list_kvp_func_val_number[i];
-
-            Func<int> func = kvp_func_val.Key;
-            int func_val = func ();
-            int val = kvp_func_val.Value;
-            if (func_val != val)
-            {
-                list_kvp_func_val_number[i] = new KeyValuePair<Func<int>, int> (func, func_val);
-                this.need_refresh = true;
-            }
-        }
-        for (int i=0; i<this.list_kvp_func_val_text.Count; i++)
-        {
-            KeyValuePair<Func<string>, string> kvp_func_val = list_kvp_func_val_text[i];
-
-            Func<string> func = kvp_func_val.Key;
-            string func_val = func ();
-            string val = kvp_func_val.Value;
-            if (func_val != val)
-            {
-                list_kvp_func_val_text[i] = new KeyValuePair<Func<string>, string> (func, func_val);
-                this.need_refresh = true;
-            }
+            this.need_refresh = true;
         }
     }
 
