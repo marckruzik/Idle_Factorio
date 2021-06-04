@@ -10,14 +10,21 @@ namespace Blazora.Pages
 {
     public partial class Game_Page
     {
-        private System.Timers.Timer timer_refresh;
-        private System.Timers.Timer timer_logic;
 
         public static event Action graphical_action;
 
+        public bool graphical_running = true;
+        public static bool logical_running_started = false;
+
         protected override async Task OnInitializedAsync ()
         {
-            StartTimer ();
+            Console.WriteLine ("start1");
+            logical_thread_task ();
+
+            Console.WriteLine ("start2");
+            graphical_thread_task ();
+
+            Console.WriteLine ("start3");
             await Task.CompletedTask;
         }
 
@@ -25,38 +32,39 @@ namespace Blazora.Pages
         {
             base.OnInitialized ();
 
-            //Blazora.Pages.Game_Page.graphical_action += StateHasChanged;
         }
 
 
-        public void StartTimer ()
+
+        async Task graphical_thread_task ()
         {
-            if (this.timer_logic == null)
+            while (true)
             {
-                this.timer_logic = new System.Timers.Timer (16);
-                this.timer_logic.Elapsed += NotifyTimerElapsed;
-                this.timer_logic.AutoReset = true;
-                this.timer_logic.Enabled = true;
+                if (this.graphical_running == false)
+                {
+                    break;
+                }
+                graphical_update ();
+                await Task.Delay (16);
             }
-
-
-            this.timer_refresh = new System.Timers.Timer (16);
-            this.timer_refresh.Elapsed += NotifyTimerElapsedGraphical;
-            this.timer_refresh.AutoReset = true;
-            this.timer_refresh.Enabled = true;
-
         }
 
-
-        private void NotifyTimerElapsed (object source, ElapsedEventArgs e)
+        async Task logical_thread_task ()
         {
-            logical_update ();
+            if (logical_running_started == true)
+            {
+                return;
+            }
+            logical_running_started = true;
+            while (logical_running_started)
+            {
+                logical_update ();
+                await Task.Delay (16);
+            }
         }
 
-        private void NotifyTimerElapsedGraphical (object source, ElapsedEventArgs e)
-        {
-            graphical_update ();
-        }
+
+
 
 
         public virtual void logical_update ()
@@ -68,8 +76,7 @@ namespace Blazora.Pages
         public virtual void graphical_update ()
         {
             Game_Engine.self.graphical_update ();
-            //InvokeAsync (StateHasChanged);
-
+            //Console.WriteLine ("graphical update");
             Game_Page.graphical_action?.Invoke ();
         }
 
@@ -77,10 +84,7 @@ namespace Blazora.Pages
 
         public void Dispose ()
         {
-            this.timer_refresh.Dispose ();
-            this.timer_logic.Dispose ();
-            this.timer_logic = null;
-            //Blazora.Pages.Game_Page.graphical_action -= StateHasChanged;
+            this.graphical_running = false;
         }
 
 
