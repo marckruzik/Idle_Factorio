@@ -16,15 +16,16 @@ namespace Blazora.Pages
         public bool graphical_running = true;
         public static bool logical_running_started = false;
 
+
+        private System.Timers.Timer timer_logic;
+
+
         protected override async Task OnInitializedAsync ()
         {
-            Console.WriteLine ("start1");
-            logical_thread_task ();
+            StartTimer ();
 
-            Console.WriteLine ("start2");
             graphical_thread_task ();
 
-            Console.WriteLine ("start3");
             await Task.CompletedTask;
         }
 
@@ -34,25 +35,23 @@ namespace Blazora.Pages
 
         }
 
-        async Task logical_thread_task ()
+
+
+        public void StartTimer ()
         {
-            if (logical_running_started == true)
+            if (this.timer_logic == null)
             {
-                return;
+                this.timer_logic = new System.Timers.Timer (16);
+                this.timer_logic.Elapsed += NotifyTimerElapsed;
+                this.timer_logic.AutoReset = true;
+                this.timer_logic.Enabled = true;
             }
-            logical_running_started = true;
-            try
-            {
-                while (logical_running_started)
-                {
-                    logical_update ();
-                    await Task.Delay (16);
-                }
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine (e.Message);
-            }
+
+
+        }
+        private void NotifyTimerElapsed (object source, ElapsedEventArgs e)
+        {
+            logical_update ();
         }
 
 
@@ -89,14 +88,12 @@ namespace Blazora.Pages
         }
 
 
-
         public void Dispose ()
         {
             this.graphical_running = false;
+            this.timer_logic.Dispose ();
+            this.timer_logic = null;
         }
-
-
-
 
 
     }

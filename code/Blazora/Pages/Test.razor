@@ -1,25 +1,45 @@
 ﻿@page "/test"
 @using System.Threading;
+@using Blazora.Components
+@using Blazora.Scripts 
 
-<h1>@Count</h1>
+ 
 
-<button onclick="StartCountdown">Start Countdown</button>
+@code{
+    public int quantity = 0;
+}
+
+@{ Console.WriteLine ("Blazor : Page Test");}
+
+
+<h1>Test</h1>
+
+<button @onclick="increment">More</button>
+
+
+<Component_Test resource_quantity=@quantity />
+
+<Component_Test2 />
+
+
+<br />
+<br />
+
+
+
+
 
 @functions 
 {
-    private int Count { get; set; } = 10;
 
 
-    void StartCountdown()
+
+    private void increment()
     {
-        var timer = new Timer(new TimerCallback(_ =>
-        {
-            if (Count <= 0) return;
-            Count--;
-
-            // Note that the following line is necessary because otherwise
-            // Blazor would not recognize the state change and not refresh the UI
-            this.StateHasChanged();
-        }), null, 1000, 1000);
+        this.quantity += 1;
     }
+
+
+
+
 }

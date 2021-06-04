@@ -1,0 +1,27 @@
+﻿
+@code {
+
+    public int resource_quantity { get; set; }
+
+
+}
+
+
+
+@{ Console.WriteLine ("Blazor : Component_Test2");}
+
+
+<button @onclick="increment2">More 2</button>
+
+<span>Resource quantity 2: @resource_quantity</span>
+
+
+
+@functions 
+{
+
+    private void increment2()
+    {
+        this.resource_quantity += 1;
+    }
+}

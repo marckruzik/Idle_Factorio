@@ -22,13 +22,15 @@ namespace Blazora.Scripts
         {
             Console.WriteLine ("game setup");
             await from_csv_load_resource ();
+            await from_csv_load_recipe ();
             Console.WriteLine ("after csv load");
             Game_Engine.self.manager_resource = stock_manager_resource_setup ();
         }
 
 
-        public static void add_generator (string recipe_text, int time, string tool_kind_name)
+        public static void add_generator (string component_mix_text, string result_mix_text, int time, string tool_kind_name)
         {
+            string recipe_text = $"{component_mix_text} => {result_mix_text}";
             Recipe recipe = Recipe.get_recipe (recipe_text, time, tool_kind_name);
 
             Game_Engine.self.manager_generator.from_recipe_add_generator (recipe);
@@ -53,13 +55,7 @@ namespace Blazora.Scripts
                 stock_manager_resource.from_resource_name_and_resource_quantity_set_resource_quantity (mine_resource_name, 999);
             }
 
-            // Recipe
-            add_generator ("iron_ore_mine * 1 => iron_ore * 1", 2, "pickaxe");
-            add_generator ("coal_ore_mine * 1 => coal_ore * 1", 2, "pickaxe");
-            add_generator ("stone_ore_mine * 1 => stone_ore * 1", 2, "pickaxe");
-            add_generator ("iron_ore * 1 + coal_ore * 1 => iron_plate * 1", 2, "furnace_stone");
-            add_generator ("stone_ore * 4 => furnace_stone * 1", 2, "hand");
-
+            
             // Quickstart
             stock_manager_resource.from_resource_name_and_resource_quantity_set_resource_quantity ("iron_ore", 8);
             stock_manager_resource.from_resource_name_and_resource_quantity_set_resource_quantity ("coal_ore", 8);
@@ -71,12 +67,12 @@ namespace Blazora.Scripts
         }
 
 
+
         public static async Task from_csv_load_resource ()
         {
-
             string csv_filepath = "data/resource.csv";
             List<dynamic> list_record = await from_csv_filepath_get_list_record (csv_filepath);
-            
+
             foreach (IDictionary<String, Object> record in list_record)
             {
                 string resource_name = (string)record["resource_name"];
@@ -99,10 +95,33 @@ namespace Blazora.Scripts
                 Resource.list_resource_name.
                 ToDictionary (x => x, x => 1);
 
-
-            Console.WriteLine ("end csv load");
-
+            Console.WriteLine ("end resource csv load");
         }
+
+
+
+        public static async Task from_csv_load_recipe ()
+        {
+            string csv_filepath = "data/recipe.csv";
+            List<dynamic> list_record = await from_csv_filepath_get_list_record (csv_filepath);
+            
+            foreach (IDictionary<String, Object> record in list_record)
+            {
+                string component_mix_text = (string)record["component_mix"];
+                string component_result_text = (string)record["result_mix"];
+                int time = int.Parse((string)(record["time"]));
+                string tool_kind = (string)record["tool_kind"];
+
+                add_generator (component_mix_text, component_result_text, time, tool_kind);
+            }
+
+            Console.WriteLine ("end recipe csv load");
+        }
+
+
+
+
+
 
         private async static Task<List<dynamic>> from_csv_filepath_get_list_record (string csv_filepath)
         {
