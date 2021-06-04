@@ -9,7 +9,7 @@
 
 @using NS_Manager_Resource
 @using NS_Game_Engine
-
+@using Blazora.Scripts
 
 @code{
 
@@ -25,16 +25,28 @@
 
 @code{
 
+    public async Task setup ()
+    {
+        if (Game_Setup.initialized == false)
+        {
+            await Game_Setup.setup ();
+            Game_Setup.initialized = true;
+        }
+    }
 
 
+    protected override async Task OnInitializedAsync ()
+    {
+        await base.OnInitializedAsync ();
+        await setup ();
+    }
 
 }
 
 
 
 @{ 
-
-    Game_Setup.setup ();
+    
 
 
 }

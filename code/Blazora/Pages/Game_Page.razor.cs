@@ -34,6 +34,26 @@ namespace Blazora.Pages
 
         }
 
+        async Task logical_thread_task ()
+        {
+            if (logical_running_started == true)
+            {
+                return;
+            }
+            logical_running_started = true;
+            try
+            {
+                while (logical_running_started)
+                {
+                    logical_update ();
+                    await Task.Delay (16);
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine (e.Message);
+            }
+        }
 
 
         async Task graphical_thread_task ()
@@ -49,19 +69,6 @@ namespace Blazora.Pages
             }
         }
 
-        async Task logical_thread_task ()
-        {
-            if (logical_running_started == true)
-            {
-                return;
-            }
-            logical_running_started = true;
-            while (logical_running_started)
-            {
-                logical_update ();
-                await Task.Delay (16);
-            }
-        }
 
 
 
@@ -69,14 +76,15 @@ namespace Blazora.Pages
 
         public virtual void logical_update ()
         {
+            //Console.WriteLine ("logical update");
             Game_Engine.self.logical_update ();
         }
 
 
         public virtual void graphical_update ()
         {
-            Game_Engine.self.graphical_update ();
             //Console.WriteLine ("graphical update");
+            Game_Engine.self.graphical_update ();
             Game_Page.graphical_action?.Invoke ();
         }
 

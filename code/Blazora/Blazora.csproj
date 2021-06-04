@@ -7,6 +7,7 @@
 
 
   <ItemGroup>
+    <PackageReference Include="CsvHelper" Version="27.1.0" />
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="3.2.1" />
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Build" Version="3.2.1" PrivateAssets="all" />
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="3.2.1" PrivateAssets="all" />
@@ -18,6 +19,8 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Include="wwwroot\data\recipe.csv" />
+    <None Include="wwwroot\data\resource.csv" />
     <None Include="wwwroot\images\coal.png" />
     <None Include="wwwroot\images\sprite-sheet-3d3a8d8b3ece0e13191a2ea142d21131.png" />
   </ItemGroup>

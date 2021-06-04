@@ -2,7 +2,6 @@
 
 - Recipe, loading CSV
 
-- Resource, loading CSV
 
 
 --------------------------------------

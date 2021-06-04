@@ -15,12 +15,12 @@ namespace NS_Game_Engine
         public Manager_Generator manager_generator;
         public Manager_Job manager_job;
 
-        public bool initialized = false;
+        public static bool initialized = false;
 
         public long clock = 0;
 
 
-        public static void start ()
+        public static void setup ()
         {
             if (Game_Engine.self != null)
             {
@@ -40,12 +40,6 @@ namespace NS_Game_Engine
         private static Manager_Resource create_manager_resource ()
         {
             Manager_Resource manager_resource = new Manager_Resource ();
-
-            manager_resource.from_resource_name_add_resource ("wood_ore");
-            manager_resource.from_resource_name_add_resource ("coal_ore");
-            manager_resource.from_resource_name_add_resource ("iron_ore");
-            manager_resource.from_resource_name_add_resource ("iron_plate");
-            manager_resource.from_resource_name_add_resource ("furnace_stone");
 
             return manager_resource;
         }
