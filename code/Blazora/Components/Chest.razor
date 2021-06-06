@@ -22,13 +22,7 @@
 }
 
 
-<div class="chest" style="
-    position: absolute;
-    @(position != null ? $"left: {position.x}px" : "");
-    @(position != null ? $"top: {position.y}px" : "");
-    @(position != null ? $"width: {position.width}px" : "");
-    @(position != null ? $"height: {position.height}px" : "");
-    ">
+<div class="chest" style="@(from_position_get_style ())">
 
     @{ 
     }

@@ -43,13 +43,7 @@
 }
 
 
-<div class="container2" style="
-    position: absolute;
-    @(position != null ? $"left: {position.x}px" : "");
-    @(position != null ? $"top: {position.y}px" : "");
-    @(position != null ? $"width: {position.width}px" : "");
-    @(position != null ? $"height: {position.height}px" : "");
-    ">
+<div style="@(from_position_get_style ())">
 
     <!-- background -->
 
@@ -66,7 +60,7 @@
     @if (picture_filename != null)
     {
         <img class="layer" style=""
-             src="images/@picture_filename" />
+                src="images/@picture_filename" />
     }
 
 
@@ -147,10 +141,10 @@
     @if (stack_func_current != null)
     {
         <ProgressBar position=@(new Position (0, s-3, s, 2))
-                     val_func="@(stack_func_current)"
-                     val_max=@(stack_func_max ())
-                     background_color="#FF0000"
-                     fill_color="#00FF00" />
+                        val_func="@(stack_func_current)"
+                        val_max=@(stack_func_max ())
+                        background_color="#FF0000"
+                        fill_color="#00FF00" />
     }
 
     <!-- border -->
@@ -166,11 +160,7 @@
     }
 
 
-
 </div>
-
-
-
 
 @code {
 

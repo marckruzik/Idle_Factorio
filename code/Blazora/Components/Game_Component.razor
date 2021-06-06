@@ -18,6 +18,15 @@
 @code {
 
 
+    public string from_position_get_style ()
+    {
+        return $"position: absolute;" +
+                $"{(position != null ? $"left: {position.x}px" : "")};" +
+                $"{(position != null ? $"top: {position.y}px" : "")};" +
+                $"{(position != null ? $"width: {position.width}px" : "")};" +
+                $"{(position != null ? $"height: {position.height}px" : "")};";
+    }
+
 
     protected override void OnInitialized()
     {

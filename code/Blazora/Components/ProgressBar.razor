@@ -18,16 +18,12 @@
 
 
 <div class="progressbar_container" style="
-    position: absolute;
-    @(position != null ? $"left: {position.x}px;" : "")
-    @(position != null ? $"top: {position.y}px;" : "")
-    @(position != null ? $"width: {position.width}px;" : "")
-    @(position != null ? $"height: {position.height}px;" : "")
+    @(from_position_get_style ())
     @(border == true ? "border: 1px solid black;" : "")
     @(background_color != null ? $"background-color: {background_color};" : "")
     ">
 
-    <div class="progressbar_content" style="        
+    <div class="progressbar_content" style="
         position: absolute;
         height: @($"{this.position.height}px");
         width: @($"{get_content_width ()}px");
