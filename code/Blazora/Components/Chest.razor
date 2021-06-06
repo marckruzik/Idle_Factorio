@@ -12,11 +12,10 @@
     private Cellicon[] arr_cellicon { get; set; } = new Cellicon[Resource.chest_size];
 
 
+
 }
 
-<style>
 
-</style>
 
 @{ 
     Console.WriteLine ("generate Blazor Chest");
@@ -40,14 +39,16 @@
         int y = i / 8;
 
         var i2 = i;
+        
+        int val = get_val (i);
 
         <Cellicon 
+                  picture_filename=@(from_val_get_picture_filename (val))
                   @ref="arr_cellicon[i2]"
-                  picture_filename=@(get_picture_filename(i))
                   position=@(new Position (this.cell_size * x, this.cell_size * y, this.cell_size, this.cell_size))
-                  text_bottom_right=@(get_val_str(i))
                   background_color_default="#B2B1B1"
                   border=true
+                  text_bottom_right=@(from_val_get_text_bottom_right (val))
                   />
 
     }
@@ -76,34 +77,31 @@
     }
 
 
-    public override void graphical_update ()
-    {
-        base.graphical_update ();
-
-        for(int i=0; i<arr_cellicon.Length; i++)
-        {
-            Cellicon r = arr_cellicon[i];
-            int val = get_val (i);
-            set_val (r, val);
-        }
-    }
 
 
 
-
-    public void set_val(Cellicon r, int val)
+    public string from_val_get_text_bottom_right (int val)
     {
         if (val > 0)
         {
-            r.text_bottom_right = $"{val}";
-            r.picture_filename = Resource.from_resource_name_get_resource_filename (this.resource_name);
+            return $"{val}";
         }
         else
         {
-            r.text_bottom_right = "";
-            r.picture_filename = null;
+            return "";
         }
+    }
 
+    public string from_val_get_picture_filename (int val)
+    {
+        if (val > 0)
+        {
+            return Resource.from_resource_name_get_resource_filename (this.resource_name);
+        }
+        else
+        {
+            return null;
+        }
     }
 
 
@@ -125,31 +123,6 @@
     }
 
 
-    public string get_picture_filename(int number)
-    {
-        int val = get_val (number);
-        if (val > 0)
-        {
-            return Resource.from_resource_name_get_resource_filename (this.resource_name);
-        }
-        else
-        {
-            return null;
-        }
-    }
 
-
-    public string get_val_str (int number)
-    {
-        int val = get_val (number);
-        if (val > 0)
-        {
-            return val.ToString ();
-        }
-        else
-        {
-            return "";
-        }
-    }
 
 }

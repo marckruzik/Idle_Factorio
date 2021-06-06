@@ -4,18 +4,6 @@ namespace NS_Game_Engine
 {
     public class Manager_Listener
     {
-        /*
-        Dictionary<Type, IGame_Listener> dico_typ_game_listener = new Dictionary<Type, IGame_Listener> ();
-
-        public void add<T> (Func<T> func)
-        {
-            if (dico_typ_game_listener.ContainsKey (typeof(T)) == false)
-            {
-                dico_typ_game_listener.Add (typeof (T), new Game_Listener<T> ());
-            }
-            var x = dico_typ_game_listener[typeof (T)];
-        }
-        */
 
         Game_Listener<int> listener_int = new Game_Listener<int> ();
         Game_Listener<string> listener_string = new Game_Listener<string> ();

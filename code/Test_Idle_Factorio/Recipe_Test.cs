@@ -29,7 +29,7 @@ namespace Test_Idle_Factorio
         [TestCase ("coal_ore*1 + iron_ore*1 => iron_plate*1", "coal_ore*1 + iron_ore*1")]
         public void when_recipe__get_recipe_left (string recipe_text, string expected_recipe_text_left)
         {
-            string recipe_text_left = Recipe.from_recipe_text_get_resource_mix_text_before (recipe_text);
+            string recipe_text_left = Recipe.from_recipe_text_get_component_mix_text (recipe_text);
             Assert.AreEqual (expected_recipe_text_left, recipe_text_left);
         }
 
@@ -37,7 +37,7 @@ namespace Test_Idle_Factorio
         [TestCase ("coal_ore*1 + iron_ore*1 => iron_plate*1", "iron_plate*1")]
         public void when_recipe__get_recipe_right (string recipe_text, string expected_recipe_text_left)
         {
-            string recipe_text_left = Recipe.from_recipe_text_get_resource_mix_text_after (recipe_text);
+            string recipe_text_left = Recipe.from_recipe_text_get_result_mix_text (recipe_text);
             Assert.AreEqual (expected_recipe_text_left, recipe_text_left);
         }
 

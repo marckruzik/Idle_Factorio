@@ -16,7 +16,7 @@ namespace NS_Manager_Resource
         }
 
 
-        public static Resource_Stack from_resource_name_get_resource_stack (string resource_name)
+        public static Resource_Stack from_resource_name_create_resource_stack (string resource_name)
         {
             Resource resource = Resource.from_resource_name_get_resource (resource_name);
             Resource_Stack resource_stack = new Resource_Stack ();
@@ -24,21 +24,21 @@ namespace NS_Manager_Resource
             return resource_stack;
         }
 
-        public static Resource_Stack from_resource_name_and_resource_quantity_get_resource_stack (
+        public static Resource_Stack from_resource_name_and_resource_quantity_create_resource_stack (
             string resource_name, int resource_quantity)
         {
-            Resource_Stack resource_stack = Resource_Stack.from_resource_name_get_resource_stack (resource_name);
+            Resource_Stack resource_stack = Resource_Stack.from_resource_name_create_resource_stack (resource_name);
             resource_stack.quantity = resource_quantity;
             return resource_stack;
         }
 
 
-        public static Resource_Stack from_resource_stack_text_get_resource_stack (string resource_stack_text)
+        public static Resource_Stack from_resource_stack_text_create_resource_stack (string resource_stack_text)
         {
             string resource_name = Resource_Stack.from_resource_stack_text_get_resource_name (resource_stack_text);
             int resource_quantity = Resource_Stack.from_resource_stack_text_get_resource_quantity (resource_stack_text);
 
-            Resource_Stack resource_stack = Resource_Stack.from_resource_name_and_resource_quantity_get_resource_stack (
+            Resource_Stack resource_stack = Resource_Stack.from_resource_name_and_resource_quantity_create_resource_stack (
                 resource_name, resource_quantity);
             
             return resource_stack;
@@ -58,16 +58,6 @@ namespace NS_Manager_Resource
             return resource_quantity;
         }
 
-
-        public void increment ()
-        {
-            if (amount_max_reached () == true)
-            {
-                return;
-            }
-
-            this.quantity += 1;
-        }
 
 
         public bool amount_max_reached ()

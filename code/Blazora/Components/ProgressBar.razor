@@ -7,6 +7,10 @@
     [Parameter] public string background_color { get; set; }
     [Parameter] public string fill_color { get; set; }
     [Parameter] public bool border { get; set; }
+    [Parameter] public int val_max { get; set; } = 100;
+    [Parameter] public Func<int> val_func { get; set; }
+
+
 
 }
 
@@ -41,8 +45,15 @@
 
 @code {
 
-    [Parameter] public int val_max { get; set; } = 100;
-    [Parameter] public Func<int> val_func { get; set; }
+
+    public override void listener_setup ()
+    {
+        base.listener_setup ();
+        listener_add (this.val_func);
+        listener_add (() => this.val_max);
+    }
+
+
 
     public int get_content_width ()
     {
@@ -72,12 +83,6 @@
     }
 
 
-    public override void listener_setup ()
-    {
-        base.listener_setup ();
-        listener_add (this.val_func);
-        listener_add (() => this.val_max);
-    }
 
 
 }

@@ -24,7 +24,7 @@
 
 <div style="
     width: 256px;
-    height: @(chest_height)px;
+    height: @($"{chest_height}px");
     position: relative;
     ">
     @{ 
@@ -33,15 +33,15 @@
 
     @if (stack_tool.resource_name == "pickaxe")
     {
-        <Component_Line_Pickaxe />
+        <BGenerator_Header_Pickaxe />
     }
     else if (stack_tool.resource_name == "hand")
     {
-        <Component_Line_Hand />
+        <BGenerator_Header_Hand />
     }
     else
     {
-        <Component_Line_Machine />
+        <BGenerator_Header_Machine />
     }
 
 
@@ -67,7 +67,7 @@
                            action_upgrade ();
                        })
               action_authorize=action_upgrade_is_ready
-              text_top_right=@((stack_resource_quantity_max*2).ToString ())
+              text_top_right=@($"{stack_resource_quantity_max*2}")
               text_middle_right="^"
               text_bottom_right=@($"Lv{stack_resource_quantity_max}")
               stack_func_current=@(() => get_stock_val (result_resource_name))
@@ -94,7 +94,7 @@
                 position=@(new Position (s*0, s*(start_line+2), s, s))
                 action=craft
                 action_authorize=craft_is_ready
-                text_bottom_right=@((this.recipe.time / 60).ToString ())
+                text_bottom_right=@($"{this.recipe.time / 60}")
                 />
 
     @{ 
@@ -114,7 +114,7 @@
     <Cellicon picture_filename=@(Resource.from_resource_name_get_resource_filename (result_resource_name))
                 position=@(new Position (s*7, s*(start_line+2), s, s))
                 text_top_right=@($"+{get_result_val ()}")
-                text_bottom_right=@(get_stock_val (result_resource_name).ToString ())
+                text_bottom_right=@($"{get_stock_val (result_resource_name)}")
                 />
 
 
@@ -228,7 +228,7 @@
     {
         base.listener_setup ();
         listener_add (() => get_stack_tool ().quantity);
-        listener_add (() => craft_is_ready ().ToString ());
+        listener_add (() => craft_is_ready ());
         listener_add (() => get_stock_val (get_result_resource_name ()));
         listener_add (() => get_stack_max (get_result_resource_name ()));
     }

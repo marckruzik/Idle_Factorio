@@ -6,7 +6,7 @@
 @using Pages
 
 @{ 
-    Console.WriteLine ("generate Blazor Line Stock\n" + this.recipe.get_text ());
+    Console.WriteLine ("generate Blazor BGenerator Line Stock\n" + this.recipe.get_text ());
 }
 
 @for (int i = 0; i < this.recipe.get_component_count (); i++)
@@ -18,7 +18,7 @@
     // Global stock
     <Cellicon picture_filename=@(Resource.from_resource_name_get_resource_filename (component_stack.resource_name))
                 position=@(new Position (s * 0, s * i, s, s))
-                text_bottom_right=@(get_stock_val (resource_name).ToString ())
+                text_bottom_right=@($"{get_stock_val (resource_name)}")
                 />
 
     
@@ -54,21 +54,7 @@
 
 @code{
 
-    public bool action_ready (string resource_name)
-    {
-        if (get_stock_val (resource_name) == 0)
-        {
-            return false;
-        }
 
-        if (get_loc_val (resource_name) == get_stack_max (resource_name) &&
-            get_stack_max (resource_name) < get_loc_min (resource_name))
-        {
-            return false;
-        }
-
-        return true;
-    }
 
     public override void listener_setup ()
     {
@@ -86,6 +72,24 @@
         }
 
         listener_add (() => get_tool_val ());
+    }
+
+
+
+    public bool action_ready (string resource_name)
+    {
+        if (get_stock_val (resource_name) == 0)
+        {
+            return false;
+        }
+
+        if (get_loc_val (resource_name) == get_stack_max (resource_name) &&
+            get_stack_max (resource_name) < get_loc_min (resource_name))
+        {
+            return false;
+        }
+
+        return true;
     }
 
 

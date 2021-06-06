@@ -27,7 +27,7 @@ namespace NS_Manager_Resource
         {
             List<string> list_resource_stack_text = from_resource_mix_text_get_list_resource_stack_text (resource_mix_text);
             List<Resource_Stack> list_resource_stack = list_resource_stack_text
-                .Select (resource_stack_text => Resource_Stack.from_resource_stack_text_get_resource_stack (resource_stack_text))
+                .Select (resource_stack_text => Resource_Stack.from_resource_stack_text_create_resource_stack (resource_stack_text))
                 .ToList ();
 
             Resource_Mix resource_mix = new Resource_Mix ();
@@ -42,15 +42,6 @@ namespace NS_Manager_Resource
             return list_resource_stack_text;
         }
 
-
-        public static Resource_Stack from_resource_mix_and_resource_name_get_resource_stack (
-            Resource_Mix resource_mix, string resource_name)
-        {
-            Resource_Stack resource_stack = resource_mix.list_resource_stack
-                .FirstOrDefault (resource_stack => resource_stack.resource_name == resource_name);
-
-            return resource_stack;
-        }
 
 
         public static Resource_Mix operator * (Resource_Mix resource_mix, int multiplier)

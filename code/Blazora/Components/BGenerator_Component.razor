@@ -33,18 +33,24 @@
         }
     }
 
+
+    //////////////
+    // Stock
+    //////////////
+    
     public int get_stock_max (string resource_name)
-    {
-        return Game_Engine.self.manager_resource.from_resource_name_get_stock_resource_quantity_max (resource_name);
-    }
+        => Game_Engine.self.manager_resource.from_resource_name_get_stock_resource_quantity_max (resource_name);
+    
 
     public int get_stock_val (string resource_name)
-    {
-        return Game_Engine.self.manager_resource.from_resource_name_get_resource_quantity (resource_name);
-    }
+        => Game_Engine.self.manager_resource.from_resource_name_get_resource_quantity (resource_name);
 
 
 
+    //////////////
+    // Stack
+    //////////////
+    
     public int get_stack_max (string resource_name)
     {
         return Resource.from_resource_name_get_stack_resource_quantity_max (resource_name);
@@ -52,6 +58,11 @@
 
 
 
+    //////////////
+    // Generator
+    //////////////
+    
+    
     public int get_loc_val (string resource_name)
         => this.generator.get_loc_val (resource_name);
 

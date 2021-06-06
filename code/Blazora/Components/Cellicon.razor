@@ -24,6 +24,8 @@
 
     [Parameter] public bool hover { get; set; }
 
+
+
 }
 
 
@@ -173,6 +175,16 @@
 @code {
 
 
+    public override void listener_setup ()
+    {
+        base.listener_setup ();
+        listener_add (() => this.text_top_right);
+        listener_add (() => is_action_authorized ());
+        listener_add (this.stack_func_current);
+        listener_add (this.stack_func_max);
+        listener_add (() => this.hover);
+    }
+
 
 
     public void mouse_in ()
@@ -227,25 +239,6 @@
     }
 
 
-    public override void listener_setup ()
-    {
-        base.listener_setup ();
-        listener_add (() => this.text_top_right);
-        listener_add (() => is_action_authorized ().ToString ());
-        listener_add (this.stack_func_current);
-        listener_add (this.stack_func_max);
-        listener_add (() => this.hover.ToString ());
-    }
 
-    public static int from_text_get_val (string text)
-    {
-        if (text == "")
-        {
-            return 0;
-        }
-        int val = 0;
-        int.TryParse (text, out val);
-        return val;
-    }
 
 }

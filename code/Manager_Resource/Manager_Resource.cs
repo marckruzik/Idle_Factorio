@@ -56,7 +56,7 @@ namespace NS_Manager_Resource
             {
                 return;
             }
-            Resource_Stack resource_stack = Resource_Stack.from_resource_name_get_resource_stack (resource_name);
+            Resource_Stack resource_stack = Resource_Stack.from_resource_name_create_resource_stack (resource_name);
             resource_stack.quantity = 0;
             resource_stack.quantity_max = 999;
             dico_resource_name_plus_resource_stack.Add (resource_name, resource_stack);
@@ -103,8 +103,7 @@ namespace NS_Manager_Resource
         public int from_resource_name_get_stock_resource_quantity_max (string resource_name)
         {
             int stack_resource_quantity_max = Resource.from_resource_name_get_stack_resource_quantity_max (resource_name);
-            int chest_size = this.chest_size;
-            int stock_resource_quantity_max = stack_resource_quantity_max * chest_size;
+            int stock_resource_quantity_max = stack_resource_quantity_max * this.chest_size;
             return stock_resource_quantity_max;
         }
 

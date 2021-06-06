@@ -25,6 +25,7 @@ namespace Blazora.Scripts
             await from_csv_load_recipe ();
             Console.WriteLine ("after csv load");
             Game_Engine.self.manager_resource = stock_manager_resource_setup ();
+            quickstart ();
         }
 
 
@@ -45,7 +46,7 @@ namespace Blazora.Scripts
 
             // Configuration
             stock_manager_resource.chest_size = Resource.chest_size;
-            
+
 
 
             // Mine
@@ -55,17 +56,21 @@ namespace Blazora.Scripts
                 stock_manager_resource.from_resource_name_and_resource_quantity_set_resource_quantity (mine_resource_name, 999);
             }
 
-            
-            // Quickstart
-            stock_manager_resource.from_resource_name_and_resource_quantity_set_resource_quantity ("iron_ore", 8);
-            stock_manager_resource.from_resource_name_and_resource_quantity_set_resource_quantity ("coal_ore", 8);
-            stock_manager_resource.from_resource_name_and_resource_quantity_set_resource_quantity ("stone_ore", 8);
-            stock_manager_resource.from_resource_name_and_resource_quantity_set_resource_quantity ("iron_plate", 4);
-            stock_manager_resource.from_resource_name_and_resource_quantity_set_resource_quantity ("furnace_stone", 8);
 
             return stock_manager_resource;
         }
 
+
+
+        private static void quickstart ()
+        {
+            // Quickstart
+            Game_Engine.self.manager_resource.from_resource_name_and_resource_quantity_set_resource_quantity ("iron_ore", 8);
+            Game_Engine.self.manager_resource.from_resource_name_and_resource_quantity_set_resource_quantity ("coal_ore", 8);
+            Game_Engine.self.manager_resource.from_resource_name_and_resource_quantity_set_resource_quantity ("stone_ore", 8);
+            Game_Engine.self.manager_resource.from_resource_name_and_resource_quantity_set_resource_quantity ("iron_plate", 4);
+            Game_Engine.self.manager_resource.from_resource_name_and_resource_quantity_set_resource_quantity ("furnace_stone", 8);
+        }
 
 
         public static async Task from_csv_load_resource ()

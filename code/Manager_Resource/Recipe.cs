@@ -19,8 +19,8 @@ namespace NS_Manager_Resource
         {
             Recipe recipe = new Recipe ();
 
-            string component_text = Recipe.from_recipe_text_get_resource_mix_text_before (recipe_text);
-            string result_text = Recipe.from_recipe_text_get_resource_mix_text_after (recipe_text);
+            string component_text = Recipe.from_recipe_text_get_component_mix_text (recipe_text);
+            string result_text = Recipe.from_recipe_text_get_result_mix_text (recipe_text);
 
             recipe.mix_component = Resource_Mix.from_resource_mix_text_get_resource_mix (component_text);
             recipe.time = recipe_time * 60;
@@ -63,7 +63,7 @@ namespace NS_Manager_Resource
 
         public static Resource_Mix from_recipe_text_get_resource_mix_before (string recipe_text)
         {
-            string resource_mix_text_before = Recipe.from_recipe_text_get_resource_mix_text_before (recipe_text);
+            string resource_mix_text_before = Recipe.from_recipe_text_get_component_mix_text (recipe_text);
             Resource_Mix resource_mix_before = Resource_Mix.from_resource_mix_text_get_resource_mix (resource_mix_text_before);
 
             return resource_mix_before;
@@ -72,19 +72,19 @@ namespace NS_Manager_Resource
 
         public static Resource_Mix from_recipe_text_get_resource_mix_after (string recipe_text)
         {
-            string resource_mix_text_after = Recipe.from_recipe_text_get_resource_mix_text_after (recipe_text);
+            string resource_mix_text_after = Recipe.from_recipe_text_get_result_mix_text (recipe_text);
             Resource_Mix resource_mix_after = Resource_Mix.from_resource_mix_text_get_resource_mix (resource_mix_text_after);
 
             return resource_mix_after;
         }
 
 
-        public static string from_recipe_text_get_resource_mix_text_before (string recipe_text)
+        public static string from_recipe_text_get_component_mix_text (string recipe_text)
         {
             return from_text_and_separator_get_text_left (recipe_text, "=>");
         }
 
-        public static string from_recipe_text_get_resource_mix_text_after (string recipe_text)
+        public static string from_recipe_text_get_result_mix_text (string recipe_text)
         {
             return from_text_and_separator_get_text_right (recipe_text, "=>");
         }
@@ -103,13 +103,5 @@ namespace NS_Manager_Resource
         }
 
 
-        public static Resource_Stack from_recipe_and_resource_name_get_before_resource_stack (Recipe recipe, string resource_name)
-        {
-            Resource_Mix resource_mix_component = recipe.mix_component;
-            Resource_Stack resource_stack = Resource_Mix.from_resource_mix_and_resource_name_get_resource_stack (
-                resource_mix_component, resource_name);
-
-            return resource_stack;
-        }
     }
 }

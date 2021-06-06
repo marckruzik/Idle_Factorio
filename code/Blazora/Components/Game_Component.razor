@@ -8,7 +8,8 @@
 
 
     Manager_Listener manager_listener = new Manager_Listener ();
-
+    
+    public bool need_refresh = true;
 }
 
 
@@ -16,8 +17,6 @@
 
 @code {
 
-
-    List<KeyValuePair<Func<string>, string>> list_kvp_func_val_text = new List<KeyValuePair<Func<string>, string>> ();
 
 
     protected override void OnInitialized()
@@ -29,7 +28,6 @@
 
 
 
-    public bool need_refresh = true;
     public virtual void graphical_update ()
     {
         listener_update ();
