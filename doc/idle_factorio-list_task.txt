@@ -1,9 +1,5 @@
 
 
-- BGenerator, job, extraction
-- BGenerator, craft, extraction
-
-
 - Layout, BGenerator_Component
 
 

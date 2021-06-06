@@ -3,8 +3,8 @@
 @using NS_Manager_Resource
 @using NS_Game_Engine
 @using Pages
-
-
+@using Blazora.script
+ 
 
 @{ 
     Console.WriteLine ("generate Blazor Generator\n" + this.recipe.get_text ());
@@ -92,8 +92,8 @@
     
     <Cellicon picture_filename="time.png"
                 position=@(new Position (s*0, s*(start_line+2), s, s))
-                action=craft
-                action_authorize=craft_is_ready
+                action=@(() => Game_Action.from_recipe_craft (this.recipe))
+                action_authorize=@(() => Game_Action.from_recipe_is_craft_ready (this.recipe))
                 text_bottom_right=@($"{this.recipe.time / 60}")
                 />
 
@@ -103,7 +103,7 @@
 
     <ProgressBar 
                  position=@(new Position (s*1, s*(start_line+2)+quarter, s*6, s-quarter*2))
-                 val_func="@get_job_time_percentage" 
+                 val_func=@(() => Game_Action.from_recipe_get_job_time_percentage (this.recipe)) 
                  val_max="100"
                  border=@(true)
                  background_color="lightgrey"
@@ -127,45 +127,17 @@
 
 
 
-    public bool craft_is_ready ()
+    public override void listener_setup ()
     {
-        if (get_job () != null)
-        {
-            return false;
-        }
-
-        return this.generator.can_craft (Game_Engine.self.manager_resource);
+        base.listener_setup ();
+        listener_add (() => get_stack_tool ().quantity);
+        listener_add (() => Game_Action.from_recipe_is_craft_ready (this.recipe));
+        listener_add (() => get_stock_val (get_result_resource_name ()));
+        listener_add (() => get_stack_max (get_result_resource_name ()));
     }
 
 
-    public void craft ()
-    {
-        if (craft_is_ready () == false)
-        {
-            return;
-        }
 
-        Resource_Stack resource_stack = Game_Engine.self.manager_resource
-            .from_resource_name_get_resource_stack (get_result_resource_name ());
-        if (resource_stack.amount_max_reached () == true)
-        {
-            return;
-        }
-
-        Resource_Stack stack_tool = get_stack_tool ();
-
-        this.generator.manager_resource.from_resource_mix_remove_resource (this.recipe.mix_component * stack_tool.quantity);
-
-        Resource_Mix mix_result = this.recipe.mix_result * stack_tool.quantity;
-
-        Action action = delegate ()
-        {
-            Game_Engine.self.manager_resource.from_resource_mix_add_resource (mix_result);
-        };
-
-        Job job = Game_Engine.self.manager_job.from_action_and_time_total_add_job (action, this.recipe.time);
-        job.id = get_job_id ();
-    }
 
 
     public bool action_upgrade_is_ready ()
@@ -186,52 +158,11 @@
 
         Resource.dico_resource_name_plus_stack_resource_quantity_max[resource_name] =
             stack_resource_quantity_max_future;
-        //Game_Engine.self.manager_resource.from_resource_name_and_resource_quantity_set_resource_quantity (
-        //    stack_result.resource_name, stack_resource_quantity_max_future);
-    }
-
-
-
-    public string get_job_id ()
-    {
-        return this.recipe.get_text ();
-    }
-
-
-    public Job get_job ()
-    {
-        string job_id = get_job_id ();
-        Job job = Game_Engine.self.manager_job.from_job_id_find_job (job_id);
-
-        return job;
-    }
-
-
-    public int get_job_time_percentage ()
-    {
-        Job job = get_job ();
-        if (job == null)
-        {
-            return 0;
-        }
-
-        float percentage_done = job.get_percentage_done ();
-        int perc = (int)(percentage_done*100);
-
-        return perc;
     }
 
 
 
 
-    public override void listener_setup ()
-    {
-        base.listener_setup ();
-        listener_add (() => get_stack_tool ().quantity);
-        listener_add (() => craft_is_ready ());
-        listener_add (() => get_stock_val (get_result_resource_name ()));
-        listener_add (() => get_stack_max (get_result_resource_name ()));
-    }
 
 
 
