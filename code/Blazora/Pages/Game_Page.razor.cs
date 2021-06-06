@@ -4,6 +4,7 @@ using System.Threading;
 using System.Threading.Tasks;
 
 using System.Timers;
+using System.Diagnostics;
 
 
 namespace Blazora.Pages
@@ -18,7 +19,10 @@ namespace Blazora.Pages
 
 
         private System.Timers.Timer timer_logic;
-
+        private Stopwatch stopwatch;
+        private int logical_interval = 16;
+        private int graphical_interval = 16;
+        private long logical_time_elapsed;
 
         protected override async Task OnInitializedAsync ()
         {
@@ -29,29 +33,29 @@ namespace Blazora.Pages
             await Task.CompletedTask;
         }
 
-        protected override void OnInitialized ()
-        {
-            base.OnInitialized ();
-
-        }
-
-
 
         public void StartTimer ()
         {
             if (this.timer_logic == null)
             {
-                this.timer_logic = new System.Timers.Timer (16);
+                this.timer_logic = new System.Timers.Timer (this.logical_interval);
                 this.timer_logic.Elapsed += NotifyTimerElapsed;
                 this.timer_logic.AutoReset = true;
                 this.timer_logic.Enabled = true;
             }
-
-
+            this.stopwatch = new Stopwatch ();
+            this.stopwatch.Start ();
+            this.logical_time_elapsed = 0;
         }
+
+
         private void NotifyTimerElapsed (object source, ElapsedEventArgs e)
         {
-            logical_update ();
+            while (this.logical_time_elapsed < this.stopwatch.ElapsedMilliseconds)
+            {
+                logical_update ();
+                this.logical_time_elapsed += this.logical_interval;
+            }
         }
 
 
@@ -64,13 +68,9 @@ namespace Blazora.Pages
                     break;
                 }
                 graphical_update ();
-                await Task.Delay (16);
+                await Task.Delay (this.graphical_interval);
             }
         }
-
-
-
-
 
 
         public virtual void logical_update ()
@@ -93,6 +93,7 @@ namespace Blazora.Pages
             this.graphical_running = false;
             this.timer_logic.Dispose ();
             this.timer_logic = null;
+            this.stopwatch = null;
         }
 
 
