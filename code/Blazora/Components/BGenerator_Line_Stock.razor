@@ -36,7 +36,7 @@
                                  component_stack.resource_name,
                                  1);
                          })
-                action_authorize=@(() => action_ready (resource_name))
+                func_authorize=@(() => action_ready (resource_name))
                 text_bottom_right=@($"{get_loc_val (resource_name)}/{get_loc_min (resource_name)}")
                 stack_func_current=@(() => get_loc_val (resource_name))
                 stack_func_max=@(() => get_stack_max (resource_name))

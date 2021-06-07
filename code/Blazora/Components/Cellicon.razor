@@ -7,7 +7,7 @@
     [Parameter] public string picture_filename { get; set; }
 
     [Parameter] public System.Action action { get; set; }
-    [Parameter] public System.Func<bool> action_authorize { get; set; }
+    [Parameter] public System.Func<bool> func_authorize { get; set; }
 
     [Parameter] public string text_top_left { get; set; } = "";
     [Parameter] public string text_middle_left { get; set; } = "";
@@ -168,8 +168,7 @@
     public override void listener_setup ()
     {
         base.listener_setup ();
-        listener_add (() => this.text_top_right);
-        listener_add (() => is_action_authorized ());
+        listener_add (this.func_authorize);
         listener_add (this.stack_func_current);
         listener_add (this.stack_func_max);
         listener_add (() => this.hover);
@@ -221,11 +220,11 @@
 
     public bool is_action_authorized ()
     {
-        if (this.action_authorize == null)
+        if (this.func_authorize == null)
         {
             return true;
         }
-        return this.action_authorize ();
+        return this.func_authorize ();
     }
 
 

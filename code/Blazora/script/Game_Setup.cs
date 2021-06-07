@@ -47,7 +47,10 @@ namespace Blazora.Scripts
             // Configuration
             stock_manager_resource.chest_size = Resource.chest_size;
 
-
+            foreach (string resource_name in Resource.list_resource_name)
+            {
+                stock_manager_resource.from_resource_name_add_resource (resource_name);
+            }
 
             // Mine
             foreach (string mine_resource_name in Resource.list_mine_resource_name)
@@ -65,11 +68,13 @@ namespace Blazora.Scripts
         private static void quickstart ()
         {
             // Quickstart
-            Game_Engine.self.manager_resource.from_resource_name_and_resource_quantity_set_resource_quantity ("iron_ore", 8);
+            Game_Engine.self.manager_resource.from_resource_name_and_resource_quantity_set_resource_quantity ("iron_ore", 7);
             Game_Engine.self.manager_resource.from_resource_name_and_resource_quantity_set_resource_quantity ("coal_ore", 8);
             Game_Engine.self.manager_resource.from_resource_name_and_resource_quantity_set_resource_quantity ("stone_ore", 8);
-            Game_Engine.self.manager_resource.from_resource_name_and_resource_quantity_set_resource_quantity ("iron_plate", 4);
+            Game_Engine.self.manager_resource.from_resource_name_and_resource_quantity_set_resource_quantity ("iron_plate", 6);
             Game_Engine.self.manager_resource.from_resource_name_and_resource_quantity_set_resource_quantity ("furnace_stone", 8);
+            Game_Engine.self.manager_resource.from_resource_name_and_resource_quantity_set_resource_quantity ("burner_drill", 0);
+            Game_Engine.self.manager_resource.from_resource_name_and_resource_quantity_set_resource_quantity ("iron_gear", 0);
         }
 
 

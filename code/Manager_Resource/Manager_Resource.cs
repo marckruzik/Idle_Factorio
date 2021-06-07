@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using NS_Blazora_Basic;
 
 namespace NS_Manager_Resource
 {
@@ -8,6 +9,7 @@ namespace NS_Manager_Resource
     {
         Dictionary<string, Resource_Stack> dico_resource_name_plus_resource_stack = new Dictionary<string, Resource_Stack> ();
         public int chest_size = 1;
+
 
         public bool can_craft (Resource_Mix mix_component)
         {
@@ -58,7 +60,6 @@ namespace NS_Manager_Resource
             }
             Resource_Stack resource_stack = Resource_Stack.from_resource_name_create_resource_stack (resource_name);
             resource_stack.quantity = 0;
-            resource_stack.quantity_max = 999;
             dico_resource_name_plus_resource_stack.Add (resource_name, resource_stack);
         }
 

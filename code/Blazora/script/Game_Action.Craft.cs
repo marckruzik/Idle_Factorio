@@ -37,10 +37,6 @@ namespace Blazora.script
 
             Resource_Stack resource_stack = Game_Engine.self.manager_resource
                 .from_resource_name_get_resource_stack (generator.get_result_resource_name ());
-            if (resource_stack.amount_max_reached () == true)
-            {
-                return;
-            }
 
             Resource_Stack stack_tool = generator.get_stack_tool ();
 

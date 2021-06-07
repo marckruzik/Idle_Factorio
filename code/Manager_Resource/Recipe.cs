@@ -23,7 +23,7 @@ namespace NS_Manager_Resource
             string result_text = Recipe.from_recipe_text_get_result_mix_text (recipe_text);
 
             recipe.mix_component = Resource_Mix.from_resource_mix_text_get_resource_mix (component_text);
-            recipe.time = recipe_time * 60;
+            recipe.time = (int)(recipe_time / 16.6666f);
             recipe.mix_result = Resource_Mix.from_resource_mix_text_get_resource_mix (result_text);
 
             recipe.list_tool_kind = new List<Resource> ()

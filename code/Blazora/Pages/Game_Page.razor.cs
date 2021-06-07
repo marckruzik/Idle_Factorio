@@ -2,18 +2,15 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
-
+using System.Collections.Generic;
 using System.Timers;
 using System.Diagnostics;
-
+using Blazora.Components;
 
 namespace Blazora.Pages
 {
     public partial class Game_Page
     {
-
-        public static event Action graphical_action;
-
         public bool graphical_running = true;
         public static bool logical_running_started = false;
 
@@ -23,6 +20,10 @@ namespace Blazora.Pages
         private int logical_interval = 16;
         private int graphical_interval = 16;
         private long logical_time_elapsed;
+
+        public static List<Game_Component> list_component = new List<Game_Component> ();
+
+        public bool stat_displayed = false;
 
         protected override async Task OnInitializedAsync ()
         {
@@ -59,6 +60,9 @@ namespace Blazora.Pages
         }
 
 
+        long total = 0;
+        long last_second = 0;
+        int number = 0;
         async Task graphical_thread_task ()
         {
             while (true)
@@ -67,7 +71,24 @@ namespace Blazora.Pages
                 {
                     break;
                 }
+                long a = this.stopwatch.ElapsedMilliseconds;
                 graphical_update ();
+                long b = this.stopwatch.ElapsedMilliseconds;
+                long tim = b - a;
+                total += tim;
+                number += 1;
+                long current_second = this.stopwatch.ElapsedMilliseconds / 1000;
+                if (last_second != current_second)
+                {
+                    float average = ((float)total) / number;
+                    if (this.stat_displayed == true)
+                    {
+                        Console.WriteLine ($"average : {average:0} ms");
+                    }
+                    last_second = current_second;
+                    total = 0;
+                    number = 0;
+                }
                 await Task.Delay (this.graphical_interval);
             }
         }
@@ -84,7 +105,12 @@ namespace Blazora.Pages
         {
             //Console.WriteLine ("graphical update");
             Game_Engine.self.graphical_update ();
-            Game_Page.graphical_action?.Invoke ();
+
+            foreach (Game_Component game_component in Game_Page.list_component)
+            {
+                game_component.graphical_update ();
+            }
+            
         }
 
 

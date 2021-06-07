@@ -5,7 +5,6 @@ namespace NS_Manager_Resource
     public class Resource_Stack
     {
         public int quantity = 0;
-        public int quantity_max = 16;
         public Resource resource;
         public string resource_name { get { return this.resource.resource_name; } }
 
@@ -56,13 +55,6 @@ namespace NS_Manager_Resource
             string resource_quantity_text = Recipe.from_text_and_separator_get_text_right (resource_stack_text, "*");
             int resource_quantity = int.Parse (resource_quantity_text);
             return resource_quantity;
-        }
-
-
-
-        public bool amount_max_reached ()
-        {
-            return this.quantity >= this.quantity_max;
         }
 
 

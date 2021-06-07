@@ -1,6 +1,7 @@
 ﻿@using BlazorApp.Shared.Models
 @using NS_Game_Engine
 @implements IDisposable
+@using Blazora.Pages
 
 @code{
     
@@ -32,7 +33,7 @@
     {
         base.OnInitialized ();
         listener_setup ();
-        Blazora.Pages.Game_Page.graphical_action += graphical_update;
+        Game_Page.list_component.Add (this);
     }
 
 
@@ -76,6 +77,6 @@
 
     public virtual void Dispose ()
     {
-        Blazora.Pages.Game_Page.graphical_action -= graphical_update;
+        Game_Page.list_component.Remove (this);
     }
 }

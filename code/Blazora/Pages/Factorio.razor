@@ -9,18 +9,25 @@
 
 @using NS_Manager_Resource
 @using NS_Game_Engine
+@using NS_Blazora_Basic
 @using Blazora.Scripts
 
 @code{
+        ObservableProperty<string> test = new ObservableProperty<string> ("#00FF00");
 
 }
 
+@{ 
+    
+}
 
-
+<button @onclick=@(() => { test.Set (test.Get () + 1); }) />
 
 <div class="noselect">
 
 <h3>Factorio</h3>
+
+    <span>test : @(test.Get ())</span>
 
 
 @code{
@@ -38,18 +45,21 @@
     protected override async Task OnInitializedAsync ()
     {
         await base.OnInitializedAsync ();
+        test.changed += (v) => { Console.WriteLine (v); };
         await setup ();
     }
+
 
 }
 
 
 
 @{ 
-    
+
 
 
 }
+
 
 
 

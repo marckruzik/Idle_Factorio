@@ -66,7 +66,7 @@
                            Console.WriteLine ("chest_upgrade");
                            action_upgrade ();
                        })
-              action_authorize=action_upgrade_is_ready
+              func_authorize=action_upgrade_is_ready
               text_top_right=@($"{stack_resource_quantity_max*2}")
               text_middle_right="^"
               text_bottom_right=@($"Lv{stack_resource_quantity_max}")
@@ -93,8 +93,8 @@
     <Cellicon picture_filename="time.png"
                 position=@(new Position (s*0, s*(start_line+2), s, s))
                 action=@(() => Game_Action.from_recipe_craft (this.recipe))
-                action_authorize=@(() => Game_Action.from_recipe_is_craft_ready (this.recipe))
-                text_bottom_right=@($"{this.recipe.time / 60}")
+                func_authorize=@(() => Game_Action.from_recipe_is_craft_ready (this.recipe))
+                text_bottom_right=@(get_recipe_time_str ())
                 />
 
     @{ 
@@ -132,11 +132,25 @@
         base.listener_setup ();
         listener_add (() => get_stack_tool ().quantity);
         listener_add (() => Game_Action.from_recipe_is_craft_ready (this.recipe));
-        listener_add (() => get_stock_val (get_result_resource_name ()));
+        //listener_add (() => get_stock_val (get_result_resource_name ()));
         listener_add (() => get_stack_max (get_result_resource_name ()));
     }
 
 
+    public string get_recipe_time_str ()
+    {
+        int dividor = 60;
+        if (this.recipe.time % dividor == 0)
+        {
+            return $"{this.recipe.time / dividor}";
+        }
+        else
+        {
+            float divided = ((float)this.recipe.time) / dividor;
+            divided = (float)Math.Round (divided, 1);
+            return $"{divided}";
+        }
+    }
 
 
 

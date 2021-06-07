@@ -25,6 +25,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Blazora_Basic\Blazora_Basic.csproj" />
     <ProjectReference Include="..\Game_Engine\Game_Engine.csproj" />
     <ProjectReference Include="..\Manager_Resource\Manager_Resource.csproj" />
   </ItemGroup>

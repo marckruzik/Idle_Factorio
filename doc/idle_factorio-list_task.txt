@@ -1,21 +1,32 @@
 
 
-- Layout, BGenerator_Component
 
 
 --------------------------------------
 
-- iron gear
-- burning drill
+- Flag system
 
 
 - Line Pickaxe
  - burning drill, when flag true, display
  - Pickaxe, when local burning drill >= 1, hide
 
+- Recipe, change
+
 - time on / off
  - time, when local burning drill >= 1, on off
  
+
+--------------------------------------
+
+- copper_ore_mine
+- copper_ore
+- copper_plate
+- copper_cable
+- electronic_circuit
+- assembling_machine_1
+
+
 
 --------------------------------------
 

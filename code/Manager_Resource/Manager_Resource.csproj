@@ -5,4 +5,8 @@
     <RootNamespace>NS_Manager_Resource</RootNamespace>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Blazora_Basic\Blazora_Basic.csproj" />
+  </ItemGroup>
+
 </Project>

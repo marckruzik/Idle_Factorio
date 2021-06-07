@@ -14,5 +14,5 @@
 
 <!-- Line 1 -->
 <Cellicon picture_filename=@(Resource.from_resource_name_get_resource_filename (stack_tool.resource_name))
-            position=@(new Position (s*4, s*0, s, s))
+            position=@(new Position (s*4, s*(this.recipe.get_component_count ()-1), s, s))
             />
