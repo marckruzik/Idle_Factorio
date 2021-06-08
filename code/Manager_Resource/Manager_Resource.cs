@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using NS_Blazora_Basic;
+using System.Linq;
 
 namespace NS_Manager_Resource
 {
@@ -10,6 +11,8 @@ namespace NS_Manager_Resource
         Dictionary<string, Resource_Stack> dico_resource_name_plus_resource_stack = new Dictionary<string, Resource_Stack> ();
         public int chest_size = 1;
 
+        Dictionary<string, ObservableProperty<int>> dico_resource_name_plus_stock_quantity_max = 
+            new Dictionary<string, ObservableProperty<int>> ();
 
         public bool can_craft (Resource_Mix mix_component)
         {
@@ -61,6 +64,14 @@ namespace NS_Manager_Resource
             Resource_Stack resource_stack = Resource_Stack.from_resource_name_create_resource_stack (resource_name);
             resource_stack.quantity = 0;
             dico_resource_name_plus_resource_stack.Add (resource_name, resource_stack);
+
+
+            int max = Resource.dico_resource_name_plus_stack_resource_quantity_max[resource_name] * this.chest_size;
+            dico_resource_name_plus_stock_quantity_max.Add (resource_name, new ObservableProperty<int> (max));
+
+            Resource.dico_resource_name_plus_stack_resource_quantity_max[resource_name].changed += (v) =>
+                dico_resource_name_plus_stock_quantity_max[resource_name]
+                .Set (v * this.chest_size);
         }
 
 
@@ -98,14 +109,13 @@ namespace NS_Manager_Resource
             {
                 resource_stack.quantity = resource_quantity;
             }
+            resource_stack.observable_quantity.Set (resource_stack.quantity);
         }
 
 
-        public int from_resource_name_get_stock_resource_quantity_max (string resource_name)
+        public ObservableProperty<int> from_resource_name_get_stock_resource_quantity_max (string resource_name)
         {
-            int stack_resource_quantity_max = Resource.from_resource_name_get_stack_resource_quantity_max (resource_name);
-            int stock_resource_quantity_max = stack_resource_quantity_max * this.chest_size;
-            return stock_resource_quantity_max;
+            return dico_resource_name_plus_stock_quantity_max[resource_name];
         }
 
 
@@ -142,5 +152,24 @@ namespace NS_Manager_Resource
             return dico_resource_name_plus_resource_stack.ContainsKey (resource_name);
         }
 
+
+        public void observable_clear ()
+        {
+            List<ObservableProperty<int>> list_observable =
+                dico_resource_name_plus_resource_stack
+                .Values
+                .Select (rs => rs.observable_quantity)
+                .ToList ();
+            foreach (ObservableProperty<int> observable in list_observable)
+            {
+                observable.changed = null;
+            }
+
+            foreach (ObservableProperty<int> observable in dico_resource_name_plus_stock_quantity_max.Values)
+            {
+                observable.changed = null;
+            }
+
+        }
     }
 }

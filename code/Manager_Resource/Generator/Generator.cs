@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using NS_Blazora_Basic;
 
 namespace NS_Manager_Resource
 {
@@ -31,7 +32,12 @@ namespace NS_Manager_Resource
 
         public int get_loc_val (string resource_name)
         {
-            return this.manager_resource.from_resource_name_get_resource_stack (resource_name).quantity;
+            return get_loc_quantity (resource_name).Value;
+        }
+
+        public ObservableProperty<int> get_loc_quantity (string resource_name)
+        {
+            return this.manager_resource.from_resource_name_get_resource_stack (resource_name).observable_quantity;
         }
 
         public int get_loc_min (string resource_name)
@@ -42,7 +48,7 @@ namespace NS_Manager_Resource
 
 
 
-        public static Generator from_recipe_get_generator (Recipe recipe)
+        public static Generator from_recipe_create_generator (Recipe recipe)
         {
             Manager_Resource mr = new Manager_Resource ();
             foreach (Resource_Stack component_stack in recipe.mix_component.list_resource_stack)
@@ -84,22 +90,24 @@ namespace NS_Manager_Resource
             string result_resource_name = get_result_resource_name ();
             int result_quantity_max = stock_manager_resource.from_resource_name_get_stock_resource_quantity_max (result_resource_name);
             int result_quantity = stock_manager_resource.from_resource_name_get_resource_quantity (result_resource_name);
-
+            
             if (result_quantity >= result_quantity_max)
             {
                 return false;
             }
 
+            bool ready;
             if (must_craft_locally () == true)
             {
-                bool ready = this.manager_resource.can_craft (this.recipe.mix_component * stack_tool.quantity);
-                return ready;
+                ready = this.manager_resource.can_craft (this.recipe.mix_component * stack_tool.quantity);
             }
             else
             {
-                bool ready = stock_manager_resource.can_craft (this.recipe.mix_component * stack_tool.quantity);
-                return ready;
+                ready = stock_manager_resource.can_craft (this.recipe.mix_component * stack_tool.quantity);
             }
+
+            //Console.WriteLine ($"ready : {ready}");
+            return ready;
         }
 
         public bool must_craft_locally ()

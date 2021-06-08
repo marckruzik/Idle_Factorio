@@ -9,7 +9,7 @@ using System.IO;
 using System.Globalization;
 using CsvHelper.Configuration;
 using System.Net.Http;
-
+using NS_Blazora_Basic;
 
 
 namespace Blazora.Scripts
@@ -50,12 +50,19 @@ namespace Blazora.Scripts
             foreach (string resource_name in Resource.list_resource_name)
             {
                 stock_manager_resource.from_resource_name_add_resource (resource_name);
+                
             }
+            /*
+            string rename = "iron_ore";
+            Console.WriteLine ($"{rename}: {Resource.dico_resource_name_plus_stack_resource_quantity_max[rename]} {stock_manager_resource.from_resource_name_get_stock_resource_quantity_max (rename)}");
 
+            Resource.dico_resource_name_plus_stack_resource_quantity_max[rename].Set (3);
+            Console.WriteLine ($"{rename}: {Resource.dico_resource_name_plus_stack_resource_quantity_max[rename]} {stock_manager_resource.from_resource_name_get_stock_resource_quantity_max (rename)}");
+            */
             // Mine
             foreach (string mine_resource_name in Resource.list_mine_resource_name)
             {
-                Resource.dico_resource_name_plus_stack_resource_quantity_max[mine_resource_name] = 999;
+                Resource.dico_resource_name_plus_stack_resource_quantity_max[mine_resource_name].Set (999);
                 stock_manager_resource.from_resource_name_and_resource_quantity_set_resource_quantity (mine_resource_name, 999);
             }
 
@@ -103,7 +110,7 @@ namespace Blazora.Scripts
 
             Resource.dico_resource_name_plus_stack_resource_quantity_max =
                 Resource.list_resource_name.
-                ToDictionary (x => x, x => 1);
+                ToDictionary (x => x, x => new ObservableProperty<int> (1));
 
             Console.WriteLine ("end resource csv load");
         }

@@ -4,7 +4,9 @@
 @using NS_Game_Engine
 @using Pages
 @using Blazora.script
- 
+@using NS_Blazora_Basic
+
+
 
 @{ 
     Console.WriteLine ("generate Blazor Generator\n" + this.recipe.get_text ());
@@ -66,12 +68,12 @@
                            Console.WriteLine ("chest_upgrade");
                            action_upgrade ();
                        })
-              func_authorize=action_upgrade_is_ready
+              val_authorize=@(action_upgrade_is_ready())
               text_top_right=@($"{stack_resource_quantity_max*2}")
               text_middle_right="^"
               text_bottom_right=@($"Lv{stack_resource_quantity_max}")
-              stack_func_current=@(() => get_stock_val (result_resource_name))
-              stack_func_max=@(() => get_stock_max (result_resource_name))
+              stack_val_current=@(get_stock_quantity (result_resource_name))
+              stack_val_max=@(get_stock_max (result_resource_name))
             />
 
 
@@ -93,7 +95,7 @@
     <Cellicon picture_filename="time.png"
                 position=@(new Position (s*0, s*(start_line+2), s, s))
                 action=@(() => Game_Action.from_recipe_craft (this.recipe))
-                func_authorize=@(() => Game_Action.from_recipe_is_craft_ready (this.recipe))
+                val_authorize=@(Game_Action.from_recipe_is_craft_ready (this.recipe))
                 text_bottom_right=@(get_recipe_time_str ())
                 />
 
@@ -103,8 +105,8 @@
 
     <ProgressBar 
                  position=@(new Position (s*1, s*(start_line+2)+quarter, s*6, s-quarter*2))
-                 val_func=@(() => Game_Action.from_recipe_get_job_time_percentage (this.recipe)) 
-                 val_max="100"
+                 val_current=this.job_percentage 
+                 val_max=@(new ObservableProperty<int> (100))
                  border=@(true)
                  background_color="lightgrey"
                  fill_color="forestgreen"
@@ -130,10 +132,19 @@
     public override void listener_setup ()
     {
         base.listener_setup ();
-        listener_add (() => get_stack_tool ().quantity);
+        listener_add (get_stack_tool ().observable_quantity);
         listener_add (() => Game_Action.from_recipe_is_craft_ready (this.recipe));
-        //listener_add (() => get_stock_val (get_result_resource_name ()));
-        listener_add (() => get_stack_max (get_result_resource_name ()));
+        listener_add (get_stock_quantity (get_result_resource_name ()));
+        listener_add (get_stack_quantity_max (get_result_resource_name ()));
+        listener_add (() => Game_Action.from_recipe_get_job_time_percentage (this.recipe) != 0);
+    }
+
+    public ObservableProperty<int> job_percentage = new ObservableProperty<int> (0);
+
+    public override void graphical_update ()
+    {
+        base.graphical_update ();
+        job_percentage.Set (Game_Action.from_recipe_get_job_time_percentage (this.recipe));
     }
 
 
@@ -170,13 +181,16 @@
         int stack_resource_quantity_max = Resource.from_resource_name_get_stack_resource_quantity_max (resource_name);
         int stack_resource_quantity_max_future = stack_resource_quantity_max * 2;
 
-        Resource.dico_resource_name_plus_stack_resource_quantity_max[resource_name] =
-            stack_resource_quantity_max_future;
+        Resource.dico_resource_name_plus_stack_resource_quantity_max[resource_name].Set (stack_resource_quantity_max_future);
     }
 
 
 
-
+    public override void Dispose ()
+    {
+        base.Dispose ();
+        this.generator.manager_resource.observable_clear ();
+    }
 
 
 

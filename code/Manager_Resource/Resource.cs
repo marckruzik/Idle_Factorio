@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Linq;
+using NS_Blazora_Basic;
 
 namespace NS_Manager_Resource
 {
@@ -17,13 +18,14 @@ namespace NS_Manager_Resource
 
         public static List<string> list_can_craft_stock_resource_name = new List<string> ();
 
-        public static Dictionary<string, int> dico_resource_name_plus_stack_resource_quantity_max = new Dictionary<string, int> ();
+        public static Dictionary<string, ObservableProperty<int>> dico_resource_name_plus_stack_resource_quantity_max = 
+            new Dictionary<string, ObservableProperty<int>> ();
 
         public static int chest_size = 8;
 
 
 
-        public static int from_resource_name_get_stack_resource_quantity_max (string resource_name)
+        public static ObservableProperty<int> from_resource_name_get_stack_resource_quantity_max (string resource_name)
         {
             return dico_resource_name_plus_stack_resource_quantity_max[resource_name];
         }

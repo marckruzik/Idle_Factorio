@@ -1,13 +1,14 @@
 ﻿@inherits Game_Component
 
 @using BlazorApp.Shared.Models
+@using NS_Blazora_Basic 
 
 @code{
 
     [Parameter] public string picture_filename { get; set; }
 
     [Parameter] public System.Action action { get; set; }
-    [Parameter] public System.Func<bool> func_authorize { get; set; }
+    [Parameter] public bool val_authorize { get; set; } = true;
 
     [Parameter] public string text_top_left { get; set; } = "";
     [Parameter] public string text_middle_left { get; set; } = "";
@@ -19,10 +20,10 @@
     [Parameter] public string background_color_default { get; set; } = "transparent";
     [Parameter] public bool border { get; set; } = false;
 
-    [Parameter] public Func<int> stack_func_current { get; set; }
-    [Parameter] public Func<int> stack_func_max { get; set; }
+    [Parameter] public ObservableProperty<int> stack_val_current { get; set; }
+    [Parameter] public ObservableProperty<int> stack_val_max { get; set; }
 
-    [Parameter] public bool hover { get; set; }
+    public ObservableProperty<bool> hover { get; set; }
 
 
 
@@ -52,7 +53,7 @@
 
     @if (action != null)
     {
-        <div class="layer" style="background-color:@(this.hover == true ? "rgba(255, 255, 255, 0.3)" : "transparent");" />
+        <div class="layer" style="background-color:@(this.hover?.Value == true ? "rgba(255, 255, 255, 0.3)" : "transparent");" />
     }
 
 
@@ -138,11 +139,11 @@
     }
 
     <!-- Stack bar -->
-    @if (stack_func_current != null)
+    @if (stack_val_current != null)
     {
         <ProgressBar position=@(new Position (0, s-3, s, 2))
-                        val_func="@(stack_func_current)"
-                        val_max=@(stack_func_max ())
+                        val_current=stack_val_current
+                        val_max=stack_val_max
                         background_color="#FF0000"
                         fill_color="#00FF00" />
     }
@@ -168,29 +169,31 @@
     public override void listener_setup ()
     {
         base.listener_setup ();
-        listener_add (this.func_authorize);
-        listener_add (this.stack_func_current);
-        listener_add (this.stack_func_max);
-        listener_add (() => this.hover);
+        
+        listener_add (() => this.val_authorize);
+        listener_add (this.stack_val_current);
+        listener_add (this.stack_val_max);
+        listener_add (this.hover);
+        
     }
 
 
 
     public void mouse_in ()
     {
-        this.hover = true;
+        this.hover?.Set (true);
     }
 
     public void mouse_out ()
     {
-        this.hover = false;
+        this.hover?.Set (false);
     }
 
     public string get_background_color ()
     {
         if (this.action != null)
         {
-            if (is_action_authorized () == true)
+            if (this.val_authorize == true)
             {
                 return "#9D99FF";
             }
@@ -210,7 +213,7 @@
 
     public void action_click ()
     {
-        if (is_action_authorized () == false)
+        if (this.val_authorize == false)
         {
             return;
         }
@@ -218,14 +221,6 @@
     }
 
 
-    public bool is_action_authorized ()
-    {
-        if (this.func_authorize == null)
-        {
-            return true;
-        }
-        return this.func_authorize ();
-    }
 
 
 

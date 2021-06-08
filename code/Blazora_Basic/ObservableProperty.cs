@@ -1,3 +1,5 @@
+using System;
+
 // get an event when a property changes
 namespace NS_Blazora_Basic
 {
@@ -5,8 +7,7 @@ namespace NS_Blazora_Basic
     {
         T value;
 
-        public delegate void ChangeEvent (T data);
-        public event ChangeEvent changed;
+        public Action<T> changed;
 
         public ObservableProperty (T initialValue)
         {
@@ -25,6 +26,12 @@ namespace NS_Blazora_Basic
             }
         }
 
+        public void fastset (T v)
+        {
+            value = v;  
+        }
+
+
         public T Get ()
         {
             return value;
@@ -34,5 +41,7 @@ namespace NS_Blazora_Basic
         {
             return p.value;
         }
+
+        public T Value { get { return Get (); } }
     }
 }

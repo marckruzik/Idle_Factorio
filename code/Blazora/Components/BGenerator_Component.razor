@@ -3,6 +3,7 @@
 @using NS_Manager_Resource
 @using NS_Game_Engine
 @using Pages
+@using NS_Blazora_Basic 
 
 @code {
     [CascadingParameter] public Recipe recipe { get; set; }
@@ -37,21 +38,22 @@
     //////////////
     // Stock
     //////////////
-    
-    public int get_stock_max (string resource_name)
+
+    public ObservableProperty<int> get_stock_max (string resource_name)
         => Game_Engine.self.manager_resource.from_resource_name_get_stock_resource_quantity_max (resource_name);
-    
 
     public int get_stock_val (string resource_name)
         => Game_Engine.self.manager_resource.from_resource_name_get_resource_quantity (resource_name);
 
+    public ObservableProperty<int> get_stock_quantity (string resource_name)
+        => Game_Engine.self.manager_resource.from_resource_name_get_resource_stack (resource_name).observable_quantity;
 
 
     //////////////
     // Stack
     //////////////
-    
-    public int get_stack_max (string resource_name)
+
+    public ObservableProperty<int> get_stack_quantity_max (string resource_name)
     {
         return Resource.from_resource_name_get_stack_resource_quantity_max (resource_name);
     }
@@ -61,24 +63,27 @@
     //////////////
     // Generator
     //////////////
-    
+
     
     public int get_loc_val (string resource_name)
         => this.generator.get_loc_val (resource_name);
 
+    public ObservableProperty<int> get_loc_quantity (string resource_name)
+        => this.generator.get_loc_quantity (resource_name);
+
     public int get_loc_min (string resource_name)
         => this.generator.get_loc_min (resource_name);
-    
+
     public int get_tool_val ()
         => this.generator.get_tool_val ();
-    
+
     public Resource_Stack get_stack_tool ()
         => this.generator.get_stack_tool ();
-    
+
     public string get_result_resource_name ()
         => this.generator.get_result_resource_name ();
-    
+
     public int get_result_val ()
         => this.generator.get_result_val ();
-    
+
 }

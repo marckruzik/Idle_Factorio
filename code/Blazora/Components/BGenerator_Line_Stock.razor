@@ -36,10 +36,10 @@
                                  component_stack.resource_name,
                                  1);
                          })
-                func_authorize=@(() => action_ready (resource_name))
+                val_authorize=@(action_ready (resource_name))
                 text_bottom_right=@($"{get_loc_val (resource_name)}/{get_loc_min (resource_name)}")
-                stack_func_current=@(() => get_loc_val (resource_name))
-                stack_func_max=@(() => get_stack_max (resource_name))
+                stack_val_current=@(get_loc_quantity (resource_name))
+                stack_val_max=@(get_stack_quantity_max (resource_name))
                 />
 
 }
@@ -66,12 +66,12 @@
 
         foreach (string resource_name in list_resource_name)
         {
-            listener_add (() => get_loc_val (resource_name));
+            listener_add (get_loc_quantity (resource_name));
             listener_add (() => get_loc_min (resource_name));
-            listener_add (() => get_stock_val (resource_name));
+            listener_add (get_stock_quantity (resource_name));
         }
 
-        listener_add (() => get_tool_val ());
+        listener_add (get_stack_tool ().observable_quantity);
     }
 
 
@@ -83,8 +83,8 @@
             return false;
         }
 
-        if (get_loc_val (resource_name) == get_stack_max (resource_name) &&
-            get_stack_max (resource_name) < get_loc_min (resource_name))
+        if (get_loc_val (resource_name) == get_stack_quantity_max (resource_name) &&
+            get_stack_quantity_max (resource_name) < get_loc_min (resource_name))
         {
             return false;
         }

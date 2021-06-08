@@ -18,10 +18,10 @@
 }
 
 @{ 
-    
+
 }
 
-<button @onclick=@(() => { test.Set (test.Get () + 1); }) />
+<button @onclick=@(() => { benchmark (); }) />
 
 <div class="noselect">
 
@@ -50,6 +50,39 @@
     }
 
 
+    public void benchmark ()
+    {
+        System.Diagnostics.Stopwatch s = new System.Diagnostics.Stopwatch ();
+        s.Start ();
+        long ta;
+        int loop = 100000;
+
+        ta = s.ElapsedMilliseconds;
+        int a = 0;
+        for (int i=0; i<loop; i++)
+        {
+            int v = 0;
+        }
+        Console.WriteLine ($"test 1: {s.ElapsedMilliseconds-ta}");
+
+        ta = s.ElapsedMilliseconds;
+        ObservableProperty<int> b = new ObservableProperty<int> (0);
+        for (int i=0; i<loop; i++)
+        {
+            int v = b;
+        }
+        Console.WriteLine ($"test 2: {s.ElapsedMilliseconds-ta}");
+
+        ta = s.ElapsedMilliseconds;
+        ObservableProperty<int> c = new ObservableProperty<int> (0);
+        for (int i=0; i<loop; i++)
+        {
+            int v = c.Value;
+        }
+        Console.WriteLine ($"test 3: {s.ElapsedMilliseconds-ta}");
+    }
+
+
 }
 
 
@@ -75,3 +108,19 @@
 
 </div>
 
+
+
+@code{
+
+    public override void Dispose ()
+    {
+        base.Dispose ();
+        foreach (ObservableProperty<int> observable in Resource.dico_resource_name_plus_stack_resource_quantity_max.Values)
+        {
+            observable.changed = null;
+        }
+
+        Game_Engine.self.manager_resource.observable_clear ();
+    }
+
+}

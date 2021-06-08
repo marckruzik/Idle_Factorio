@@ -23,7 +23,7 @@ namespace Blazora.Pages
 
         public static List<Game_Component> list_component = new List<Game_Component> ();
 
-        public bool stat_displayed = false;
+        public bool stat_displayed = true;
 
         protected override async Task OnInitializedAsync ()
         {
@@ -114,7 +114,7 @@ namespace Blazora.Pages
         }
 
 
-        public void Dispose ()
+        public virtual void Dispose ()
         {
             this.graphical_running = false;
             this.timer_logic.Dispose ();

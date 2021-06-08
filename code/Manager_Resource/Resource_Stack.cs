@@ -1,10 +1,12 @@
 ﻿using System;
+using NS_Blazora_Basic;
 
 namespace NS_Manager_Resource
 {
     public class Resource_Stack
     {
         public int quantity = 0;
+        public ObservableProperty<int> observable_quantity = new ObservableProperty<int> (0);
         public Resource resource;
         public string resource_name { get { return this.resource.resource_name; } }
 

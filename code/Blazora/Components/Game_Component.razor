@@ -2,6 +2,7 @@
 @using NS_Game_Engine
 @implements IDisposable
 @using Blazora.Pages
+@using NS_Blazora_Basic
 
 @code{
     
@@ -11,6 +12,7 @@
     Manager_Listener manager_listener = new Manager_Listener ();
     
     public bool need_refresh = true;
+
 }
 
 
@@ -57,6 +59,15 @@
 
     }
 
+
+    public void listener_add<T> (ObservableProperty<T> observable)
+    {
+        if (observable == null)
+        {
+            return;
+        }
+        observable.changed += (v) => { this.need_refresh = true; };
+    }
 
 
     public void listener_add<T> (Func<T> func)

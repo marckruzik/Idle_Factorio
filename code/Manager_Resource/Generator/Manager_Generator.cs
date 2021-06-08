@@ -20,7 +20,7 @@ namespace NS_Manager_Resource
                 return;
             }
 
-            Generator generator = Generator.from_recipe_get_generator (recipe);
+            Generator generator = Generator.from_recipe_create_generator (recipe);
 
             this.Add (recipe.get_text (), generator);
         }

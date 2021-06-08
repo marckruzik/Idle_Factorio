@@ -1,5 +1,6 @@
 
-
+-tool separate
+assembling machine to build assembling machine
 
 
 --------------------------------------
