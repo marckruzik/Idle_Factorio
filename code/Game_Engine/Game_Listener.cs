@@ -5,9 +5,13 @@ using System.Threading.Tasks;
 
 namespace NS_Game_Engine
 {
+    public interface IGame_Listener
+    {
+        bool need_update ();
+    }
 
 
-    public class Game_Listener<T>
+    public class Game_Listener<T> : IGame_Listener
     {
         List<KeyValuePair<Func<T>, T>> list_kvp_func_val = new List<KeyValuePair<Func<T>, T>> ();
 

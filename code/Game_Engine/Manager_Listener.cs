@@ -1,13 +1,12 @@
 ﻿using System;
+using NS_Blazora_Basic;
+using System.Collections.Generic;
 
 namespace NS_Game_Engine
 {
     public class Manager_Listener
     {
-
-        Game_Listener<int> listener_int = new Game_Listener<int> ();
-        Game_Listener<string> listener_string = new Game_Listener<string> ();
-        Game_Listener<bool> listener_bool = new Game_Listener<bool> ();
+        Dictionary<Type, IGame_Listener> dico_typ_plus_game_listener = new Dictionary<Type, IGame_Listener> ();
 
         public void add<T> (Func<T> func)
         {
@@ -17,27 +16,20 @@ namespace NS_Game_Engine
 
         private Game_Listener<T> get_listener<T> ()
         {
-            if (typeof (T) == typeof (int))
+            if (dico_typ_plus_game_listener.ContainsKey (typeof(T)) == false)
             {
-                return this.listener_int as Game_Listener<T>;
+                dico_typ_plus_game_listener.Add (typeof(T), new Game_Listener<T> ());
             }
-            else if (typeof (T) == typeof (string))
-            {
-                return this.listener_string as Game_Listener<T>;
-            }
-            else if (typeof (T) == typeof (bool))
-            {
-                return this.listener_bool as Game_Listener<T>;
-            }
-            throw new Exception ("unknown listener type : " + typeof(T).ToString ());
+            return dico_typ_plus_game_listener[typeof(T)] as Game_Listener<T>;
         }
 
         public bool need_update ()
         {
             bool need_update = false;
-            need_update |= this.listener_int.need_update ();
-            need_update |= this.listener_string.need_update ();
-            need_update |= this.listener_bool.need_update ();
+            foreach (IGame_Listener game_listener in dico_typ_plus_game_listener.Values)
+            {
+                need_update |= game_listener.need_update ();
+            }
             return need_update;
         }
 
