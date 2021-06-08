@@ -11,7 +11,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Game_Engine", "Game_Engine\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Test_Idle_Factorio", "Test_Idle_Factorio\Test_Idle_Factorio.csproj", "{0A3524BF-D9F8-4E08-9EBA-0624A735C712}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Blazora_Basic", "Blazora_Basic\Blazora_Basic.csproj", "{E5609640-E3A2-4798-A6A9-0349252C2EB7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Blazora_Basic", "Blazora_Basic\Blazora_Basic.csproj", "{E5609640-E3A2-4798-A6A9-0349252C2EB7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

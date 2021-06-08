@@ -69,6 +69,7 @@
             listener_add (get_loc_quantity (resource_name));
             listener_add (() => get_loc_min (resource_name));
             listener_add (get_stock_quantity (resource_name));
+            listener_add (get_stack_quantity_max (resource_name));
         }
 
         listener_add (get_stack_tool ().observable_quantity);

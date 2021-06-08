@@ -7,6 +7,7 @@ using System.Timers;
 using System.Diagnostics;
 using Blazora.Components;
 
+
 namespace Blazora.Pages
 {
     public partial class Game_Page
@@ -23,10 +24,14 @@ namespace Blazora.Pages
 
         public static List<Game_Component> list_component = new List<Game_Component> ();
 
+        public static Game_Page self;
+
         public bool stat_displayed = true;
+        public int stat_average;
 
         protected override async Task OnInitializedAsync ()
         {
+            Game_Page.self = this;
             StartTimer ();
 
             graphical_thread_task ();
@@ -80,10 +85,10 @@ namespace Blazora.Pages
                 long current_second = this.stopwatch.ElapsedMilliseconds / 1000;
                 if (last_second != current_second)
                 {
-                    float average = ((float)total) / number;
+                    this.stat_average = (int)(((float)total) / number);
                     if (this.stat_displayed == true)
                     {
-                        Console.WriteLine ($"average : {average:0} ms");
+                        Console.WriteLine ($"average : {this.stat_average} ms");
                     }
                     last_second = current_second;
                     total = 0;
