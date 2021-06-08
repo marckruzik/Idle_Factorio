@@ -26,7 +26,6 @@ namespace Blazora.Pages
 
         public static Game_Page self;
 
-        public bool stat_displayed = true;
         public ObservableProperty<int> stat_average = new ObservableProperty<int> (0);
 
         protected override async Task OnInitializedAsync ()
@@ -86,10 +85,6 @@ namespace Blazora.Pages
                 if (last_second != current_second)
                 {
                     this.stat_average.Set ((int)(((float)total) / number));
-                    if (this.stat_displayed == true)
-                    {
-                        Console.WriteLine ($"average : {this.stat_average.Value} ms");
-                    }
                     last_second = current_second;
                     total = 0;
                     number = 0;

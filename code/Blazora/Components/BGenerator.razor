@@ -7,9 +7,15 @@
 @using NS_Blazora_Basic
 
 
+@code{
+    
+    public ObservableProperty<int> job_percentage = new ObservableProperty<int> (0);
+
+}
+
 
 @{ 
-    Console.WriteLine ("generate Blazor Generator\n" + this.recipe.get_text ());
+    Console.WriteLine ("generate Blazor Generator " + this.recipe.mix_result.get_list_resource_name ()[0]);
     
 }
 
@@ -66,9 +72,9 @@
               action=@(() => 
                        {
                            Console.WriteLine ("chest_upgrade");
-                           action_upgrade ();
+                           Game_Action.action_upgrade (this.recipe);
                        })
-              val_authorize=@(action_upgrade_is_ready())
+              val_authorize=@(Game_Action.action_upgrade_is_ready (this.recipe))
               text_top_right=@($"{stack_resource_quantity_max*2}")
               text_middle_right="^"
               text_bottom_right=@($"Lv{stack_resource_quantity_max}")
@@ -133,7 +139,6 @@
     {
         base.listener_setup ();
         listener_add (get_stack_tool ().observable_quantity);
-        //listener_add (() => Game_Action.from_recipe_is_craft_ready (this.recipe));
         listener_add (get_stock_quantity (get_result_resource_name ()));
         listener_add (get_stock_max (get_result_resource_name ()));
         listener_add (get_stack_quantity_max (get_result_resource_name ()));
@@ -147,7 +152,6 @@
         }
     }
 
-    public ObservableProperty<int> job_percentage = new ObservableProperty<int> (0);
 
     public override void graphical_update ()
     {
@@ -171,26 +175,6 @@
         }
     }
 
-
-
-    public bool action_upgrade_is_ready ()
-    {
-        string resource_name = get_result_resource_name ();
-        int stock_resource_quantity_max = Game_Engine.self.manager_resource.from_resource_name_get_stock_resource_quantity_max (
-            resource_name);
-        int stock_resource_quantity = Game_Engine.self.manager_resource.from_resource_name_get_resource_quantity (resource_name);
-        return (stock_resource_quantity >= stock_resource_quantity_max);
-    }
-
-
-    public void action_upgrade ()
-    {
-        string resource_name = get_result_resource_name ();
-        int stack_resource_quantity_max = Resource.from_resource_name_get_stack_resource_quantity_max (resource_name);
-        int stack_resource_quantity_max_future = stack_resource_quantity_max * 2;
-
-        Resource.dico_resource_name_plus_stack_resource_quantity_max[resource_name].Set (stack_resource_quantity_max_future);
-    }
 
 
 

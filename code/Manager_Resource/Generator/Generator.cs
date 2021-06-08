@@ -64,7 +64,7 @@ namespace NS_Manager_Resource
                 }
             }
 
-            Generator generator = new NS_Manager_Resource.Generator ();
+            Generator generator = new Generator ();
             generator.recipe = recipe;
             generator.manager_resource = mr;
 

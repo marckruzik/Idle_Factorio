@@ -52,13 +52,7 @@ namespace Blazora.Scripts
                 stock_manager_resource.from_resource_name_add_resource (resource_name);
                 
             }
-            /*
-            string rename = "iron_ore";
-            Console.WriteLine ($"{rename}: {Resource.dico_resource_name_plus_stack_resource_quantity_max[rename]} {stock_manager_resource.from_resource_name_get_stock_resource_quantity_max (rename)}");
 
-            Resource.dico_resource_name_plus_stack_resource_quantity_max[rename].Set (3);
-            Console.WriteLine ($"{rename}: {Resource.dico_resource_name_plus_stack_resource_quantity_max[rename]} {stock_manager_resource.from_resource_name_get_stock_resource_quantity_max (rename)}");
-            */
             // Mine
             foreach (string mine_resource_name in Resource.list_mine_resource_name)
             {
@@ -125,6 +119,7 @@ namespace Blazora.Scripts
             foreach (IDictionary<String, Object> record in list_record)
             {
                 string component_mix_text = (string)record["component_mix"];
+                Console.WriteLine (component_mix_text);
                 string component_result_text = (string)record["result_mix"];
                 int time = int.Parse((string)(record["time"]));
                 string tool_kind = (string)record["tool_kind"];

@@ -6,7 +6,7 @@
 @using Pages
 
 @{ 
-    Console.WriteLine ("generate Blazor BGenerator Line Stock\n" + this.recipe.get_text ());
+    Console.WriteLine ("generate Blazor BGenerator Line Stock " + this.recipe.mix_result.get_list_resource_name ()[0]);
 }
 
 @for (int i = 0; i < this.recipe.get_component_count (); i++)

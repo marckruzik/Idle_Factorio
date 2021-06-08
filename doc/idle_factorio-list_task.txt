@@ -1,7 +1,4 @@
 
--tool separate
-assembling machine to build assembling machine
-
 
 --------------------------------------
 
@@ -16,24 +13,30 @@ assembling machine to build assembling machine
 
 - time on / off
  - time, when local burning drill >= 1, on off
- 
+
+- clear button
+
+
+- favicon
 
 --------------------------------------
 
-- copper_ore_mine
-- copper_ore
-- copper_plate
-- copper_cable
-- electronic_circuit
-- assembling_machine_1
+- assembling machine automation
 
+-tool separate
+assembling machine to build assembling machine
 
 
 --------------------------------------
-
-- FPS display
 
 - quest
+
+--------------------------------------
+
+- science
+
+--------------------------------------
+
 
 - save JSON
 - load JSON

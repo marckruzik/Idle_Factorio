@@ -170,11 +170,9 @@
     {
         base.listener_setup ();
         
-        //listener_add (() => this.val_authorize);
         listener_add (this.stack_val_current);
         listener_add (this.stack_val_max);
         listener_add (this.hover);
-        
     }
 
 
@@ -184,10 +182,12 @@
         this.hover?.Set (true);
     }
 
+
     public void mouse_out ()
     {
         this.hover?.Set (false);
     }
+
 
     public string get_background_color ()
     {
@@ -199,8 +199,6 @@
             }
             else
             {
-                //return "#FF6060";
-                //return "#3F3F3F";
                 return "#A33E42";
             }
         }
@@ -219,9 +217,6 @@
         }
         this.action ();
     }
-
-
-
 
 
 

@@ -18,7 +18,7 @@
 
 
 @{ 
-    Console.WriteLine ("generate Blazor Chest");
+    Console.WriteLine ("generate Blazor Chest " + this.recipe.mix_result.get_list_resource_name ()[0]);
 }
 
 
@@ -72,8 +72,6 @@
 
 
 
-
-
     public string from_val_get_text_bottom_right (int val)
     {
         if (val > 0)
@@ -85,6 +83,7 @@
             return "";
         }
     }
+
 
     public string from_val_get_picture_filename (int val)
     {
