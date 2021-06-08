@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using System.Timers;
 using System.Diagnostics;
 using Blazora.Components;
-
+using NS_Blazora_Basic;
 
 namespace Blazora.Pages
 {
@@ -27,7 +27,7 @@ namespace Blazora.Pages
         public static Game_Page self;
 
         public bool stat_displayed = true;
-        public int stat_average;
+        public ObservableProperty<int> stat_average = new ObservableProperty<int> (0);
 
         protected override async Task OnInitializedAsync ()
         {
@@ -85,10 +85,10 @@ namespace Blazora.Pages
                 long current_second = this.stopwatch.ElapsedMilliseconds / 1000;
                 if (last_second != current_second)
                 {
-                    this.stat_average = (int)(((float)total) / number);
+                    this.stat_average.Set ((int)(((float)total) / number));
                     if (this.stat_displayed == true)
                     {
-                        Console.WriteLine ($"average : {this.stat_average} ms");
+                        Console.WriteLine ($"average : {this.stat_average.Value} ms");
                     }
                     last_second = current_second;
                     total = 0;

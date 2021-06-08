@@ -60,14 +60,9 @@
     {
         base.listener_setup ();
 
-        List<string> list_resource_name = this.recipe.mix_component.list_resource_stack
-            .Select (resource_stack => resource_stack.resource_name)
-            .ToList ();
-
-        foreach (string resource_name in list_resource_name)
+        foreach (string resource_name in this.recipe.mix_component.get_list_resource_name ())
         {
             listener_add (get_loc_quantity (resource_name));
-            listener_add (() => get_loc_min (resource_name));
             listener_add (get_stock_quantity (resource_name));
             listener_add (get_stack_quantity_max (resource_name));
         }

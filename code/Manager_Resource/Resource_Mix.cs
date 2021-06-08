@@ -43,6 +43,14 @@ namespace NS_Manager_Resource
         }
 
 
+        public List<string> get_list_resource_name ()
+        {
+            List<string> list_resource_name = this.list_resource_stack
+                .Select (resource_stack => resource_stack.resource_name)
+                .ToList ();
+            return list_resource_name;
+        }
+
 
         public static Resource_Mix operator * (Resource_Mix resource_mix, int multiplier)
         {
