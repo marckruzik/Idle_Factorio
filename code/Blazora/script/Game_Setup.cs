@@ -10,7 +10,7 @@ using System.Globalization;
 using CsvHelper.Configuration;
 using System.Net.Http;
 using NS_Blazora_Basic;
-
+using System.Net.Http.Headers;
 
 namespace Blazora.Scripts
 {
@@ -119,7 +119,6 @@ namespace Blazora.Scripts
             foreach (IDictionary<String, Object> record in list_record)
             {
                 string component_mix_text = (string)record["component_mix"];
-                Console.WriteLine (component_mix_text);
                 string component_result_text = (string)record["result_mix"];
                 int time = int.Parse((string)(record["time"]));
                 string tool_kind = (string)record["tool_kind"];
@@ -143,14 +142,14 @@ namespace Blazora.Scripts
                 Delimiter = ","
             };
 
-            string csv_uri = $"{Program.base_adress_str}{csv_filepath}";
-            Console.WriteLine (csv_uri);
-
             HttpClient http = new HttpClient ();
             http.BaseAddress = new Uri (Program.base_adress_str);
+            http.DefaultRequestHeaders.CacheControl = new CacheControlHeaderValue
+            {
+                NoCache = true
+            };
             Stream st = await http.GetStreamAsync (csv_filepath);
-
-            Console.WriteLine ("stream");
+            
 
             IEnumerable<dynamic> records;
             using (var reader = new StreamReader (st))

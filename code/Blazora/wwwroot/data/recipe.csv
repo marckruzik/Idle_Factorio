@@ -1,8 +1,8 @@
 component_mix,result_mix,time,tool_kind
 iron_ore_mine * 1,iron_ore * 1,2000,pickaxe
 coal_ore_mine * 1,coal_ore * 1,2000,pickaxe
-stone_ore_mine * 1,stone_ore * 1,2000,pickaxe
 iron_ore * 1 + coal_ore * 1,iron_plate * 1,3000,furnace_stone
+stone_ore_mine * 1,stone_ore * 1,2000,pickaxe
 stone_ore * 4,furnace_stone * 1,2000,hand
 iron_plate * 2,iron_gear * 1,500,hand
 iron_plate * 3 + iron_gear * 3 + furnace_stone * 1,burner_drill * 1,5000,hand
