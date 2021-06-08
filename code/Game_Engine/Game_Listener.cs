@@ -8,6 +8,7 @@ namespace NS_Game_Engine
     public interface IGame_Listener
     {
         bool need_update ();
+        void clear ();
     }
 
 
@@ -42,5 +43,10 @@ namespace NS_Game_Engine
             return false;
         }
 
+
+        public void clear ()
+        {
+            this.list_kvp_func_val.Clear ();
+        }
     }
 }

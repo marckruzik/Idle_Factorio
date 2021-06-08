@@ -59,6 +59,9 @@
 
     }
 
+    Dictionary<Type, List<IObservableProperty>> dico_typ_plus_list_observable =
+        new Dictionary<Type, List<IObservableProperty>> ();
+    List<ObservableProperty<int>> list_obs_int = new List<ObservableProperty<int>> ();
 
     public void listener_add<T> (ObservableProperty<T> observable)
     {
@@ -66,7 +69,19 @@
         {
             return;
         }
-        observable.changed += (v) => { this.need_refresh = true; };
+        observable.changed += refresh;
+
+        if (dico_typ_plus_list_observable.ContainsKey (typeof(T)) == false)
+        {
+            dico_typ_plus_list_observable.Add (typeof (T), new List<IObservableProperty> ());
+        }
+        dico_typ_plus_list_observable[typeof(T)].Add (observable);
+    }
+
+
+    public void refresh<T> (T val)
+    {
+        this.need_refresh = true;
     }
 
 
@@ -84,10 +99,54 @@
         }
     }
 
+    public void listener_remove ()
+    {
+        if (dico_typ_plus_list_observable.Keys.Count > 3)
+        {
+            throw new Exception ("Game_Component: incorrect number of observable types"); 
+        }
+
+        if (dico_typ_plus_list_observable.ContainsKey (typeof (int)) == true)
+        {
+            foreach (ObservableProperty<int> obs in dico_typ_plus_list_observable[typeof (int)])
+            {
+                obs.changed -= refresh<int>;
+            }
+            dico_typ_plus_list_observable[typeof (int)].Clear ();
+        }
+
+        if (dico_typ_plus_list_observable.ContainsKey (typeof (string)) == true)
+        {
+            foreach (ObservableProperty<string> obs in dico_typ_plus_list_observable[typeof (string)])
+            {
+                obs.changed -= refresh<string>;
+            }
+            dico_typ_plus_list_observable[typeof (string)].Clear ();
+        }
+
+        if (dico_typ_plus_list_observable.ContainsKey (typeof (bool)) == true)
+        {
+            foreach (ObservableProperty<bool> obs in dico_typ_plus_list_observable[typeof (bool)])
+            {
+                obs.changed -= refresh<bool>;
+            }
+            dico_typ_plus_list_observable[typeof (bool)].Clear ();
+        }
+
+        this.manager_listener.clear ();
+    }
+
+
+    public void listener_replace ()
+    {
+        listener_remove ();
+        listener_setup ();
+    }
 
 
     public virtual void Dispose ()
     {
         Game_Page.list_component.Remove (this);
+        listener_remove ();
     }
 }

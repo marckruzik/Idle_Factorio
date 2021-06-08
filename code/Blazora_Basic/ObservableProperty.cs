@@ -3,7 +3,11 @@ using System;
 // get an event when a property changes
 namespace NS_Blazora_Basic
 {
-    public class ObservableProperty<T>
+    public interface IObservableProperty
+    {
+    }
+
+    public class ObservableProperty<T> : IObservableProperty
     {
         T value;
 

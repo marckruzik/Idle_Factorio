@@ -14,6 +14,7 @@ namespace NS_Game_Engine
             game_listener.add (func);
         }
 
+
         private Game_Listener<T> get_listener<T> ()
         {
             if (dico_typ_plus_game_listener.ContainsKey (typeof(T)) == false)
@@ -22,6 +23,7 @@ namespace NS_Game_Engine
             }
             return dico_typ_plus_game_listener[typeof(T)] as Game_Listener<T>;
         }
+
 
         public bool need_update ()
         {
@@ -33,5 +35,13 @@ namespace NS_Game_Engine
             return need_update;
         }
 
+
+        public void clear ()
+        {
+            foreach (IGame_Listener game_listener in dico_typ_plus_game_listener.Values)
+            {
+                game_listener.clear ();
+            }
+        }
     }
 }

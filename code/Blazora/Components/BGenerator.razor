@@ -96,7 +96,6 @@
 
     
     <!-- Line 4 -->
-
     
     <Cellicon picture_filename="time.png"
                 position=@(new Position (s*0, s*(start_line+2), s, s))
@@ -148,7 +147,7 @@
         foreach (string resource_name in this.recipe.mix_component.get_list_resource_name ())
         {
             listener_add (get_loc_quantity (resource_name));
-            listener_add (get_stock_quantity (resource_name));
+            //listener_add (get_stock_quantity (resource_name));
         }
     }
 
