@@ -37,6 +37,10 @@
 
 @code{
 
-
+    public override void listener_setup ()
+    {
+        base.listener_setup ();
+        listener_add (get_stack_tool ().observable_quantity);
+    }
 
 }
