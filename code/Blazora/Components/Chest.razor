@@ -5,9 +5,6 @@
 
 @code{
 
-    [Parameter] public int cell_size { get; set; }
-    [Parameter] public int val { get; set; }
-    [Parameter] public string resource_name { get; set; }
 
     private Cellicon[] arr_cellicon { get; set; } = new Cellicon[Resource.chest_size];
 
@@ -39,7 +36,7 @@
         <Cellicon 
                   picture_filename=@(from_val_get_picture_filename (val))
                   @ref="arr_cellicon[i2]"
-                  position=@(new Position (this.cell_size * x, this.cell_size * y, this.cell_size, this.cell_size))
+                  position=@(new Position (s * x, s * y, s, s))
                   background_color_default="#B2B1B1"
                   border=true
                   text_bottom_right=@(from_val_get_text_bottom_right (val))
@@ -74,8 +71,8 @@
     public override void listener_setup ()
     {
         base.listener_setup ();
-        listener_add ("Chest stock_quantity", get_stock_quantity (this.resource_name));
-        listener_add ("Chest stack_max", get_stack_quantity_max (this.resource_name));
+        listener_add ("Chest stock_quantity", get_stock_quantity (get_result_resource_name ()));
+        listener_add ("Chest stack_max", get_stack_quantity_max (get_result_resource_name ()));
     }
 
 
@@ -97,7 +94,7 @@
     {
         if (val > 0)
         {
-            return Resource.from_resource_name_get_resource_filename (this.resource_name);
+            return Resource.from_resource_name_get_resource_filename (get_result_resource_name ());
         }
         else
         {
@@ -108,8 +105,8 @@
 
     public int get_val (int number)
     {
-        int resource_total = Game_Engine.self.manager_resource.from_resource_name_get_resource_quantity (this.resource_name);
-        int stack_max = Resource.from_resource_name_get_stack_resource_quantity_max (this.resource_name);
+        int resource_total = Game_Engine.self.manager_resource.from_resource_name_get_resource_quantity (get_result_resource_name ());
+        int stack_max = Resource.from_resource_name_get_stack_resource_quantity_max (get_result_resource_name ());
 
         int resource_previous = stack_max * number;
 
