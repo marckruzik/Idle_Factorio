@@ -43,4 +43,13 @@
         listener_add ("tool", get_stack_tool ().observable_quantity);
     }
 
+
+    
+    protected override void OnInitialized ()
+    {
+        this.id = $"BGenerator_Header_Machine {get_result_resource_name ()}";
+        base.OnInitialized ();
+    }
+
+
 }

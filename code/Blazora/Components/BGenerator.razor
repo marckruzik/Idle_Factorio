@@ -23,6 +23,9 @@
 
 @{ 
 
+
+
+
     int chest_height = (3 + this.recipe.get_component_count ()) * s;
 
 }
@@ -135,37 +138,58 @@
 
 
 
+
+
+
 @code{
 
 
 
-        public void action_test1 ()
-        {
-            listener_remove ();
-            this.recipe.list_tool_kind[0] = Resource.from_resource_name_get_resource ("furnace_stone");
-            this.generator.manager_resource.from_recipe_setup (this.recipe);
-            this.generator.manager_resource.listener_setup (this.recipe);
-            this.need_refresh = true;
-            listener_setup ();
+    public void action_test1 ()
+    {
+        listener_remove ();
+        this.recipe.list_tool_kind[0] = Resource.from_resource_name_get_resource ("furnace_stone");
+        this.generator.manager_resource.from_recipe_setup (this.recipe);
+        this.generator.manager_resource.listener_setup (this.recipe);
+        this.need_refresh = true;
+        listener_setup ();
 
-            BGenerator_Line_Stock.line_stock.listener_replace ();
+        BGenerator_Line_Stock.line_stock.listener_replace ();
+    }
+
+
+    public void action_test ()
+    {
+        foreach (Game_Component gc in this.list_descendant)
+        {
+            Console.WriteLine (gc.id);
+        }
+    }
+
+    public void action_test3 ()
+    {
+        //Factorio.listener_stat_display ();
+
+        listener_remove ();
+        this.generator.manager_resource.listener_clear ();
+        foreach (Game_Component gc in this.list_descendant)
+        {
+            gc.listener_remove ();
         }
 
+        this.generator.manager_resource.from_recipe_setup (this.recipe);
+        this.generator.manager_resource.listener_setup (this.recipe);
+        listener_setup ();
 
-        public void action_test ()
+        foreach (Game_Component gc in this.list_descendant)
         {
-            Factorio.listener_stat_display ();
-            /*
-            listener_remove ();
-            this.generator.manager_resource.observable_clear ();
-
-            //BGenerator_Line_Stock.line_stock.listener_remove ();
-            Chest.chest.listener_remove ();
-
-            Console.WriteLine ("\n\n\n");
-            Factorio.listener_stat_display ();
-            */
+            gc.listener_setup ();
         }
+
+        //Console.WriteLine ("\n\n\n");
+        //Factorio.listener_stat_display ();
+
+    }
 
 
     protected override void OnInitialized()
@@ -173,6 +197,7 @@
         this.id = "BGenerator_" + this.recipe.get_first_result_resource_name ();
         Console.WriteLine ("parameters");
         this.generator.manager_resource.listener_setup (this.generator.recipe);
+
         base.OnInitialized ();
     }
 

@@ -50,6 +50,12 @@
     }
 
 
+    protected override void OnInitialized()
+    {
+        this.id = $"ProgressBar (w:{this.position.width},h:{this.position.height})";
+        base.OnInitialized ();
+    }
+
 
     public int get_content_width ()
     {

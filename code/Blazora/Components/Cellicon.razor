@@ -169,12 +169,25 @@
     public override void listener_setup ()
     {
         base.listener_setup ();
-        
+
         //listener_add ("Cellicon val_current", this.stack_val_current);
         //listener_add ("Cellicon val_max", this.stack_val_max);
         listener_add ("Cellicon hover", this.hover);
     }
 
+
+    protected override void OnInitialized()
+    {
+        if (this.position != null)
+        {
+            this.id = $"Cellicon (x:{this.position.x},y:{this.position.y})";
+        }
+        else
+        {
+            this.id = $"Cellicon (x:?,y:?)";
+        }
+        base.OnInitialized ();
+    }
 
 
     public void mouse_in ()

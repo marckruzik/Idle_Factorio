@@ -15,7 +15,9 @@
 
     public string id = "GC_Unknown";
 
+    public List<Game_Component> list_descendant = new List<Game_Component> ();
 }
+
 
 
 
@@ -71,7 +73,7 @@
             return;
         }
         observable.changed += refresh;
-        
+
         Console.WriteLine ($"Listener for Game_Component {this.id} with [{observable.id}]{info} (total listener: {observable.get_listener_count ()})");
 
         if (dico_typ_plus_list_observable.ContainsKey (typeof(T)) == false)
@@ -106,7 +108,7 @@
     {
         if (dico_typ_plus_list_observable.Keys.Count > 3)
         {
-            throw new Exception ("Game_Component: incorrect number of observable types"); 
+            throw new Exception ("Game_Component: incorrect number of observable types");
         }
 
         if (dico_typ_plus_list_observable.ContainsKey (typeof (int)) == true)
