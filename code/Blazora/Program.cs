@@ -8,7 +8,7 @@ using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using NS_Game_Engine;
-using Blazora.Scripts;
+using Blazora.Script;
 
 namespace Blazora
 {

@@ -31,7 +31,7 @@
 
 
 @{ 
-    display_name ();
+    //display_name ();
 }
 
 
@@ -177,7 +177,10 @@
 
         //listener_add ("Cellicon val_current", this.stack_val_current);
         //listener_add ("Cellicon val_max", this.stack_val_max);
-        listener_add ("Cellicon hover", this.hover);
+        if (this.action != null)
+        {
+            listener_add ("Cellicon hover", this.hover);
+        }
     }
 
 

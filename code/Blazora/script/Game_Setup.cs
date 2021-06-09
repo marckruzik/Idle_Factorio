@@ -12,7 +12,7 @@ using System.Net.Http;
 using NS_Blazora_Basic;
 using System.Net.Http.Headers;
 
-namespace Blazora.Scripts
+namespace Blazora.Script
 {
     public class Game_Setup
     {
@@ -25,7 +25,7 @@ namespace Blazora.Scripts
             await from_csv_load_recipe ();
             //Console.WriteLine ("after csv load");
             Game_Engine.self.manager_resource = stock_manager_resource_setup ();
-            quickstart ();
+            //quickstart ();
         }
 
 
@@ -67,16 +67,29 @@ namespace Blazora.Scripts
 
 
 
-        private static void quickstart ()
+        public static void quickstart ()
         {
             // Quickstart
-            Game_Engine.self.manager_resource.from_resource_name_and_resource_quantity_set_resource_quantity ("iron_ore", 8);
-            Game_Engine.self.manager_resource.from_resource_name_and_resource_quantity_set_resource_quantity ("coal_ore", 8);
-            Game_Engine.self.manager_resource.from_resource_name_and_resource_quantity_set_resource_quantity ("stone_ore", 8);
-            Game_Engine.self.manager_resource.from_resource_name_and_resource_quantity_set_resource_quantity ("iron_plate", 6);
-            Game_Engine.self.manager_resource.from_resource_name_and_resource_quantity_set_resource_quantity ("furnace_stone", 8);
-            Game_Engine.self.manager_resource.from_resource_name_and_resource_quantity_set_resource_quantity ("burner_drill", 0);
-            Game_Engine.self.manager_resource.from_resource_name_and_resource_quantity_set_resource_quantity ("iron_gear", 0);
+            quickstart ("iron_ore", 8);
+            quickstart ("coal_ore", 8);
+            quickstart ("stone_ore", 8);
+            quickstart ("iron_plate", 6);
+            quickstart ("furnace_stone", 8);
+            quickstart ("burner_drill", 4);
+            quickstart ("assembling_machine_1", 4);
+            quickstart ("iron_gear", 0);
+
+        }
+
+        public static void quickstart (string resource_name, int quantity_min)
+        {
+            int quantity_current = Game_Engine.self.manager_resource.from_resource_name_get_resource_quantity (resource_name);
+            if (quantity_current >= quantity_min)
+            {
+                return;
+            }
+            Game_Engine.self.manager_resource.from_resource_name_and_resource_quantity_set_resource_quantity 
+                (resource_name, quantity_min);
         }
 
 

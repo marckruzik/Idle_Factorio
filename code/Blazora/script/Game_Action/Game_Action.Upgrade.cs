@@ -1,9 +1,11 @@
 ﻿using NS_Game_Engine;
 using NS_Manager_Resource;
 using NS_Blazora_Basic;
+using Blazora.Components;
+using System.Linq;
+using System.Collections.Generic;
 
-
-namespace Blazora.script
+namespace Blazora.Script
 {
     public static partial class Game_Action
     {
@@ -38,5 +40,70 @@ namespace Blazora.script
 
             Resource.dico_resource_name_plus_stack_resource_quantity_max[resource_name].Set (stack_resource_quantity_max_future);
         }
+
+
+        public static void flag_furnace_stone ()
+        {
+            Game_Engine.self.manager_toggle.set ("know_furnace", true);
+            List<BGenerator> list_bgenerator = BGenerator.from_game_page_get_list_bgenerator ()
+                .Where (bgenerator => bgenerator.get_stack_tool ().resource_name == "fire")
+                .ToList ();
+            foreach (BGenerator bgenerator in list_bgenerator)
+            {
+                bgenerator.state_change ();
+            }
+        }
+
+        public static void flag_burner_drill ()
+        {
+            Game_Engine.self.manager_toggle.set ("know_burner_drill", true);
+            List<BGenerator> list_bgenerator = BGenerator.from_game_page_get_list_bgenerator ()
+                .Where (bgenerator => bgenerator.get_stack_tool ().resource_name == "pickaxe")
+                .ToList ();
+            foreach (BGenerator bgenerator in list_bgenerator)
+            {
+                bgenerator.state_change ();
+            }
+        }
+
+        public static void flag_assembling_machine_1 ()
+        {
+            Game_Engine.self.manager_toggle.set ("know_assembling_machine_1", true);
+            List<BGenerator> list_bgenerator = BGenerator.from_game_page_get_list_bgenerator ()
+                .Where (bgenerator => bgenerator.get_stack_tool ().resource_name == "hand")
+                .ToList ();
+            foreach (BGenerator bgenerator in list_bgenerator)
+            {
+                bgenerator.state_change ();
+            }
+        }
+
+
+        public static void upgrade_tool (int generator_id, string tool_resource_name)
+        {
+            BGenerator bgenerator = BGenerator.from_generator_id_get_bgenerator (generator_id);
+
+            bgenerator.listener_remove ();
+            bgenerator.generator.manager_resource.listener_clear ();
+            foreach (Game_Component gc in bgenerator.ienumerable_get_child ())
+            {
+                gc.listener_remove ();
+            }
+
+            bgenerator.recipe.list_tool_kind[0] = Resource.from_resource_name_get_resource (tool_resource_name);
+
+            bgenerator.state_change ();
+
+            bgenerator.generator.manager_resource.from_recipe_setup (bgenerator.recipe);
+            bgenerator.generator.manager_resource.listener_setup (bgenerator.recipe);
+            bgenerator.listener_setup ();
+
+            foreach (Game_Component gc in bgenerator.ienumerable_get_child ())
+            {
+                gc.listener_setup ();
+                gc.need_refresh = true;
+            }
+        }
+
     }
 }

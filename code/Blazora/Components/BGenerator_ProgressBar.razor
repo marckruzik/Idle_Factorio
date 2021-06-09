@@ -1,0 +1,45 @@
+﻿@inherits BGenerator_Component
+@using BlazorApp.Shared.Models
+@using NS_Manager_Resource
+@using NS_Game_Engine
+@using Pages
+@using Blazora.Script
+@using NS_Blazora_Basic
+
+@code {
+
+
+    public ObservableProperty<int> job_percentage = new ObservableProperty<int> ("job_percentage", 0);
+
+
+}
+
+@{
+
+}
+
+
+
+
+<ProgressBar 
+                position=@(this.position)
+                val_current=this.job_percentage 
+                val_max=@(new ObservableProperty<int> ("ProgressBar_val_max", 100))
+                border=@(true)
+                background_color="lightgrey"
+                fill_color="forestgreen"
+                parent=this
+            />
+
+
+@code{
+
+
+    public override void graphical_update ()
+    {
+        base.graphical_update ();
+        job_percentage.Set (Game_Action.from_recipe_get_job_time_percentage (this.recipe));
+    }
+
+
+}

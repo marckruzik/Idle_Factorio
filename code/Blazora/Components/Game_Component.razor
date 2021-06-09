@@ -121,7 +121,7 @@
     }
 
 
-    public void refresh<T> (T val)
+    public virtual void refresh<T> (T val)
     {
         this.need_refresh = true;
     }
@@ -183,6 +183,13 @@
     {
         listener_remove ();
         listener_setup ();
+    }
+
+
+
+    public void state_change ()
+    {
+        StateHasChanged ();
     }
 
 

@@ -14,6 +14,7 @@ namespace NS_Game_Engine
         public Manager_Resource manager_resource;
         public Manager_Generator manager_generator;
         public Manager_Job manager_job;
+        public Manager_Toggle manager_toggle;
 
         public static bool initialized = false;
 
@@ -32,6 +33,7 @@ namespace NS_Game_Engine
             Game_Engine.self.manager_resource = create_manager_resource ();
             Game_Engine.self.manager_generator = create_manager_generator ();
             Game_Engine.self.manager_job = create_manager_job ();
+            Game_Engine.self.manager_toggle = new Manager_Toggle ();
 
 
         }

@@ -10,9 +10,19 @@
 @using NS_Manager_Resource
 @using NS_Game_Engine
 @using NS_Blazora_Basic
-@using Blazora.Scripts
+@using Blazora.Script
+@using System.Linq
 
 @code{
+
+
+    public void test ()
+    {
+        Game_Action.flag_furnace_stone ();
+        Game_Action.flag_burner_drill ();
+        Game_Action.flag_assembling_machine_1 ();
+
+    }
 
 }
 
@@ -27,7 +37,11 @@
 <div class="noselect">
 
 <h3>Factorio</h3>
+    
+    <button @onclick=@(() => test ()) >Activate tools</button>
+    <button @onclick=@(() => Game_Setup.quickstart ()) >Quickstart</button>
 
+    <br /><br />
 
 @code{
 

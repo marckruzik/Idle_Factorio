@@ -11,6 +11,7 @@ namespace NS_Manager_Resource
         public Manager_Resource manager_resource;
         public int id;
         public static int id_count = 0;
+        public bool auto_on_current = false;
 
         public Generator ()
         {
@@ -106,6 +107,7 @@ namespace NS_Manager_Resource
 
         public bool must_craft_locally ()
         {
+            int count = Resource.list_can_craft_stock_resource_name.Count;
             return (Resource.list_can_craft_stock_resource_name.Contains (get_stack_tool ().resource_name) == false);
         }
 

@@ -1,7 +1,7 @@
 ﻿using NS_Game_Engine;
 using NS_Manager_Resource;
 
-namespace Blazora.script
+namespace Blazora.Script
 {
     public static partial class Game_Action
     {

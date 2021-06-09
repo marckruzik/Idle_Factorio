@@ -3,13 +3,13 @@
 @using NS_Manager_Resource
 @using NS_Game_Engine
 @using Pages
-@using Blazora.script
+@using Blazora.Script
 @using NS_Blazora_Basic
 
 
 @code{
     
-    public ObservableProperty<int> job_percentage = new ObservableProperty<int> ("job_percentage", 0);
+
 
 }
 
@@ -46,7 +46,11 @@
     {
         <BGenerator_Header_Pickaxe parent=this />
     }
-    else if (stack_tool.resource_name == "hand")
+    else if (stack_tool.resource_name == "burner_drill")
+    {
+        <BGenerator_Header_Drill parent=this />
+    }
+    else if (stack_tool.resource_name == "hand" || stack_tool.resource_name == "fire")
     {
         <BGenerator_Header_Hand parent=this />
     }
@@ -99,30 +103,19 @@
 
     
     <!-- Line 4 -->
-    <Cellicon picture_filename="chest.png"
-            position=@(new Position (s*8, s*0, s, s))
-            action=@(action_test)
-            />
 
 
-    <Cellicon picture_filename="time.png"
-                position=@(new Position (s*0, s*(start_line+2), s, s))
-                action=@(() => Game_Action.from_recipe_craft (this.recipe))
-                val_authorize=@(Game_Action.from_recipe_is_craft_ready (this.recipe))
-                text_bottom_right=@(get_recipe_time_str ())
-                />
+    <BGenerator_Time_Button 
+                            position=@(new Position (s*0, s*(start_line+2), s, s))
+                            parent=this
+                            />
 
     @{ 
         int quarter = s / 4;
     }
 
-    <ProgressBar 
+    <BGenerator_ProgressBar 
                  position=@(new Position (s*1, s*(start_line+2)+quarter, s*6, s-quarter*2))
-                 val_current=this.job_percentage 
-                 val_max=@(new ObservableProperty<int> ("ProgressBar_val_max", 100))
-                 border=@(true)
-                 background_color="lightgrey"
-                 fill_color="forestgreen"
                  parent=this
                 />
 
@@ -146,51 +139,10 @@
 
 
 
-    public void action_test1 ()
-    {
-        listener_remove ();
-        this.recipe.list_tool_kind[0] = Resource.from_resource_name_get_resource ("furnace_stone");
-        this.generator.manager_resource.from_recipe_setup (this.recipe);
-        this.generator.manager_resource.listener_setup (this.recipe);
-        this.need_refresh = true;
-        listener_setup ();
-
-        BGenerator_Line_Stock.line_stock.listener_replace ();
-    }
-
-
-    public void action_test2 ()
-    {
-        self_child_display ();
-    }
 
     public void action_test ()
     {
-        //Factorio.listener_stat_display ();
 
-        listener_remove ();
-        this.generator.manager_resource.listener_clear ();
-        foreach (Game_Component gc in ienumerable_get_child ())
-        {
-            gc.listener_remove ();
-        }
-
-        this.recipe.list_tool_kind[0] = Resource.from_resource_name_get_resource ("furnace_stone");
-
-        StateHasChanged ();
-
-        this.generator.manager_resource.from_recipe_setup (this.recipe);
-        this.generator.manager_resource.listener_setup (this.recipe);
-        listener_setup ();
-
-        foreach (Game_Component gc in ienumerable_get_child ())
-        {
-            gc.listener_setup ();
-            gc.need_refresh = true;
-        }
-
-        //Console.WriteLine ("\n\n\n");
-        //Factorio.listener_stat_display ();
 
     }
 
@@ -213,49 +165,33 @@
         //Console.WriteLine ("listener setup");
         listener_add ("BGenerator tool", get_stack_tool ().observable_quantity);
         listener_add ("BGenerator stock_quantity", get_stock_quantity (get_result_resource_name ()));
-        listener_add ("BGenerator stock_max", get_stock_max (get_result_resource_name ()));
+        //listener_add ("BGenerator stock_max", get_stock_max (get_result_resource_name ()));
         listener_add ("BGenerator stack_max", get_stack_quantity_max (get_result_resource_name ()));
-        listener_add (() => Game_Action.from_recipe_get_job_time_percentage (this.recipe) != 0);
-        //listener_add (() => this.recipe.list_tool_kind[0].resource_name);
+        //listener_add (() => Game_Action.from_recipe_get_job_time_percentage (this.recipe) != 0);
 
         foreach (string resource_name in this.recipe.mix_component.get_list_resource_name ())
         {
-            listener_add ($"BGenerator loc_quantity {resource_name}", get_loc_quantity (resource_name));
+            //listener_add ($"BGenerator loc_quantity {resource_name}", get_loc_quantity (resource_name));
             //listener_add (get_stock_quantity (resource_name));
         }
 
-        /*
-        foreach (ObservableProperty<int> obs in dico_typ_plus_list_observable[typeof(int)])
-        {
-            Console.WriteLine (obs.id);
-        }
-
-        //Console.WriteLine ("Manager resource listener");
-        this.generator.manager_resource.listener_display ();
-        */
     }
 
 
-    public override void graphical_update ()
+    public static BGenerator from_generator_id_get_bgenerator (int generator_id)
     {
-        base.graphical_update ();
-        job_percentage.Set (Game_Action.from_recipe_get_job_time_percentage (this.recipe));
+        return (BGenerator)Game_Page.list_component
+            .Where (gc => gc is BGenerator_Component == true)
+            .Cast<BGenerator_Component> ()
+            .FirstOrDefault (bgc => bgc.generator_id == generator_id);
     }
 
-
-    public string get_recipe_time_str ()
+    public static List<BGenerator> from_game_page_get_list_bgenerator ()
     {
-        int dividor = 60;
-        if (this.recipe.time % dividor == 0)
-        {
-            return $"{this.recipe.time / dividor}";
-        }
-        else
-        {
-            float divided = ((float)this.recipe.time) / dividor;
-            divided = (float)Math.Round (divided, 1);
-            return $"{divided}";
-        }
+        return Game_Page.list_component
+            .Where (gc => gc is BGenerator == true)
+            .Cast<BGenerator> ()
+            .ToList ();
     }
 
 

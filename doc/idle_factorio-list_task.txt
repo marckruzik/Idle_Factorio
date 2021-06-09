@@ -2,33 +2,30 @@
 
 --------------------------------------
 
-- Flag system
 
-
-- Line Pickaxe
- - burning drill, when flag true, display
- - Pickaxe, when local burning drill >= 1, hide
-
-- Recipe, change
-
-- time on / off
- - time, when local burning drill >= 1, on off
-
+- change tool, transfer pack
 
 
 - clear button
 
 
+
+- FPS Counter, permanent top
+
 - favicon
+- Splash Screen, picture
+- Splash Screen, title
+- Tab about
+- copyrights
 
 --------------------------------------
 
-- craft button, own component
 - upgrade button, own component
 
+- refresh only on screen
+
 --------------------------------------
 
-- assembling machine automation
 
 - tool separate
 assembling machine to build assembling machine
