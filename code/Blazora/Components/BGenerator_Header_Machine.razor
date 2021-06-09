@@ -10,7 +10,7 @@
 }
 
 
-<BGenerator_Line_Stock />
+<BGenerator_Line_Stock parent=this />
 
 @{ 
     Resource_Stack stack_tool = get_stack_tool ();
@@ -32,6 +32,7 @@
             text_bottom_right=@($"{stack_tool.quantity}")
             stack_val_current=@(get_loc_quantity (stack_tool.resource_name))
             stack_val_max=@(get_stack_quantity_max (stack_tool.resource_name))
+            parent=this
             />
 
 
@@ -47,7 +48,7 @@
     
     protected override void OnInitialized ()
     {
-        this.id = $"BGenerator_Header_Machine {get_result_resource_name ()}";
+        this.id = $"BGenerator_Header_Machine [{get_result_resource_name ()}]";
         base.OnInitialized ();
     }
 

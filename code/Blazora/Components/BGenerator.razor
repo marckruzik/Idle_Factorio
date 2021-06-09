@@ -44,15 +44,15 @@
 
     @if (stack_tool.resource_name == "pickaxe")
     {
-        <BGenerator_Header_Pickaxe />
+        <BGenerator_Header_Pickaxe parent=this />
     }
     else if (stack_tool.resource_name == "hand")
     {
-        <BGenerator_Header_Hand />
+        <BGenerator_Header_Hand parent=this />
     }
     else
     {
-        <BGenerator_Header_Machine />
+        <BGenerator_Header_Machine parent=this />
     }
 
 
@@ -83,6 +83,7 @@
               text_bottom_right=@($"Lv{stack_resource_quantity_max}")
               stack_val_current=@(get_stock_quantity (result_resource_name))
               stack_val_max=@(get_stock_max (result_resource_name))
+              parent=this
             />
 
 
@@ -94,7 +95,8 @@
     <Chest 
            resource_name=@(result_resource_name)
            position=@(new Position (s*0, s*(start_line+1), s*8, s*1))
-           cell_size=s 
+           cell_size=s
+            parent=this
            />
 
     
@@ -123,6 +125,7 @@
                  border=@(true)
                  background_color="lightgrey"
                  fill_color="forestgreen"
+                 parent=this
                 />
 
 
@@ -158,21 +161,18 @@
     }
 
 
-    public void action_test ()
+    public void action_test2 ()
     {
-        foreach (Game_Component gc in this.list_descendant)
-        {
-            Console.WriteLine (gc.id);
-        }
+        self_child_display ();
     }
 
-    public void action_test3 ()
+    public void action_test ()
     {
         //Factorio.listener_stat_display ();
 
         listener_remove ();
         this.generator.manager_resource.listener_clear ();
-        foreach (Game_Component gc in this.list_descendant)
+        foreach (Game_Component gc in ienumerable_get_child ())
         {
             gc.listener_remove ();
         }
@@ -181,7 +181,7 @@
         this.generator.manager_resource.listener_setup (this.recipe);
         listener_setup ();
 
-        foreach (Game_Component gc in this.list_descendant)
+        foreach (Game_Component gc in ienumerable_get_child ())
         {
             gc.listener_setup ();
         }
@@ -194,7 +194,7 @@
 
     protected override void OnInitialized()
     {
-        this.id = "BGenerator_" + this.recipe.get_first_result_resource_name ();
+        this.id = $"BGenerator [{this.recipe.get_first_result_resource_name ()}]";
         Console.WriteLine ("parameters");
         this.generator.manager_resource.listener_setup (this.generator.recipe);
 

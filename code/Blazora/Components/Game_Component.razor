@@ -7,6 +7,7 @@
 @code{
     
     [Parameter] public Position position { get; set; }
+    [Parameter] public Game_Component parent { get; set; }
 
 
     Manager_Listener manager_listener = new Manager_Listener ();
@@ -15,7 +16,7 @@
 
     public string id = "GC_Unknown";
 
-    public List<Game_Component> list_descendant = new List<Game_Component> ();
+    public List<Game_Component> list_child = new List<Game_Component> ();
 }
 
 
@@ -35,11 +36,15 @@
     }
 
 
-    protected override void OnInitialized()
+    protected override void OnInitialized ()
     {
         base.OnInitialized ();
         listener_setup ();
         Game_Page.list_component.Add (this);
+        if (this.parent != null)
+        {
+            this.parent.list_child.Add (this);
+        }
     }
 
 
@@ -55,6 +60,29 @@
 
         StateHasChanged ();
         this.need_refresh = false;
+    }
+
+
+    public void self_child_display ()
+    {
+        Console.WriteLine (this.id);
+        foreach (Game_Component gc in ienumerable_get_child ())
+        {
+            Console.WriteLine (gc.id);
+        }
+    }
+
+    public IEnumerable<Game_Component> ienumerable_get_child ()
+    {
+        foreach (Game_Component gc in this.list_child)
+        {
+            yield return gc;
+            foreach (Game_Component g in gc.ienumerable_get_child ())
+            {
+                yield return g;
+            }
+        }
+
     }
 
 

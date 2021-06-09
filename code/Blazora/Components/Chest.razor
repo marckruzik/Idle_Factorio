@@ -62,16 +62,12 @@
 
 @code {
 
-    public static Chest chest;
 
     protected override void OnInitialized()
     {
         this.id = "Chest_" + this.recipe.get_first_result_resource_name ();
         base.OnInitialized ();
-        if (get_result_resource_name () == "iron_ore")
-        {
-            chest = this;
-        }
+
     }
 
 

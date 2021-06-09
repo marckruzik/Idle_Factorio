@@ -47,7 +47,8 @@
                 text_bottom_right=@($"{get_loc_val (resource_name)}/{get_loc_min (resource_name)}")
                 stack_val_current=@(get_loc_quantity (resource_name))
                 stack_val_max=@(get_stack_quantity_max (resource_name))
-                />
+                parent=this
+              />
 
 }
 
@@ -65,7 +66,7 @@
 
     protected override void OnInitialized ()
     {
-        this.id = "Line_Stock_" + this.recipe.get_first_result_resource_name ();
+        this.id = $"Line_Stock [{this.recipe.get_first_result_resource_name ()}]";
         base.OnInitialized ();
         if (get_result_resource_name () == "iron_ore")
         {
