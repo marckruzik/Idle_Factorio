@@ -139,31 +139,33 @@
 
 
 
-    public void action_test1 ()
-    {
-        listener_remove ();
-        this.recipe.list_tool_kind[0] = Resource.from_resource_name_get_resource ("furnace_stone");
-        this.generator.manager_resource.from_recipe_setup (this.recipe);
-        this.generator.manager_resource.listener_setup (this.recipe);
-        this.need_refresh = true;
-        listener_setup ();
+        public void action_test1 ()
+        {
+            listener_remove ();
+            this.recipe.list_tool_kind[0] = Resource.from_resource_name_get_resource ("furnace_stone");
+            this.generator.manager_resource.from_recipe_setup (this.recipe);
+            this.generator.manager_resource.listener_setup (this.recipe);
+            this.need_refresh = true;
+            listener_setup ();
 
-        BGenerator_Line_Stock.line_stock.listener_replace ();
-    }
+            BGenerator_Line_Stock.line_stock.listener_replace ();
+        }
 
 
-    public void action_test ()
-    {
-        Factorio.listener_stat_display ();
-        listener_remove ();
-        this.generator.manager_resource.observable_clear ();
-        
-        //BGenerator_Line_Stock.line_stock.listener_remove ();
-        Chest.chest.listener_remove ();
+        public void action_test ()
+        {
+            Factorio.listener_stat_display ();
+            /*
+            listener_remove ();
+            this.generator.manager_resource.observable_clear ();
 
-        Console.WriteLine ("\n\n\n");
-        Factorio.listener_stat_display ();
-    }
+            //BGenerator_Line_Stock.line_stock.listener_remove ();
+            Chest.chest.listener_remove ();
+
+            Console.WriteLine ("\n\n\n");
+            Factorio.listener_stat_display ();
+            */
+        }
 
 
     protected override void OnInitialized()
@@ -179,7 +181,7 @@
     public override void listener_setup ()
     {
         base.listener_setup ();
-        
+
         Console.WriteLine ("listener setup");
         listener_add ("BGenerator tool", get_stack_tool ().observable_quantity);
         listener_add ("BGenerator stock_quantity", get_stock_quantity (get_result_resource_name ()));
@@ -194,7 +196,7 @@
             //listener_add (get_stock_quantity (resource_name));
         }
 
-        
+
         foreach (ObservableProperty<int> obs in dico_typ_plus_list_observable[typeof(int)])
         {
             Console.WriteLine (obs.id);
@@ -202,7 +204,7 @@
 
         Console.WriteLine ("Manager resource listener");
         this.generator.manager_resource.listener_display ();
-        
+
     }
 
 
@@ -234,7 +236,7 @@
     public override void Dispose ()
     {
         base.Dispose ();
-        this.generator.manager_resource.observable_clear ();
+        this.generator.manager_resource.listener_clear ();
     }
 
 

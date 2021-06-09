@@ -121,9 +121,10 @@ namespace NS_Manager_Resource
             };
             dico_resource_name_plus_action.Add (resource_name, action);
 
-            Resource.dico_resource_name_plus_stack_resource_quantity_max[resource_name].changed += action;
+            ObservableProperty<int> obs = Resource.dico_resource_name_plus_stack_resource_quantity_max[resource_name];
+            obs.changed += action;
 
-            Console.WriteLine ($"Listener for Manager_Resource {this.id} with {resource_name}");
+            Console.WriteLine ($"Listener for Manager_Resource {this.id} with [{obs.id}]{resource_name}");
             
         }
 
@@ -168,7 +169,7 @@ namespace NS_Manager_Resource
         }
 
 
-        public void observable_clear ()
+        public void listener_clear ()
         {
             List<ObservableProperty<int>> list_observable =
                 this.dico_resource_name_plus_resource_stack

@@ -45,7 +45,8 @@
     {
         await base.OnInitializedAsync ();
         await setup ();
-
+        
+        Game_Engine.self.manager_resource.listener_setup (Resource.list_resource_name);
 
     }
 
@@ -54,7 +55,7 @@
     {
         base.OnInitialized ();
         Console.WriteLine ("Factorio page");
-
+        
     }
 
 }
@@ -84,20 +85,31 @@
 
     public static void listener_stat_display ()
     {
-            
+
         foreach (string resource_name in Resource.list_resource_name)
         {
             ObservableProperty<int> obs = Game_Engine.self.manager_resource.from_resource_name_get_resource_stack (resource_name).observable_quantity;
             Console.WriteLine ($"Game Engine [{obs.id}]{resource_name} listener : {obs.get_listener_count ()}");
         }
 
-    
+
         foreach (string resource_name in Resource.list_resource_name)
         {
             ObservableProperty<int> obs = Resource.from_resource_name_get_stack_resource_quantity_max (resource_name);
             Console.WriteLine ($"Resource quantity max [{obs.id}]{resource_name} listener : {obs.get_listener_count ()}");
         }
 
+        Generator generator =
+            Game_Engine.self.manager_generator.Values.FirstOrDefault (generator => generator.get_result_resource_name () == "iron_ore");
+        foreach (string resource_name in Resource.list_resource_name)
+        {
+            if (generator.manager_resource.from_resource_name_contain_resource_stack (resource_name) == false)
+            {
+                continue;
+            }
+            ObservableProperty<int> obs = generator.manager_resource.from_resource_name_get_resource_stack (resource_name).observable_quantity;
+            Console.WriteLine ($"Generator iron_ore [{obs.id}]{resource_name} listener : {obs.get_listener_count ()}");
+        }
     }
 
 
@@ -111,7 +123,7 @@
             observable.changed = null;
         }
 
-        Game_Engine.self.manager_resource.observable_clear ();
+        Game_Engine.self.manager_resource.listener_clear ();
 
         Console.WriteLine ($"iron ore listener : {Game_Engine.self.manager_resource.from_resource_name_get_resource_stack ("iron_ore").observable_quantity.get_listener_count ()}");
     }
