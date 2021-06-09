@@ -49,6 +49,32 @@ namespace NS_Manager_Resource
         }
 
 
+        public void from_recipe_setup (Recipe recipe)
+        {
+            clear ();
+
+            foreach (Resource_Stack component_stack in recipe.mix_component.list_resource_stack)
+            {
+                from_resource_name_add_resource (component_stack.resource_name);
+            }
+            foreach (Resource tool_kind in recipe.list_tool_kind)
+            {
+                from_resource_name_add_resource (tool_kind.resource_name);
+                if (Resource.list_unique_resource_name.Contains (tool_kind.resource_name) == true)
+                {
+                    from_resource_name_and_resource_quantity_set_resource_quantity (tool_kind.resource_name, 1);
+                }
+            }
+        }
+
+
+        private void clear ()
+        {
+            this.dico_resource_name_plus_resource_stack.Clear ();
+            this.dico_resource_name_plus_stock_quantity_max.Clear ();
+        }
+
+
         public int from_resource_name_get_resource_quantity (string resource_name)
         {
             return from_resource_name_get_resource_stack (resource_name).quantity;
@@ -63,16 +89,103 @@ namespace NS_Manager_Resource
             }
             Resource_Stack resource_stack = Resource_Stack.from_resource_name_create_resource_stack (resource_name);
             resource_stack.quantity = 0;
-            dico_resource_name_plus_resource_stack.Add (resource_name, resource_stack);
+            this.dico_resource_name_plus_resource_stack.Add (resource_name, resource_stack);
 
 
             int max = Resource.dico_resource_name_plus_stack_resource_quantity_max[resource_name] * this.chest_size;
-            dico_resource_name_plus_stock_quantity_max.Add (resource_name, new ObservableProperty<int> (max));
-
-            Resource.dico_resource_name_plus_stack_resource_quantity_max[resource_name].changed += (v) =>
-                dico_resource_name_plus_stock_quantity_max[resource_name]
-                .Set (v * this.chest_size);
+            this.dico_resource_name_plus_stock_quantity_max.Add (resource_name, new ObservableProperty<int> (max));
         }
+
+
+        Dictionary<string, Action<int>> dico_resource_name_plus_action = new Dictionary<string, Action<int>> ();
+
+        public void listener_set (string resource_name)
+        {
+            /*
+            Resource.dico_resource_name_plus_stack_resource_quantity_max[resource_name].changed += (v) =>
+                {
+                    this.dico_resource_name_plus_stock_quantity_max[resource_name]
+                        .Set (v * this.chest_size);
+                    Console.WriteLine ($"{resource_name} new : {v}");
+                };
+            */
+
+            Action<int> action = delegate (int v) 
+            {
+                this.dico_resource_name_plus_stock_quantity_max[resource_name]
+                    .Set (v * this.chest_size);
+                Console.WriteLine ($"{resource_name} new : {v}");
+            };
+            dico_resource_name_plus_action.Add (resource_name, action);
+
+            Resource.dico_resource_name_plus_stack_resource_quantity_max[resource_name].changed += action;
+        }
+
+        public void listener_unset (string resource_name)
+        {
+            Action<int> action = dico_resource_name_plus_action[resource_name];
+            Resource.dico_resource_name_plus_stack_resource_quantity_max[resource_name].changed -= action;
+            dico_resource_name_plus_action.Remove (resource_name);
+        }
+
+
+
+        public void listener_display ()
+        {
+            foreach (ObservableProperty<int> obs in dico_resource_name_plus_stock_quantity_max.Values)
+            {
+                Console.WriteLine (obs.id);
+            }
+        }
+
+
+        public void listener_setup (Recipe recipe)
+        {
+            foreach (Resource_Stack component_stack in recipe.mix_component.list_resource_stack)
+            {
+                listener_set (component_stack.resource_name);
+            }
+            foreach (Resource tool_kind in recipe.list_tool_kind)
+            {
+                listener_set (tool_kind.resource_name);
+            }
+        }
+
+
+        public void listener_setup (List<string> list_resource_name)
+        {
+            foreach (string resource_name in list_resource_name)
+            {
+                listener_set (resource_name);
+            }
+        }
+
+
+        public void observable_clear ()
+        {
+            List<ObservableProperty<int>> list_observable =
+                this.dico_resource_name_plus_resource_stack
+                .Values
+                .Select (rs => rs.observable_quantity)
+                .ToList ();
+            foreach (ObservableProperty<int> observable in list_observable)
+            {
+                observable.changed = null;
+            }
+
+            foreach (ObservableProperty<int> observable in this.dico_resource_name_plus_stock_quantity_max.Values)
+            {
+                observable.changed = null;
+            }
+
+            foreach (string resource_name in dico_resource_name_plus_action.Keys)
+            {
+                //listener_unset (resource_name);
+            }
+
+        }
+
+
 
 
         public void from_resource_name_and_resource_quantity_add_resource (string resource_name, int resource_quantity)
@@ -93,7 +206,7 @@ namespace NS_Manager_Resource
         {
             from_resource_name_add_resource (resource_name);
 
-            Resource_Stack resource_stack = dico_resource_name_plus_resource_stack[resource_name];
+            Resource_Stack resource_stack = this.dico_resource_name_plus_resource_stack[resource_name];
 
             int stock_max = from_resource_name_get_stock_resource_quantity_max (resource_name);
 
@@ -142,34 +255,16 @@ namespace NS_Manager_Resource
 
         public Resource_Stack from_resource_name_get_resource_stack (string resource_name)
         {
-            Resource_Stack resource_stack = dico_resource_name_plus_resource_stack[resource_name];
+            Resource_Stack resource_stack = this.dico_resource_name_plus_resource_stack[resource_name];
             return resource_stack;
         }
 
 
         public bool from_resource_name_contain_resource_stack (string resource_name)
         {
-            return dico_resource_name_plus_resource_stack.ContainsKey (resource_name);
+            return this.dico_resource_name_plus_resource_stack.ContainsKey (resource_name);
         }
 
 
-        public void observable_clear ()
-        {
-            List<ObservableProperty<int>> list_observable =
-                dico_resource_name_plus_resource_stack
-                .Values
-                .Select (rs => rs.observable_quantity)
-                .ToList ();
-            foreach (ObservableProperty<int> observable in list_observable)
-            {
-                observable.changed = null;
-            }
-
-            foreach (ObservableProperty<int> observable in dico_resource_name_plus_stock_quantity_max.Values)
-            {
-                observable.changed = null;
-            }
-
-        }
     }
 }

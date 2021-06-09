@@ -96,7 +96,12 @@
 
     
     <!-- Line 4 -->
-    
+    <Cellicon picture_filename="chest.png"
+            position=@(new Position (s*8, s*0, s, s))
+            action=@(action_test)
+            />
+
+
     <Cellicon picture_filename="time.png"
                 position=@(new Position (s*0, s*(start_line+2), s, s))
                 action=@(() => Game_Action.from_recipe_craft (this.recipe))
@@ -134,21 +139,66 @@
 
 
 
+    public void action_test1 ()
+    {
+        listener_remove ();
+        this.recipe.list_tool_kind[0] = Resource.from_resource_name_get_resource ("furnace_stone");
+        this.generator.manager_resource.from_recipe_setup (this.recipe);
+        this.generator.manager_resource.listener_setup (this.recipe);
+        this.need_refresh = true;
+        listener_setup ();
+
+        BGenerator_Line_Stock.line_stock.listener_replace ();
+    }
+
+
+    public void action_test ()
+    {
+        Factorio.listener_stat_display ();
+        listener_remove ();
+        this.generator.manager_resource.observable_clear ();
+
+        //BGenerator_Line_Stock.line_stock.listener_remove ();
+
+        Factorio.listener_stat_display ();
+    }
+
+
+    protected override void OnInitialized()
+    {
+        Console.WriteLine ("parameters");
+        this.generator.manager_resource.listener_setup (this.generator.recipe);
+        base.OnInitialized ();
+    }
+
+
+
     public override void listener_setup ()
     {
         base.listener_setup ();
+        Console.WriteLine ("listener setup");
         listener_add (get_stack_tool ().observable_quantity);
         listener_add (get_stock_quantity (get_result_resource_name ()));
         listener_add (get_stock_max (get_result_resource_name ()));
         listener_add (get_stack_quantity_max (get_result_resource_name ()));
         listener_add (() => Game_Action.from_recipe_get_job_time_percentage (this.recipe) != 0);
-
+        //listener_add (() => this.recipe.list_tool_kind[0].resource_name);
 
         foreach (string resource_name in this.recipe.mix_component.get_list_resource_name ())
         {
             listener_add (get_loc_quantity (resource_name));
             //listener_add (get_stock_quantity (resource_name));
         }
+
+
+        foreach (ObservableProperty<int> obs in dico_typ_plus_list_observable[typeof(int)])
+        {
+            Console.WriteLine (obs.id);
+        }
+
+        Console.WriteLine ("Manager resource listener");
+        this.generator.manager_resource.listener_display ();
+
     }
 
 

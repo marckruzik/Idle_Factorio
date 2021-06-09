@@ -1,5 +1,7 @@
 ﻿using NS_Game_Engine;
 using NS_Manager_Resource;
+using NS_Blazora_Basic;
+
 
 namespace Blazora.script
 {
@@ -29,8 +31,10 @@ namespace Blazora.script
                .from_recipe_get_generator (recipe)
                .get_result_resource_name ();
 
-            int stack_resource_quantity_max = Resource.from_resource_name_get_stack_resource_quantity_max (resource_name);
+            ObservableProperty<int> stack_resource_quantity_max = Resource.from_resource_name_get_stack_resource_quantity_max (resource_name);
             int stack_resource_quantity_max_future = stack_resource_quantity_max * 2;
+
+            int count = Resource.dico_resource_name_plus_stack_resource_quantity_max[resource_name].get_listener_count ();
 
             Resource.dico_resource_name_plus_stack_resource_quantity_max[resource_name].Set (stack_resource_quantity_max_future);
         }

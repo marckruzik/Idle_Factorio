@@ -59,9 +59,8 @@
 
     }
 
-    Dictionary<Type, List<IObservableProperty>> dico_typ_plus_list_observable =
+    public Dictionary<Type, List<IObservableProperty>> dico_typ_plus_list_observable =
         new Dictionary<Type, List<IObservableProperty>> ();
-    List<ObservableProperty<int>> list_obs_int = new List<ObservableProperty<int>> ();
 
     public void listener_add<T> (ObservableProperty<T> observable)
     {

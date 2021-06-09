@@ -25,6 +25,7 @@ namespace Blazora.Scripts
             await from_csv_load_recipe ();
             Console.WriteLine ("after csv load");
             Game_Engine.self.manager_resource = stock_manager_resource_setup ();
+            Game_Engine.self.manager_resource.listener_setup (Resource.list_resource_name);
             quickstart ();
         }
 
@@ -69,7 +70,7 @@ namespace Blazora.Scripts
         private static void quickstart ()
         {
             // Quickstart
-            Game_Engine.self.manager_resource.from_resource_name_and_resource_quantity_set_resource_quantity ("iron_ore", 7);
+            Game_Engine.self.manager_resource.from_resource_name_and_resource_quantity_set_resource_quantity ("iron_ore", 8);
             Game_Engine.self.manager_resource.from_resource_name_and_resource_quantity_set_resource_quantity ("coal_ore", 8);
             Game_Engine.self.manager_resource.from_resource_name_and_resource_quantity_set_resource_quantity ("stone_ore", 8);
             Game_Engine.self.manager_resource.from_resource_name_and_resource_quantity_set_resource_quantity ("iron_plate", 6);
@@ -124,6 +125,7 @@ namespace Blazora.Scripts
                 string tool_kind = (string)record["tool_kind"];
 
                 add_generator (component_mix_text, component_result_text, time, tool_kind);
+                break;
             }
 
             Console.WriteLine ("end recipe csv load");

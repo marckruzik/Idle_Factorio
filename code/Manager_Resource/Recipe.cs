@@ -28,7 +28,7 @@ namespace NS_Manager_Resource
 
             recipe.list_tool_kind = new List<Resource> ()
             {
-                Resource.from_resource_name_get_resource(tool_kind_name)
+                Resource.from_resource_name_get_resource (tool_kind_name)
             };
 
             return recipe;

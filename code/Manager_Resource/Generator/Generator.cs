@@ -50,23 +50,11 @@ namespace NS_Manager_Resource
 
         public static Generator from_recipe_create_generator (Recipe recipe)
         {
-            Manager_Resource mr = new Manager_Resource ();
-            foreach (Resource_Stack component_stack in recipe.mix_component.list_resource_stack)
-            {
-                mr.from_resource_name_add_resource (component_stack.resource_name);
-            }
-            foreach (Resource tool_kind in recipe.list_tool_kind)
-            {
-                mr.from_resource_name_add_resource (tool_kind.resource_name);
-                if (Resource.list_unique_resource_name.Contains (tool_kind.resource_name) == true)
-                {
-                    mr.from_resource_name_and_resource_quantity_set_resource_quantity (tool_kind.resource_name, 1);
-                }
-            }
-
             Generator generator = new Generator ();
             generator.recipe = recipe;
-            generator.manager_resource = mr;
+            generator.manager_resource = new Manager_Resource ();
+
+            generator.manager_resource.from_recipe_setup (recipe);
 
             return generator;
         }

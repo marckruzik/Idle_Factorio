@@ -18,6 +18,7 @@
 
 @{ 
 
+    Console.WriteLine ("generate Blazor Page Factorio");
 }
 
 <FPS_Counter />
@@ -28,34 +29,37 @@
 <h3>Factorio</h3>
 
 
-
 @code{
 
-    public async Task setup ()
-    {
-        if (Game_Setup.initialized == false)
+        public async Task setup ()
         {
-            await Game_Setup.setup ();
-            Game_Setup.initialized = true;
+            if (Game_Setup.initialized == false)
+            {
+                await Game_Setup.setup ();
+                Game_Setup.initialized = true;
+            }
         }
-    }
 
 
     protected override async Task OnInitializedAsync ()
     {
         await base.OnInitializedAsync ();
         await setup ();
+
+
     }
 
 
+    protected override void OnInitialized ()
+    {
+        base.OnInitialized ();
+        Console.WriteLine ("Factorio page");
+
+    }
 
 }
 
-
-
 @{ 
-
-
 
 }
 
@@ -64,7 +68,7 @@
 
     @foreach (Generator generator in Game_Engine.self.manager_generator.Values)
     {
-        <CascadingValue Value=generator.recipe IsFixed="true">
+        <CascadingValue Value=generator.recipe >
             <BGenerator /> 
         </CascadingValue>
 
@@ -78,15 +82,37 @@
 
 @code{
 
+    public static void listener_stat_display ()
+    {
+            
+        foreach (string resource_name in Resource.list_resource_name)
+        {
+            Console.WriteLine ($"Game Engine {resource_name} listener : {Game_Engine.self.manager_resource.from_resource_name_get_resource_stack (resource_name).observable_quantity.get_listener_count ()}");
+        }
+
+    
+        foreach (string resource_name in Resource.list_resource_name)
+        {
+            ObservableProperty<int> obs = Resource.from_resource_name_get_stack_resource_quantity_max (resource_name);
+            Console.WriteLine ($"[{obs.id}] Resource quantity max {resource_name} listener : {obs.get_listener_count ()}");
+        }
+
+    }
+
+
+
     public override void Dispose ()
     {
         base.Dispose ();
+
         foreach (ObservableProperty<int> observable in Resource.dico_resource_name_plus_stack_resource_quantity_max.Values)
         {
             observable.changed = null;
         }
 
         Game_Engine.self.manager_resource.observable_clear ();
+
+        Console.WriteLine ($"iron ore listener : {Game_Engine.self.manager_resource.from_resource_name_get_resource_stack ("iron_ore").observable_quantity.get_listener_count ()}");
     }
 
 }

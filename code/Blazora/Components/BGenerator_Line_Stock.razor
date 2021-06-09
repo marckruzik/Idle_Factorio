@@ -5,6 +5,13 @@
 
 @using Pages
 
+@code{
+
+
+}
+
+
+
 @{ 
     Console.WriteLine ("generate Blazor BGenerator Line Stock " + this.recipe.mix_result.get_list_resource_name ()[0]);
 }
@@ -54,11 +61,21 @@
 
 @code{
 
+    public static BGenerator_Line_Stock line_stock;
 
+    protected override void OnInitialized ()
+    {
+        base.OnInitialized ();
+        if (get_result_resource_name () == "iron_plate")
+        {
+            line_stock = this;
+        }
+    }
 
     public override void listener_setup ()
     {
         base.listener_setup ();
+
 
         foreach (string resource_name in this.recipe.mix_component.get_list_resource_name ())
         {

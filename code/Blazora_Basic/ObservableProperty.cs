@@ -7,15 +7,21 @@ namespace NS_Blazora_Basic
     {
     }
 
+
     public class ObservableProperty<T> : IObservableProperty
     {
+        static int id_count = 0;
+        public int id;
         T value;
 
         public Action<T> changed;
 
+
         public ObservableProperty (T initialValue)
         {
             value = initialValue;
+            this.id = id_count;
+            id_count++;
         }
 
         public void Set (T v)
@@ -47,5 +53,14 @@ namespace NS_Blazora_Basic
         }
 
         public T Value { get { return Get (); } }
+
+        public int get_listener_count ()
+        {
+            if (changed == null)
+            {
+                return 0;
+            }
+            return changed.GetInvocationList ().Length;
+        }
     }
 }
