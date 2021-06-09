@@ -22,6 +22,7 @@ namespace NS_Manager_Resource
             Resource resource = Resource.from_resource_name_get_resource (resource_name);
             Resource_Stack resource_stack = new Resource_Stack ();
             resource_stack.resource = resource;
+            resource_stack.observable_quantity.id = "Resource_Stack:" + resource_name + ":" + resource_stack.observable_quantity.id;
             return resource_stack;
         }
 

@@ -13,6 +13,8 @@
     
     public bool need_refresh = true;
 
+    public string id = "GC_Unknown";
+
 }
 
 
@@ -62,13 +64,15 @@
     public Dictionary<Type, List<IObservableProperty>> dico_typ_plus_list_observable =
         new Dictionary<Type, List<IObservableProperty>> ();
 
-    public void listener_add<T> (ObservableProperty<T> observable)
+    public void listener_add<T> (string info, ObservableProperty<T> observable)
     {
         if (observable == null)
         {
             return;
         }
         observable.changed += refresh;
+        
+        Console.WriteLine ($"Listener for Game_Component {this.id} with [{observable.id}]{info}");
 
         if (dico_typ_plus_list_observable.ContainsKey (typeof(T)) == false)
         {

@@ -11,7 +11,7 @@ namespace NS_Blazora_Basic
     public class ObservableProperty<T> : IObservableProperty
     {
         static int id_count = 0;
-        public int id;
+        public string id;
         T value;
 
         public Action<T> changed;
@@ -20,9 +20,14 @@ namespace NS_Blazora_Basic
         public ObservableProperty (T initialValue)
         {
             value = initialValue;
-            this.id = id_count;
+            this.id = id_count.ToString ();
             id_count++;
         }
+        public ObservableProperty (string id, T initialValue) : this (initialValue)
+        {
+            this.id = id + ":" + this.id;
+        }
+
 
         public void Set (T v)
         {

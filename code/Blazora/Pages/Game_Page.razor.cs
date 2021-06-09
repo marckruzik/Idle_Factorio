@@ -26,7 +26,7 @@ namespace Blazora.Pages
 
         public static Game_Page self;
 
-        public ObservableProperty<int> stat_average = new ObservableProperty<int> (0);
+        public ObservableProperty<int> stat_average = new ObservableProperty<int> ("stat_average", 0);
 
         protected override async Task OnInitializedAsync ()
         {

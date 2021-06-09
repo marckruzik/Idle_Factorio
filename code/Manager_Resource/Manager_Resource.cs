@@ -14,6 +14,8 @@ namespace NS_Manager_Resource
         Dictionary<string, ObservableProperty<int>> dico_resource_name_plus_stock_quantity_max = 
             new Dictionary<string, ObservableProperty<int>> ();
 
+        public string id = "MR_unknown";
+
         public bool can_craft (Resource_Mix mix_component)
         {
             foreach (Resource_Stack component in mix_component.list_resource_stack)
@@ -93,7 +95,8 @@ namespace NS_Manager_Resource
 
 
             int max = Resource.dico_resource_name_plus_stack_resource_quantity_max[resource_name] * this.chest_size;
-            this.dico_resource_name_plus_stock_quantity_max.Add (resource_name, new ObservableProperty<int> (max));
+            this.dico_resource_name_plus_stock_quantity_max
+                .Add (resource_name, new ObservableProperty<int> (this.id + ":" + resource_name, max));
         }
 
 
@@ -109,7 +112,7 @@ namespace NS_Manager_Resource
                     Console.WriteLine ($"{resource_name} new : {v}");
                 };
             */
-
+            
             Action<int> action = delegate (int v) 
             {
                 this.dico_resource_name_plus_stock_quantity_max[resource_name]
@@ -119,7 +122,11 @@ namespace NS_Manager_Resource
             dico_resource_name_plus_action.Add (resource_name, action);
 
             Resource.dico_resource_name_plus_stack_resource_quantity_max[resource_name].changed += action;
+
+            Console.WriteLine ($"Listener for Manager_Resource {this.id} with {resource_name}");
+            
         }
+
 
         public void listener_unset (string resource_name)
         {
@@ -178,9 +185,10 @@ namespace NS_Manager_Resource
                 observable.changed = null;
             }
 
-            foreach (string resource_name in dico_resource_name_plus_action.Keys)
+            List<string> list_resource_name = dico_resource_name_plus_action.Keys.ToList ();
+            foreach (string resource_name in list_resource_name)
             {
-                //listener_unset (resource_name);
+                listener_unset (resource_name);
             }
 
         }

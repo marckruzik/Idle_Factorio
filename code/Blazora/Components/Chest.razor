@@ -18,7 +18,7 @@
 
 
 @{ 
-    Console.WriteLine ("generate Blazor Chest " + this.recipe.mix_result.get_list_resource_name ()[0]);
+    Console.WriteLine ("generate Blazor " + this.id);
 }
 
 
@@ -62,12 +62,24 @@
 
 @code {
 
+    public static Chest chest;
+
+    protected override void OnInitialized()
+    {
+        this.id = "Chest_" + this.recipe.get_first_result_resource_name ();
+        base.OnInitialized ();
+        if (get_result_resource_name () == "iron_ore")
+        {
+            chest = this;
+        }
+    }
+
 
     public override void listener_setup ()
     {
         base.listener_setup ();
-        listener_add (get_stock_quantity (this.resource_name));
-        listener_add (get_stack_quantity_max (this.resource_name));
+        listener_add ("Chest stock_quantity", get_stock_quantity (this.resource_name));
+        listener_add ("Chest stack_max", get_stack_quantity_max (this.resource_name));
     }
 
 

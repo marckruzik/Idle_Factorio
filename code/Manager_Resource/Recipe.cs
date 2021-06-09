@@ -41,15 +41,24 @@ namespace NS_Manager_Resource
             return mix_component.list_resource_stack.Count;
         }
 
+
         public string get_id ()
         {
             return get_text ();
         }
 
+
         public string get_text ()
         {
             return $"{mix_component.get_text ()} => {mix_result.get_text ()}";
         }
+
+
+        public string get_first_result_resource_name ()
+        {
+            return this.mix_result.get_list_resource_name ()[0];
+        }
+
 
         public static Recipe from_recipe_text_get_recipe (string recipe_text)
         {

@@ -7,6 +7,10 @@
 }
 
 
+@{ 
+    Console.WriteLine ("generate Blazor " + this.id);
+}
+
 <div style="
     position: absolute;
     top: 0px;
@@ -23,10 +27,17 @@
 
 @code {
 
+    protected override void OnInitialized()
+    {
+        this.id = "FPS_Counter";
+        base.OnInitialized ();
+    }
+
+
     public override void listener_setup ()
     {
         base.listener_setup ();
-        listener_add (Game_Page.self.stat_average);
+        listener_add ("FPS Counter", Game_Page.self.stat_average);
     }
 
 }

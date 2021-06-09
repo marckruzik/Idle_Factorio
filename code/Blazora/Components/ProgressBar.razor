@@ -7,7 +7,7 @@
     [Parameter] public string background_color { get; set; }
     [Parameter] public string fill_color { get; set; }
     [Parameter] public bool border { get; set; }
-    [Parameter] public ObservableProperty<int> val_max { get; set; } = new ObservableProperty<int> (100);
+    [Parameter] public ObservableProperty<int> val_max { get; set; } = new ObservableProperty<int> ("ProgressBar_val_max", 100);
     [Parameter] public ObservableProperty<int> val_current { get; set; }
 
 
@@ -45,8 +45,8 @@
     public override void listener_setup ()
     {
         base.listener_setup ();
-        listener_add (this.val_current);
-        listener_add (this.val_max);
+        listener_add ("ProgressBar val_current", this.val_current);
+        listener_add ("ProgressBar val_max", this.val_max);
     }
 
 

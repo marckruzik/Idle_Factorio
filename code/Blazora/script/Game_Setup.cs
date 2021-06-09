@@ -42,6 +42,7 @@ namespace Blazora.Scripts
         public static Manager_Resource stock_manager_resource_setup ()
         {
             Manager_Resource stock_manager_resource = new Manager_Resource ();
+            stock_manager_resource.id = "MR_Game_Engine";
 
             Console.WriteLine ("stock_manager_resource_setup");
 
@@ -105,7 +106,7 @@ namespace Blazora.Scripts
 
             Resource.dico_resource_name_plus_stack_resource_quantity_max =
                 Resource.list_resource_name.
-                ToDictionary (x => x, x => new ObservableProperty<int> (1));
+                ToDictionary (x => x, x => new ObservableProperty<int> ("R_" + x, 1));
 
             Console.WriteLine ("end resource csv load");
         }

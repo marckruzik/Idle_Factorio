@@ -13,7 +13,7 @@
 
 
 @{ 
-    Console.WriteLine ("generate Blazor BGenerator Line Stock " + this.recipe.mix_result.get_list_resource_name ()[0]);
+    Console.WriteLine ("generate Blazor " + this.id);
 }
 
 @for (int i = 0; i < this.recipe.get_component_count (); i++)
@@ -65,8 +65,9 @@
 
     protected override void OnInitialized ()
     {
+        this.id = "Line_Stock_" + this.recipe.get_first_result_resource_name ();
         base.OnInitialized ();
-        if (get_result_resource_name () == "iron_plate")
+        if (get_result_resource_name () == "iron_ore")
         {
             line_stock = this;
         }
@@ -79,12 +80,12 @@
 
         foreach (string resource_name in this.recipe.mix_component.get_list_resource_name ())
         {
-            listener_add (get_loc_quantity (resource_name));
-            listener_add (get_stock_quantity (resource_name));
-            listener_add (get_stack_quantity_max (resource_name));
+            listener_add ("BGL loc_quantity", get_loc_quantity (resource_name));
+            listener_add ("BGL stock_quantity", get_stock_quantity (resource_name));
+            listener_add ("BGL stack_max", get_stack_quantity_max (resource_name));
         }
 
-        listener_add (get_stack_tool ().observable_quantity);
+        listener_add ("BGL tool", get_stack_tool ().observable_quantity);
     }
 
 

@@ -9,14 +9,14 @@
 
 @code{
     
-    public ObservableProperty<int> job_percentage = new ObservableProperty<int> (0);
+    public ObservableProperty<int> job_percentage = new ObservableProperty<int> ("job_percentage", 0);
 
 }
 
 
 @{ 
-    Console.WriteLine ("generate Blazor Generator " + this.recipe.mix_result.get_list_resource_name ()[0]);
-    
+    Console.WriteLine ("generate Blazor " + this.id);
+
 }
 
 
@@ -116,7 +116,7 @@
     <ProgressBar 
                  position=@(new Position (s*1, s*(start_line+2)+quarter, s*6, s-quarter*2))
                  val_current=this.job_percentage 
-                 val_max=@(new ObservableProperty<int> (100))
+                 val_max=@(new ObservableProperty<int> ("ProgressBar_val_max", 100))
                  border=@(true)
                  background_color="lightgrey"
                  fill_color="forestgreen"
@@ -157,15 +157,18 @@
         Factorio.listener_stat_display ();
         listener_remove ();
         this.generator.manager_resource.observable_clear ();
-
+        
         //BGenerator_Line_Stock.line_stock.listener_remove ();
+        Chest.chest.listener_remove ();
 
+        Console.WriteLine ("\n\n\n");
         Factorio.listener_stat_display ();
     }
 
 
     protected override void OnInitialized()
     {
+        this.id = "BGenerator_" + this.recipe.get_first_result_resource_name ();
         Console.WriteLine ("parameters");
         this.generator.manager_resource.listener_setup (this.generator.recipe);
         base.OnInitialized ();
@@ -176,21 +179,22 @@
     public override void listener_setup ()
     {
         base.listener_setup ();
+        
         Console.WriteLine ("listener setup");
-        listener_add (get_stack_tool ().observable_quantity);
-        listener_add (get_stock_quantity (get_result_resource_name ()));
-        listener_add (get_stock_max (get_result_resource_name ()));
-        listener_add (get_stack_quantity_max (get_result_resource_name ()));
+        listener_add ("BGenerator tool", get_stack_tool ().observable_quantity);
+        listener_add ("BGenerator stock_quantity", get_stock_quantity (get_result_resource_name ()));
+        listener_add ("BGenerator stock_max", get_stock_max (get_result_resource_name ()));
+        listener_add ("BGenerator stack_max", get_stack_quantity_max (get_result_resource_name ()));
         listener_add (() => Game_Action.from_recipe_get_job_time_percentage (this.recipe) != 0);
         //listener_add (() => this.recipe.list_tool_kind[0].resource_name);
 
         foreach (string resource_name in this.recipe.mix_component.get_list_resource_name ())
         {
-            listener_add (get_loc_quantity (resource_name));
+            listener_add ($"BGenerator loc_quantity {resource_name}", get_loc_quantity (resource_name));
             //listener_add (get_stock_quantity (resource_name));
         }
 
-
+        
         foreach (ObservableProperty<int> obs in dico_typ_plus_list_observable[typeof(int)])
         {
             Console.WriteLine (obs.id);
@@ -198,7 +202,7 @@
 
         Console.WriteLine ("Manager resource listener");
         this.generator.manager_resource.listener_display ();
-
+        
     }
 
 

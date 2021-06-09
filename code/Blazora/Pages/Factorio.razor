@@ -87,14 +87,15 @@
             
         foreach (string resource_name in Resource.list_resource_name)
         {
-            Console.WriteLine ($"Game Engine {resource_name} listener : {Game_Engine.self.manager_resource.from_resource_name_get_resource_stack (resource_name).observable_quantity.get_listener_count ()}");
+            ObservableProperty<int> obs = Game_Engine.self.manager_resource.from_resource_name_get_resource_stack (resource_name).observable_quantity;
+            Console.WriteLine ($"Game Engine [{obs.id}]{resource_name} listener : {obs.get_listener_count ()}");
         }
 
     
         foreach (string resource_name in Resource.list_resource_name)
         {
             ObservableProperty<int> obs = Resource.from_resource_name_get_stack_resource_quantity_max (resource_name);
-            Console.WriteLine ($"[{obs.id}] Resource quantity max {resource_name} listener : {obs.get_listener_count ()}");
+            Console.WriteLine ($"Resource quantity max [{obs.id}]{resource_name} listener : {obs.get_listener_count ()}");
         }
 
     }
