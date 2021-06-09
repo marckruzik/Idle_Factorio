@@ -9,7 +9,13 @@ namespace NS_Manager_Resource
     {
         public Recipe recipe;
         public Manager_Resource manager_resource;
+        public int id;
+        public static int id_count = 0;
 
+        public Generator ()
+        {
+            this.id = id_count++;
+        }
 
         public Resource_Stack get_stack_tool ()
         {

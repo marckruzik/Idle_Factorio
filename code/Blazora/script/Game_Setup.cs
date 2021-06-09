@@ -20,10 +20,10 @@ namespace Blazora.Scripts
 
         public static async Task setup ()
         {
-            Console.WriteLine ("game setup");
+            //Console.WriteLine ("game setup");
             await from_csv_load_resource ();
             await from_csv_load_recipe ();
-            Console.WriteLine ("after csv load");
+            //Console.WriteLine ("after csv load");
             Game_Engine.self.manager_resource = stock_manager_resource_setup ();
             quickstart ();
         }
@@ -43,7 +43,7 @@ namespace Blazora.Scripts
             Manager_Resource stock_manager_resource = new Manager_Resource ();
             stock_manager_resource.id = "MR_Game_Engine";
 
-            Console.WriteLine ("stock_manager_resource_setup");
+            //Console.WriteLine ("stock_manager_resource_setup");
 
             // Configuration
             stock_manager_resource.chest_size = Resource.chest_size;
@@ -107,7 +107,7 @@ namespace Blazora.Scripts
                 Resource.list_resource_name.
                 ToDictionary (x => x, x => new ObservableProperty<int> ("R_" + x, 1));
 
-            Console.WriteLine ("end resource csv load");
+            //Console.WriteLine ("end resource csv load");
         }
 
 
@@ -128,7 +128,7 @@ namespace Blazora.Scripts
                 //break;
             }
 
-            Console.WriteLine ("end recipe csv load");
+            //Console.WriteLine ("end recipe csv load");
         }
 
 

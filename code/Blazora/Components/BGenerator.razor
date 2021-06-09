@@ -15,7 +15,7 @@
 
 
 @{ 
-    Console.WriteLine ("generate Blazor " + this.id);
+    display_name ();
 
 }
 
@@ -74,7 +74,7 @@
               position=@(new Position (s*7, s*(start_line+0), s, s))
               action=@(() => 
                        {
-                           Console.WriteLine ("chest_upgrade");
+                           //Console.WriteLine ("resource upgrade");
                            Game_Action.action_upgrade (this.recipe);
                        })
               val_authorize=@(Game_Action.action_upgrade_is_ready (this.recipe))
@@ -177,6 +177,10 @@
             gc.listener_remove ();
         }
 
+        this.recipe.list_tool_kind[0] = Resource.from_resource_name_get_resource ("furnace_stone");
+
+        StateHasChanged ();
+
         this.generator.manager_resource.from_recipe_setup (this.recipe);
         this.generator.manager_resource.listener_setup (this.recipe);
         listener_setup ();
@@ -184,6 +188,7 @@
         foreach (Game_Component gc in ienumerable_get_child ())
         {
             gc.listener_setup ();
+            gc.need_refresh = true;
         }
 
         //Console.WriteLine ("\n\n\n");
@@ -195,7 +200,7 @@
     protected override void OnInitialized()
     {
         this.id = $"BGenerator [{this.recipe.get_first_result_resource_name ()}]";
-        Console.WriteLine ("parameters");
+        //Console.WriteLine ("parameters");
         this.generator.manager_resource.listener_setup (this.generator.recipe);
 
         base.OnInitialized ();
@@ -207,7 +212,7 @@
     {
         base.listener_setup ();
 
-        Console.WriteLine ("listener setup");
+        //Console.WriteLine ("listener setup");
         listener_add ("BGenerator tool", get_stack_tool ().observable_quantity);
         listener_add ("BGenerator stock_quantity", get_stock_quantity (get_result_resource_name ()));
         listener_add ("BGenerator stock_max", get_stock_max (get_result_resource_name ()));
@@ -221,15 +226,15 @@
             //listener_add (get_stock_quantity (resource_name));
         }
 
-
+        /*
         foreach (ObservableProperty<int> obs in dico_typ_plus_list_observable[typeof(int)])
         {
             Console.WriteLine (obs.id);
         }
 
-        Console.WriteLine ("Manager resource listener");
+        //Console.WriteLine ("Manager resource listener");
         this.generator.manager_resource.listener_display ();
-
+        */
     }
 
 

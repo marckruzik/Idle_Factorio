@@ -22,7 +22,7 @@
             position=@(new Position (s*4, s*(this.recipe.get_component_count ()-1), s, s))
             action=@(() => 
                         { 
-                            Console.WriteLine ($"tool {stack_tool.resource_name}"); 
+                            //Console.WriteLine ($"tool {stack_tool.resource_name}"); 
                             Manager_Resource.resource_transfer (
                                 Game_Engine.self.manager_resource,
                                 this.generator.manager_resource,

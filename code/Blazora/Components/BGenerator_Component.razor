@@ -6,7 +6,9 @@
 @using NS_Blazora_Basic 
 
 @code {
-    [CascadingParameter] public Recipe recipe { get; set; }
+    [CascadingParameter] public int generator_id { get; set; }
+
+
 
 }
 
@@ -22,9 +24,20 @@
     {
         get
         {
-            return Game_Engine.self.manager_generator.from_recipe_get_generator (this.recipe);
+            return Game_Engine.self.manager_generator.from_generator_id_get_generator (this.generator_id);
         }
     }
+
+
+    public Recipe recipe
+    {
+        get
+        {
+            return this.generator.recipe;
+        }
+    }
+
+
 
     public int s
     {

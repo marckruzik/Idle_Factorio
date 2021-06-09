@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Linq;
 
 namespace NS_Manager_Resource
 {
@@ -12,6 +13,10 @@ namespace NS_Manager_Resource
             return this[recipe.get_text ()];
         }
 
+        public Generator from_generator_id_get_generator (int generator_id)
+        {
+            return this.Values.FirstOrDefault (generator => generator.id == generator_id);
+        }
 
         public void from_recipe_add_generator (Recipe recipe)
         {

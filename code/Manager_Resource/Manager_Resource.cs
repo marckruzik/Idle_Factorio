@@ -117,14 +117,14 @@ namespace NS_Manager_Resource
             {
                 this.dico_resource_name_plus_stock_quantity_max[resource_name]
                     .Set (v * this.chest_size);
-                Console.WriteLine ($"{resource_name} new : {v}");
+                //Console.WriteLine ($"{resource_name} new : {v}");
             };
             dico_resource_name_plus_action.Add (resource_name, action);
 
             ObservableProperty<int> obs = Resource.dico_resource_name_plus_stack_resource_quantity_max[resource_name];
             obs.changed += action;
 
-            Console.WriteLine ($"Listener for Manager_Resource {this.id} with [{obs.id}]{resource_name}");
+            //Console.WriteLine ($"Listener for Manager_Resource {this.id} with [{obs.id}]{resource_name}");
             
         }
 

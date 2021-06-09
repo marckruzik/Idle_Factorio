@@ -18,7 +18,7 @@
 
 @{ 
 
-    Console.WriteLine ("generate Blazor Page Factorio");
+    //Console.WriteLine ("generate Blazor Page Factorio");
 }
 
 <FPS_Counter />
@@ -54,7 +54,7 @@
     protected override void OnInitialized ()
     {
         base.OnInitialized ();
-        Console.WriteLine ("Factorio page");
+        //Console.WriteLine ("Factorio page");
         
     }
 
@@ -69,7 +69,7 @@
 
     @foreach (Generator generator in Game_Engine.self.manager_generator.Values)
     {
-        <CascadingValue Value=generator.recipe >
+        <CascadingValue Value=generator.id >
             <BGenerator /> 
         </CascadingValue>
 
@@ -125,7 +125,7 @@
 
         Game_Engine.self.manager_resource.listener_clear ();
 
-        Console.WriteLine ($"iron ore listener : {Game_Engine.self.manager_resource.from_resource_name_get_resource_stack ("iron_ore").observable_quantity.get_listener_count ()}");
+        //Console.WriteLine ($"iron ore listener : {Game_Engine.self.manager_resource.from_resource_name_get_resource_stack ("iron_ore").observable_quantity.get_listener_count ()}");
     }
 
 }

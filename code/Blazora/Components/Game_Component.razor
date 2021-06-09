@@ -39,11 +39,14 @@
     protected override void OnInitialized ()
     {
         base.OnInitialized ();
+        listener_remove ();
         listener_setup ();
+        Game_Page.list_component.Remove (this);
         Game_Page.list_component.Add (this);
         if (this.parent != null)
         {
             this.parent.list_child.Add (this);
+            this.parent = null;
         }
     }
 
@@ -72,6 +75,12 @@
         }
     }
 
+    public void display_name ()
+    {
+        //Console.WriteLine ("generate Blazor " + this.id);
+    }
+
+
     public IEnumerable<Game_Component> ienumerable_get_child ()
     {
         foreach (Game_Component gc in this.list_child)
@@ -88,7 +97,7 @@
 
     public virtual void listener_setup ()
     {
-
+        listener_remove ();
     }
 
     public Dictionary<Type, List<IObservableProperty>> dico_typ_plus_list_observable =
@@ -102,7 +111,7 @@
         }
         observable.changed += refresh;
 
-        Console.WriteLine ($"Listener for Game_Component {this.id} with [{observable.id}]{info} (total listener: {observable.get_listener_count ()})");
+        //Console.WriteLine ($"Listener for Game_Component {this.id} with [{observable.id}]{info} (total listener: {observable.get_listener_count ()})");
 
         if (dico_typ_plus_list_observable.ContainsKey (typeof(T)) == false)
         {
