@@ -2,6 +2,7 @@
 using NS_Manager_Resource;
 using NS_Blazora_Basic;
 using Blazora.Components;
+using Blazora.Components.BGenerator;
 using System.Linq;
 using System.Collections.Generic;
 

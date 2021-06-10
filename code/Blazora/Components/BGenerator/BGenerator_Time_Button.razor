@@ -22,6 +22,7 @@
             val_authorize=@(is_time_action_ready ())
             text_bottom_right=@(get_recipe_time_str ())
             text_top_right=@(get_onoff_str ())
+            background_color_authorized=@(get_background_color_authorized ())
             />
 
 
@@ -120,6 +121,39 @@
             }
         }
     }
+
+
+    public string get_background_color_authorized ()
+    {
+        string authorized_auto = "#8BFF5A";
+        string authorized_auto_impossible = "#FF924F";
+        string authorized_nonauto = "#9D99FF";
+
+        if (is_auto_available () == false)
+        {
+            return authorized_nonauto;
+        }
+        if (get_onoff_str () == "off")
+        {
+            return authorized_nonauto;
+        }
+
+        if (Game_Action.from_recipe_get_job_time_percentage (this.recipe) == 0)
+        {
+            if (Game_Action.from_recipe_is_craft_ready (this.recipe) == true)
+            {
+                return authorized_auto;
+            }
+            else
+            {
+                return authorized_auto_impossible;
+            }
+        }
+
+        return authorized_auto;
+    }
+
+
 
 
     public void time_action ()

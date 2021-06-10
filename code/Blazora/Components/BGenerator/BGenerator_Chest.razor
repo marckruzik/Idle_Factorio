@@ -24,7 +24,7 @@
     @{ 
     }
 
-    @for (int i = 0; i < arr_cellicon.Length; i++)
+    @for (int i = 0; i < this.arr_cellicon.Length; i++)
     {
         int x = i % 8;
         int y = i / 8;
@@ -62,7 +62,7 @@
 
     protected override void OnInitialized()
     {
-        this.id = $"Chest [{this.recipe.get_first_result_resource_name ()}]";
+        this.id = $"BGenerator_Chest [{this.recipe.get_first_result_resource_name ()}]";
         base.OnInitialized ();
     }
 
@@ -70,10 +70,33 @@
     public override void listener_setup ()
     {
         base.listener_setup ();
-        listener_add ("Chest stock_quantity", get_stock_quantity (get_result_resource_name ()));
-        listener_add ("Chest stack_max", get_stack_quantity_max (get_result_resource_name ()));
+        listener_add ("BGenerator_Chest stock_quantity", get_stock_quantity (get_result_resource_name ()));
+        listener_add ("BGenerator_Chest stack_max", get_stack_quantity_max (get_result_resource_name ()));
     }
 
+
+    public override void refresh<T> (T refresh_val)
+    {
+        base.refresh (refresh_val);
+        this.need_refresh = false;
+        for (int i = 0; i < this.arr_cellicon.Length; i++)
+        {
+            int val = get_val (i);
+            string picture_filename_updated = from_val_get_picture_filename (val);
+            if (this.arr_cellicon[i].picture_filename != picture_filename_updated)
+            {
+                this.arr_cellicon[i].picture_filename = picture_filename_updated;
+                this.arr_cellicon[i].need_refresh = true;
+            }
+
+            string text_bottom_right_updated = from_val_get_text_bottom_right (val);
+            if (this.arr_cellicon[i].text_bottom_right != text_bottom_right_updated)
+            {
+                this.arr_cellicon[i].text_bottom_right = from_val_get_text_bottom_right (val);
+                this.arr_cellicon[i].need_refresh = true;
+            }
+        }
+    }
 
 
     public string from_val_get_text_bottom_right (int val)

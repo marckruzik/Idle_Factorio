@@ -18,6 +18,7 @@
     [Parameter] public string text_bottom_right { get; set; } = "";
 
     [Parameter] public string background_color_default { get; set; } = "transparent";
+    [Parameter] public string background_color_authorized { get; set; } = "#9D99FF";
     [Parameter] public bool border { get; set; } = false;
 
     [Parameter] public ObservableProperty<int> stack_val_current { get; set; }
@@ -216,7 +217,7 @@
         {
             if (this.val_authorize == true)
             {
-                return "#9D99FF";
+                return this.background_color_authorized;
             }
             else
             {
