@@ -3,6 +3,8 @@
 @implements IDisposable
 @using Blazora.Pages
 @using NS_Blazora_Basic
+@using script
+
 
 @code{
     
@@ -77,7 +79,7 @@
 
     public void display_name ()
     {
-        //Console.WriteLine ("generate Blazor " + this.id);
+        Console.WriteLine ("generate Blazor " + this.id);
     }
 
 
@@ -100,24 +102,29 @@
         listener_remove ();
     }
 
-    public Dictionary<Type, List<IObservableProperty>> dico_typ_plus_list_observable =
-        new Dictionary<Type, List<IObservableProperty>> ();
+
+
+
+
+    private List<IListener_Data> list_listener_data = new List<IListener_Data> ();
 
     public void listener_add<T> (string info, ObservableProperty<T> observable)
+    {
+        listener_add (info, observable, refresh);
+    }
+
+
+    public void listener_add<T> (string info, ObservableProperty<T> observable, Action<T> action)
     {
         if (observable == null)
         {
             return;
         }
-        observable.changed += refresh;
+        observable.changed += action;
 
         //Console.WriteLine ($"Listener for Game_Component {this.id} with [{observable.id}]{info} (total listener: {observable.get_listener_count ()})");
 
-        if (dico_typ_plus_list_observable.ContainsKey (typeof(T)) == false)
-        {
-            dico_typ_plus_list_observable.Add (typeof (T), new List<IObservableProperty> ());
-        }
-        dico_typ_plus_list_observable[typeof(T)].Add (observable);
+        this.list_listener_data.Add (new Listener_Data<T> (typeof(T), observable, action));
     }
 
 
@@ -143,40 +150,31 @@
 
     public void listener_remove ()
     {
-        if (dico_typ_plus_list_observable.Keys.Count > 3)
-        {
-            throw new Exception ("Game_Component: incorrect number of observable types");
-        }
+        listener_remove<int> ();
+        listener_remove<string> ();
+        listener_remove<bool> ();
+        this.list_listener_data.Clear ();
 
-        if (dico_typ_plus_list_observable.ContainsKey (typeof (int)) == true)
-        {
-            foreach (ObservableProperty<int> obs in dico_typ_plus_list_observable[typeof (int)])
-            {
-                obs.changed -= refresh<int>;
-            }
-            dico_typ_plus_list_observable[typeof (int)].Clear ();
-        }
-
-        if (dico_typ_plus_list_observable.ContainsKey (typeof (string)) == true)
-        {
-            foreach (ObservableProperty<string> obs in dico_typ_plus_list_observable[typeof (string)])
-            {
-                obs.changed -= refresh<string>;
-            }
-            dico_typ_plus_list_observable[typeof (string)].Clear ();
-        }
-
-        if (dico_typ_plus_list_observable.ContainsKey (typeof (bool)) == true)
-        {
-            foreach (ObservableProperty<bool> obs in dico_typ_plus_list_observable[typeof (bool)])
-            {
-                obs.changed -= refresh<bool>;
-            }
-            dico_typ_plus_list_observable[typeof (bool)].Clear ();
-        }
 
         this.manager_listener.clear ();
     }
+
+
+    public void listener_remove<T> ()
+    {
+        foreach (IListener_Data listener_data in this.list_listener_data)
+        {
+            if (listener_data.typ != typeof (T))
+            {
+                continue;
+            }
+            Listener_Data<T> li = listener_data as Listener_Data<T>;
+            li.observable.changed -= li.action;
+        }
+    }
+
+
+
 
 
     public void listener_replace ()

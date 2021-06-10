@@ -16,6 +16,8 @@
     display_name ();
 }
 
+
+
 @for (int i = 0; i < this.recipe.get_component_count (); i++)
 {
     Resource_Stack component_stack = this.recipe.mix_component.list_resource_stack[i];
@@ -62,16 +64,11 @@
 
 @code{
 
-    public static BGenerator_Line_Stock line_stock;
 
     protected override void OnInitialized ()
     {
         this.id = $"Line_Stock [{this.recipe.get_first_result_resource_name ()}]";
         base.OnInitialized ();
-        if (get_result_resource_name () == "iron_ore")
-        {
-            line_stock = this;
-        }
     }
 
     public override void listener_setup ()

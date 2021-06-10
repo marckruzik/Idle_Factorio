@@ -62,9 +62,8 @@
 
     protected override void OnInitialized()
     {
-        this.id = "Chest_" + this.recipe.get_first_result_resource_name ();
+        this.id = $"Chest [{this.recipe.get_first_result_resource_name ()}]";
         base.OnInitialized ();
-
     }
 
 

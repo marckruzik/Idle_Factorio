@@ -16,7 +16,6 @@
 
 @{ 
     display_name ();
-
 }
 
 
@@ -150,7 +149,6 @@
     protected override void OnInitialized()
     {
         this.id = $"BGenerator [{this.recipe.get_first_result_resource_name ()}]";
-        //Console.WriteLine ("parameters");
         this.generator.manager_resource.listener_setup (this.generator.recipe);
 
         base.OnInitialized ();

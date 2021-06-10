@@ -10,8 +10,8 @@
 
 }
 
-@{
-
+@{ 
+    display_name ();
 }
 
 
@@ -44,10 +44,19 @@
 
         foreach (string resource_name in this.recipe.mix_component.get_list_resource_name ())
         {
-            listener_add ($"BGenerator loc_quantity {resource_name}", get_loc_quantity (resource_name));
+            listener_add ($"BGenerator_Time_Button loc_quantity {resource_name}", get_loc_quantity (resource_name));
         }
 
     }
+
+
+
+    protected override void OnInitialized()
+    {
+        this.id = $"BGenerator_Time_Button [{this.recipe.get_first_result_resource_name ()}]";
+        base.OnInitialized ();
+    }
+
 
 
     public override void graphical_update ()

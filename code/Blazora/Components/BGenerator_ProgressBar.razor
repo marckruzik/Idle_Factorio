@@ -14,10 +14,9 @@
 
 }
 
-@{
-
+@{ 
+    display_name ();
 }
-
 
 
 
@@ -40,6 +39,14 @@
         base.graphical_update ();
         job_percentage.Set (Game_Action.from_recipe_get_job_time_percentage (this.recipe));
     }
+
+
+    protected override void OnInitialized()
+    {
+        this.id = $"BGenerator_ProgressBar [{this.recipe.get_first_result_resource_name ()}]";
+        base.OnInitialized ();
+    }
+
 
 
 }
