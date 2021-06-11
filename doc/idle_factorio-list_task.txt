@@ -3,14 +3,15 @@
 --------------------------------------
 
 
-- change tool, transfer pack
-
-
 - clear button
 
-
-
 - FPS Counter, permanent top
+
+- inserter
+
+- transport belt
+
+
 
 - favicon
 - Splash Screen, picture
@@ -20,15 +21,10 @@
 
 --------------------------------------
 
-- upgrade button, own component
 
 - refresh only on screen
 
 --------------------------------------
-
-
-- tool separate
-assembling machine to build assembling machine
 
 
 - quest

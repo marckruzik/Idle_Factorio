@@ -19,9 +19,7 @@
 
     public void test ()
     {
-        Game_Action.flag_furnace_stone ();
-        Game_Action.flag_burner_drill ();
-        Game_Action.flag_assembling_machine_1 ();
+
 
     }
 
@@ -39,7 +37,6 @@
 
 <h3>Factorio</h3>
     
-    <button @onclick=@(() => test ()) >Activate tools</button>
     <button @onclick=@(() => Game_Setup.quickstart ()) >Quickstart</button>
 
     <br /><br />
@@ -60,17 +57,21 @@
     {
         await base.OnInitializedAsync ();
         await setup ();
-        
+
         Game_Engine.self.manager_resource.listener_setup (Resource.list_resource_name);
 
+        Game_Setup.listener_flag_setup ();
     }
+
+
+
 
 
     protected override void OnInitialized ()
     {
         base.OnInitialized ();
         //Console.WriteLine ("Factorio page");
-        
+
     }
 
 }

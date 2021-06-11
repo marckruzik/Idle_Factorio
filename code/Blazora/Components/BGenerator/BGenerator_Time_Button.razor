@@ -26,6 +26,7 @@
             />
 
 
+@{ auto_craft (); }
 
 
 @code{
@@ -39,7 +40,7 @@
         listener_add ("BGenerator_Time_Button tool", get_stack_tool ().observable_quantity);
         listener_add ("BGenerator_Time_Button stock_quantity", get_stock_quantity (get_result_resource_name ()));
         listener_add ("BGenerator_Time_Button stock_max", get_stock_max (get_result_resource_name ()));
-        //listener_add ("BGenerator_Time_Button stack_max", get_stack_quantity_max (get_result_resource_name ()));
+        
         listener_add (() => Game_Action.from_recipe_get_job_time_percentage (this.recipe) != 0);
         listener_add (() => this.generator.auto_on_current);
 
@@ -63,9 +64,13 @@
     public override void graphical_update ()
     {
         base.graphical_update ();
+    }
+
+    public void auto_craft ()
+    {
         if (is_auto_available () == true)
         {
-            if (Game_Action.from_recipe_get_job_time_percentage (this.recipe) == 0)
+            if (Game_Action.from_recipe_get_job (this.recipe) == null)
             {
                 if (get_onoff_str () == "on")
                 {
@@ -138,16 +143,10 @@
             return authorized_nonauto;
         }
 
-        if (Game_Action.from_recipe_get_job_time_percentage (this.recipe) == 0)
+        if (Game_Action.from_recipe_get_job (this.recipe) == null &&
+            Game_Action.from_recipe_is_craft_ready (this.recipe) == false)
         {
-            if (Game_Action.from_recipe_is_craft_ready (this.recipe) == true)
-            {
-                return authorized_auto;
-            }
-            else
-            {
-                return authorized_auto_impossible;
-            }
+            return authorized_auto_impossible;    
         }
 
         return authorized_auto;

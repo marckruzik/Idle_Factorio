@@ -28,12 +28,12 @@
                             //Console.WriteLine ($"tool {stack_tool.resource_name}"); 
                             Manager_Resource.resource_transfer (
                                 Game_Engine.self.manager_resource,
-                                this.generator.manager_resource,
-                                stack_tool.resource_name, 
+                                this.generator.manager_resource_tool,
+                                stack_tool.resource_name,
                                 1);
                         })
             text_bottom_right=@($"{stack_tool.quantity}")
-            stack_val_current=@(get_loc_quantity (stack_tool.resource_name))
+            stack_val_current=@(stack_tool.observable_quantity)
             stack_val_max=@(get_stack_quantity_max (stack_tool.resource_name))
             parent=this
             />

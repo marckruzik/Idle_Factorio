@@ -93,6 +93,42 @@ namespace Blazora.Script
         }
 
 
+
+        public static void listener_flag_setup ()
+        {
+            List<(string, string)> list_tuple_tool_before_plus_tool_after = new List<(string, string)> ()
+            {
+                ("fire", "furnace_stone"),
+                ("pickaxe", "burner_drill"),
+                ("hand", "assembling_machine_1")
+            };
+            foreach ((string, string) tuple_tool_before_plus_tool_after in list_tuple_tool_before_plus_tool_after)
+            {
+                listener_flag_setup (
+                    tuple_tool_before_plus_tool_after.Item1, 
+                    tuple_tool_before_plus_tool_after.Item2);
+            }
+        }
+
+
+        public static void listener_flag_setup (string tool_before, string tool_after)
+        {
+            string toggle_id = $"know_{tool_after}";
+            Game_Engine.self.manager_resource.from_resource_name_get_resource_stack (tool_after)
+                .observable_quantity.changed += (v) =>
+                {
+                    if (Game_Engine.self.manager_toggle.get_tog (toggle_id) != Toggle.Tog.is_true)
+                    {
+                        if (v > 0)
+                        {
+                            Game_Action.action_flag_upgrade (tool_before, toggle_id);
+                        }
+                    }
+                };
+        }
+
+
+
         public static async Task from_csv_load_resource ()
         {
             string csv_filepath = "data/resource.csv";

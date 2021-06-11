@@ -43,11 +43,11 @@ namespace Blazora.Script
         }
 
 
-        public static void flag_furnace_stone ()
+        public static void action_flag_upgrade (string tool_before, string toggle_id)
         {
-            Game_Engine.self.manager_toggle.set ("know_furnace", true);
+            Game_Engine.self.manager_toggle.set (toggle_id, true);
             List<BGenerator> list_bgenerator = BGenerator.from_game_page_get_list_bgenerator ()
-                .Where (bgenerator => bgenerator.get_stack_tool ().resource_name == "fire")
+                .Where (bgenerator => bgenerator.get_stack_tool ().resource_name == tool_before)
                 .ToList ();
             foreach (BGenerator bgenerator in list_bgenerator)
             {
@@ -55,37 +55,19 @@ namespace Blazora.Script
             }
         }
 
-        public static void flag_burner_drill ()
-        {
-            Game_Engine.self.manager_toggle.set ("know_burner_drill", true);
-            List<BGenerator> list_bgenerator = BGenerator.from_game_page_get_list_bgenerator ()
-                .Where (bgenerator => bgenerator.get_stack_tool ().resource_name == "pickaxe")
-                .ToList ();
-            foreach (BGenerator bgenerator in list_bgenerator)
-            {
-                bgenerator.state_change ();
-            }
-        }
 
-        public static void flag_assembling_machine_1 ()
-        {
-            Game_Engine.self.manager_toggle.set ("know_assembling_machine_1", true);
-            List<BGenerator> list_bgenerator = BGenerator.from_game_page_get_list_bgenerator ()
-                .Where (bgenerator => bgenerator.get_stack_tool ().resource_name == "hand")
-                .ToList ();
-            foreach (BGenerator bgenerator in list_bgenerator)
-            {
-                bgenerator.state_change ();
-            }
-        }
+
 
 
         public static void upgrade_tool (int generator_id, string tool_resource_name)
         {
             BGenerator bgenerator = BGenerator.from_generator_id_get_bgenerator (generator_id);
 
+            Resource_Mix component_resource_mix = bgenerator.generator.manager_resource.get_resource_mix ();
+            Resource_Mix tool_resource_mix = bgenerator.generator.manager_resource_tool.get_resource_mix ();
+
             bgenerator.listener_remove ();
-            bgenerator.generator.manager_resource.listener_clear ();
+            bgenerator.generator.listener_clear ();
             foreach (Game_Component gc in bgenerator.ienumerable_get_child ())
             {
                 gc.listener_remove ();
@@ -95,14 +77,18 @@ namespace Blazora.Script
 
             bgenerator.state_change ();
 
-            bgenerator.generator.manager_resource.from_recipe_setup (bgenerator.recipe);
-            bgenerator.generator.manager_resource.listener_setup (bgenerator.recipe);
+            bgenerator.generator.from_recipe_setup_manager ();
+
+            bgenerator.generator.manager_resource.set_resource_mix (component_resource_mix);
+            bgenerator.generator.manager_resource_tool.set_resource_mix (tool_resource_mix);
+
             bgenerator.listener_setup ();
+
 
             foreach (Game_Component gc in bgenerator.ienumerable_get_child ())
             {
                 gc.listener_setup ();
-                gc.need_refresh = true;
+                gc.set_need_refresh ();
             }
         }
 

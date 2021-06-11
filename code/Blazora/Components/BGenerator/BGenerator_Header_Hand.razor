@@ -28,7 +28,7 @@
               />
 
 
-@if (stack_tool.resource_name == "fire" && Game_Engine.self.manager_toggle.is_true ("know_furnace") == true)
+@if (stack_tool.resource_name == "fire" && Game_Engine.self.manager_toggle.is_true ("know_furnace_stone") == true)
 {
     <Cellicon 
               picture_filename=@(Resource.from_resource_name_get_resource_filename ("furnace_stone"))
@@ -60,7 +60,7 @@ else if (stack_tool.resource_name == "hand" && Game_Engine.self.manager_toggle.i
     public override void listener_setup ()
     {
         base.listener_setup ();
-        //listener_add (() => Game_Engine.self.manager_toggle.is_true ("know_furnace"));
+
     }
 
 

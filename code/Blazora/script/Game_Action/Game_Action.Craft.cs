@@ -14,7 +14,8 @@ namespace Blazora.Script
 
         public static bool from_recipe_is_craft_ready (Recipe recipe)
         {
-            if (from_recipe_get_job (recipe) != null)
+            Job job = from_recipe_get_job (recipe);
+            if (job != null)
             {
                 return false;
             }

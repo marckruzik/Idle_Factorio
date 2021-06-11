@@ -28,14 +28,14 @@
 @code {
 
 
-    public string from_position_get_style ()
-    {
-        return $"position: absolute;" +
-                $"{(position != null ? $"left: {position.x}px" : "")};" +
-                $"{(position != null ? $"top: {position.y}px" : "")};" +
-                $"{(position != null ? $"width: {position.width}px" : "")};" +
-                $"{(position != null ? $"height: {position.height}px" : "")};";
-    }
+        public string from_position_get_style ()
+        {
+            return $"position: absolute;" +
+                    $"{(position != null ? $"left: {position.x}px" : "")};" +
+                    $"{(position != null ? $"top: {position.y}px" : "")};" +
+                    $"{(position != null ? $"width: {position.width}px" : "")};" +
+                    $"{(position != null ? $"height: {position.height}px" : "")};";
+        }
 
 
     protected override void OnInitialized ()
@@ -110,7 +110,7 @@
 
     public void listener_add<T> (string info, ObservableProperty<T> observable)
     {
-        listener_add (info, observable, refresh);
+        listener_add (info, observable, set_need_refresh);
     }
 
 
@@ -128,9 +128,14 @@
     }
 
 
-    public virtual void refresh<T> (T val)
+    public virtual void set_need_refresh ()
     {
         this.need_refresh = true;
+    }
+
+    public virtual void set_need_refresh<T> (T val)
+    {
+        set_need_refresh ();
     }
 
 
@@ -144,7 +149,7 @@
         bool need_update = this.manager_listener.need_update ();
         if (need_update == true)
         {
-            this.need_refresh = true;
+            set_need_refresh ();
         }
     }
 

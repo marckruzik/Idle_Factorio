@@ -75,9 +75,9 @@
     }
 
 
-    public override void refresh<T> (T refresh_val)
+    public override void set_need_refresh<T> (T refresh_val)
     {
-        base.refresh (refresh_val);
+        base.set_need_refresh (refresh_val);
         this.need_refresh = false;
         for (int i = 0; i < this.arr_cellicon.Length; i++)
         {
@@ -86,14 +86,14 @@
             if (this.arr_cellicon[i].picture_filename != picture_filename_updated)
             {
                 this.arr_cellicon[i].picture_filename = picture_filename_updated;
-                this.arr_cellicon[i].need_refresh = true;
+                this.arr_cellicon[i].set_need_refresh ();
             }
 
             string text_bottom_right_updated = from_val_get_text_bottom_right (val);
             if (this.arr_cellicon[i].text_bottom_right != text_bottom_right_updated)
             {
                 this.arr_cellicon[i].text_bottom_right = from_val_get_text_bottom_right (val);
-                this.arr_cellicon[i].need_refresh = true;
+                this.arr_cellicon[i].set_need_refresh ();
             }
         }
     }

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using NS_Blazora_Basic;
+using System.Linq;
 
 namespace NS_Manager_Resource
 {
@@ -9,9 +10,10 @@ namespace NS_Manager_Resource
     {
         public Recipe recipe;
         public Manager_Resource manager_resource;
+        public Manager_Resource manager_resource_tool;
         public int id;
         public static int id_count = 0;
-        public bool auto_on_current = false;
+        public bool auto_on_current = true;
 
         public Generator ()
         {
@@ -21,7 +23,7 @@ namespace NS_Manager_Resource
         public Resource_Stack get_stack_tool ()
         {
             Resource resource_tool = this.recipe.list_tool_kind[0];
-            Resource_Stack stack_tool = this.manager_resource.from_resource_name_get_resource_stack (resource_tool.resource_name);
+            Resource_Stack stack_tool = this.manager_resource_tool.from_resource_name_get_resource_stack (resource_tool.resource_name);
             return stack_tool;
         }
 
@@ -50,7 +52,12 @@ namespace NS_Manager_Resource
         public int get_loc_min (string resource_name)
         {
             int component_quantity = this.recipe.mix_component.from_resource_name_get_resource_stack (resource_name).quantity;
-            return component_quantity * get_tool_val ();
+            int tool_val = get_tool_val ();
+            if (tool_val == 0)
+            {
+                tool_val = 1;
+            }
+            return component_quantity * tool_val;
         }
 
 
@@ -60,11 +67,28 @@ namespace NS_Manager_Resource
             Generator generator = new Generator ();
             generator.recipe = recipe;
             generator.manager_resource = new Manager_Resource ();
+            generator.manager_resource_tool = new Manager_Resource ();
 
-            generator.manager_resource.from_recipe_setup (recipe);
+            generator.from_recipe_setup_manager ();
 
             return generator;
         }
+
+
+        public void from_recipe_setup_manager ()
+        {
+            List<string> component_list_resource_name = this.recipe.mix_component.get_list_resource_name ();
+            this.manager_resource.from_list_resource_name_setup (component_list_resource_name);
+            this.manager_resource.listener_setup (component_list_resource_name);
+
+            List<string> tool_list_resource_name = this.recipe.list_tool_kind
+                .Select (resource => resource.resource_name)
+                .ToList ();
+            this.manager_resource_tool.from_list_resource_name_setup (tool_list_resource_name);
+            this.manager_resource_tool.listener_setup (tool_list_resource_name);
+        }
+
+
 
 
         public string get_result_resource_name ()
@@ -111,6 +135,12 @@ namespace NS_Manager_Resource
             return (Resource.list_can_craft_stock_resource_name.Contains (get_stack_tool ().resource_name) == false);
         }
 
+
+        public void listener_clear ()
+        {
+            this.manager_resource.listener_clear ();
+            this.manager_resource_tool.listener_clear ();
+        }
 
     }
 }

@@ -88,6 +88,7 @@ namespace Blazora.Pages
                     last_second = current_second;
                     total = 0;
                     number = 0;
+                    //Console.WriteLine ($"Game_Page Game_Component count: {Game_Page.list_component.Count}");
                 }
                 await Task.Delay (this.graphical_interval);
             }

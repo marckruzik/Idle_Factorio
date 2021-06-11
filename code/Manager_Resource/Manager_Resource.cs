@@ -33,6 +33,23 @@ namespace NS_Manager_Resource
             return true;
         }
 
+
+        public Resource_Mix get_resource_mix ()
+        {
+            Resource_Mix resource_mix = new Resource_Mix ();
+            resource_mix.list_resource_stack = dico_resource_name_plus_resource_stack.Values.ToList ();
+            return resource_mix;
+        }
+
+        public void set_resource_mix (Resource_Mix resource_mix)
+        {
+            foreach (Resource_Stack resource_stack in resource_mix.list_resource_stack)
+            {
+                from_resource_name_and_resource_quantity_set_resource_quantity (
+                    resource_stack.resource_name, resource_stack.quantity);
+            }
+        }
+
         public static void resource_transfer (
             Manager_Resource manager_resource_source,
             Manager_Resource manager_resource_destination,
@@ -51,20 +68,16 @@ namespace NS_Manager_Resource
         }
 
 
-        public void from_recipe_setup (Recipe recipe)
+        public void from_list_resource_name_setup (List<string> list_resource_name)
         {
             clear ();
 
-            foreach (Resource_Stack component_stack in recipe.mix_component.list_resource_stack)
+            foreach (string resource_name in list_resource_name)
             {
-                from_resource_name_add_resource (component_stack.resource_name);
-            }
-            foreach (Resource tool_kind in recipe.list_tool_kind)
-            {
-                from_resource_name_add_resource (tool_kind.resource_name);
-                if (Resource.list_unique_resource_name.Contains (tool_kind.resource_name) == true)
+                from_resource_name_add_resource (resource_name);
+                if (Resource.list_unique_resource_name.Contains (resource_name) == true)
                 {
-                    from_resource_name_and_resource_quantity_set_resource_quantity (tool_kind.resource_name, 1);
+                    from_resource_name_and_resource_quantity_set_resource_quantity (resource_name, 1);
                 }
             }
         }
@@ -104,15 +117,6 @@ namespace NS_Manager_Resource
 
         public void listener_set (string resource_name)
         {
-            /*
-            Resource.dico_resource_name_plus_stack_resource_quantity_max[resource_name].changed += (v) =>
-                {
-                    this.dico_resource_name_plus_stock_quantity_max[resource_name]
-                        .Set (v * this.chest_size);
-                    Console.WriteLine ($"{resource_name} new : {v}");
-                };
-            */
-            
             Action<int> action = delegate (int v) 
             {
                 this.dico_resource_name_plus_stock_quantity_max[resource_name]
@@ -125,7 +129,6 @@ namespace NS_Manager_Resource
             obs.changed += action;
 
             //Console.WriteLine ($"Listener for Manager_Resource {this.id} with [{obs.id}]{resource_name}");
-            
         }
 
 
@@ -147,17 +150,6 @@ namespace NS_Manager_Resource
         }
 
 
-        public void listener_setup (Recipe recipe)
-        {
-            foreach (Resource_Stack component_stack in recipe.mix_component.list_resource_stack)
-            {
-                listener_set (component_stack.resource_name);
-            }
-            foreach (Resource tool_kind in recipe.list_tool_kind)
-            {
-                listener_set (tool_kind.resource_name);
-            }
-        }
 
 
         public void listener_setup (List<string> list_resource_name)

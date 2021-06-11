@@ -131,7 +131,7 @@
     protected override void OnInitialized()
     {
         this.id = $"BGenerator [{this.recipe.get_first_result_resource_name ()}]";
-        this.generator.manager_resource.listener_setup (this.generator.recipe);
+        //this.generator.from_recipe_setup_manager ();
 
         base.OnInitialized ();
     }
@@ -180,7 +180,7 @@
     public override void Dispose ()
     {
         base.Dispose ();
-        this.generator.manager_resource.listener_clear ();
+        this.generator.listener_clear ();
     }
 
 

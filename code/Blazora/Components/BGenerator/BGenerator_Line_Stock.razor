@@ -38,7 +38,7 @@
                 position=@(new Position (s * 3, s * i, s, s))
                 action=@(() =>
                          {
-                             //Console.WriteLine ($"{component_stack.resource_name}_in_tool_kind");
+                             Console.WriteLine ($"{component_stack.resource_name}_in_tool_kind");
                              Manager_Resource.resource_transfer (
                                  Game_Engine.self.manager_resource,
                                  this.generator.manager_resource,
