@@ -5,9 +5,11 @@ iron_ore * 1 + coal_ore * 1,iron_plate * 1,3000,fire
 stone_ore_mine * 1,stone_ore * 1,2000,pickaxe
 stone_ore * 4,furnace_stone * 1,2000,hand
 iron_plate * 2,iron_gear * 1,500,hand
+iron_plate * 1 + iron_gear * 1,transport_belt_1 * 1,500,hand
 iron_plate * 3 + iron_gear * 3 + furnace_stone * 1,burner_drill * 1,5000,hand
 copper_ore_mine * 1,copper_ore * 1,2000,pickaxe
 copper_ore * 1 + coal_ore * 1,copper_plate * 1,3000,fire
 copper_plate * 1,copper_cable * 2,500,hand
 copper_cable * 3 + iron_plate * 1,electronic_circuit * 1,500,hand
+electronic_circuit * 1 + iron_gear * 1 + iron_plate * 1,inserter_1 * 1,500,hand
 electronic_circuit * 3 + iron_gear * 5 + iron_plate * 9,assembling_machine_1 * 1,5000,hand

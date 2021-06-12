@@ -88,10 +88,14 @@
         => this.generator.get_loc_min (resource_name);
 
     public int get_tool_val ()
-        => this.generator.get_tool_val ();
-
+        => this.generator.get_main_tool_val ();
+    
     public Resource_Stack get_stack_tool ()
-        => this.generator.get_stack_tool ();
+        => this.generator.get_stack_main_tool ();
+
+    public Resource_Stack get_stack_tool (string resource_name)
+        => this.generator.manager_resource_tool
+            .from_resource_name_get_resource_stack (resource_name);
 
     public string get_result_resource_name ()
         => this.generator.get_result_resource_name ();

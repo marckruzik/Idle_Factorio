@@ -2,6 +2,8 @@
 @using BlazorApp.Shared.Models
 @using NS_Manager_Resource
 @using NS_Game_Engine
+@using Blazora.Script
+
 
 @using Pages
 
@@ -25,25 +27,54 @@
     string resource_name = component_stack.resource_name;
 
     // Global stock
-    <Cellicon picture_filename=@(Resource.from_resource_name_get_resource_filename (component_stack.resource_name))
+    <Cellicon picture_filename=@(Resource.from_resource_name_get_resource_filename (resource_name))
                 position=@(new Position (s * 0, s * i, s, s))
                 text_bottom_right=@($"{get_stock_val (resource_name)}")
                 />
 
-    
-    //int max_indicator = Math.Max (get_stack_max (resource_name), get_loc_min (resource_name));
-   
 
-    <Cellicon picture_filename=@(Resource.from_resource_name_get_resource_filename (component_stack.resource_name))
+    List<(int, string)> list_tup = new List<(int, string)> ()
+    {
+        (1, "transport_belt_1"),
+        (2, "inserter_1"),
+    };
+
+    foreach ((int, string) tup in list_tup)
+    {
+        int x = tup.Item1;
+        string tool_resource_name = tup.Item2;
+
+        if (Game_Engine.self.manager_toggle.is_true ($"know_{tool_resource_name}") == true)
+        {
+            string local_toggle_id = this.generator.get_toggle_id_know (tool_resource_name);
+            if (Game_Engine.self.manager_toggle.is_true (local_toggle_id) == false)
+            {
+            <Cellicon picture_filename=@(Resource.from_resource_name_get_resource_filename (tool_resource_name))
+                position=@(new Position (s * x, s * i, s, s))
+                text_middle_right="^"
+                action=@(() => Game_Action.upgrade_accessory (this.generator_id, local_toggle_id))
+                />
+            }
+            else
+            {
+            <BGenerator_Transport_Belt_1 
+                position=@(new Position (s * x, s * i, s, s))
+                main_resource_name=@(tool_resource_name)
+                secondary_resource_name=@(resource_name)
+                parent=this
+                />
+            }
+        }
+    }
+
+
+
+    <Cellicon picture_filename=@(Resource.from_resource_name_get_resource_filename (resource_name))
                 position=@(new Position (s * 3, s * i, s, s))
                 action=@(() =>
                          {
-                             Console.WriteLine ($"{component_stack.resource_name}_in_tool_kind");
-                             Manager_Resource.resource_transfer (
-                                 Game_Engine.self.manager_resource,
-                                 this.generator.manager_resource,
-                                 component_stack.resource_name,
-                                 1);
+                             Console.WriteLine ($"{resource_name}_in_tool_kind");
+                             give_resource (resource_name);
                          })
                 val_authorize=@(action_ready (resource_name))
                 text_bottom_right=@($"{get_loc_val (resource_name)}/{get_loc_min (resource_name)}")
@@ -87,6 +118,24 @@
     }
 
 
+    public int get_transfer_power (string secondary_resource_name)
+    {
+        string complex_resource_name = 
+            Resource.from_resource_name_get_complex_resource_name (
+                "inserter_1", secondary_resource_name);
+        return 1 + get_stack_tool (complex_resource_name).quantity;
+    }
+
+
+    public void give_resource (string resource_name)
+    {
+        Manager_Resource.resource_transfer (
+            Game_Engine.self.manager_resource,
+            this.generator.manager_resource,
+            resource_name,
+            get_transfer_power (resource_name));
+    }
+
 
     public bool action_ready (string resource_name)
     {
@@ -103,7 +152,6 @@
 
         return true;
     }
-
 
 
 }

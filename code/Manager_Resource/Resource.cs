@@ -73,5 +73,22 @@ namespace NS_Manager_Resource
             string resource_name = resource_text.Trim ().ToLower ();
             return resource_name;
         }
+
+
+        public static string from_complex_resource_name_get_resource_name_main (string complex_resource_name)
+        {
+            return complex_resource_name.Split ("-")[0];
+        }
+
+        public static string from_complex_resource_name_get_resource_name_secondary (string complex_resource_name)
+        {
+            return complex_resource_name.Split ("-")[1];
+        }
+
+        public static string from_resource_name_get_complex_resource_name (
+            string resource_name_a, string resource_name_b)
+        {
+            return $"{resource_name_a}-{resource_name_b}";
+        }
     }
 }

@@ -39,7 +39,7 @@ namespace Blazora.Script
             Resource_Stack resource_stack = Game_Engine.self.manager_resource
                 .from_resource_name_get_resource_stack (generator.get_result_resource_name ());
 
-            Resource_Stack stack_tool = generator.get_stack_tool ();
+            Resource_Stack stack_tool = generator.get_stack_main_tool ();
 
             generator.manager_resource.from_resource_mix_remove_resource (recipe.mix_component * stack_tool.quantity);
 

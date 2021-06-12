@@ -11,7 +11,7 @@ namespace NS_Manager_Resource
         Dictionary<string, Resource_Stack> dico_resource_name_plus_resource_stack = new Dictionary<string, Resource_Stack> ();
         public int chest_size = 1;
 
-        Dictionary<string, ObservableProperty<int>> dico_resource_name_plus_stock_quantity_max = 
+        Dictionary<string, ObservableProperty<int>> dico_resource_name_plus_stock_quantity_max =
             new Dictionary<string, ObservableProperty<int>> ();
 
         public string id = "MR_unknown";
@@ -41,6 +41,7 @@ namespace NS_Manager_Resource
             return resource_mix;
         }
 
+
         public void set_resource_mix (Resource_Mix resource_mix)
         {
             foreach (Resource_Stack resource_stack in resource_mix.list_resource_stack)
@@ -50,21 +51,43 @@ namespace NS_Manager_Resource
             }
         }
 
+
         public static void resource_transfer (
             Manager_Resource manager_resource_source,
             Manager_Resource manager_resource_destination,
             string resource_name,
             int quantity)
         {
-            quantity = Math.Min (manager_resource_source.from_resource_name_get_resource_quantity (resource_name), quantity);
+            resource_transfer (
+                manager_resource_source,
+                manager_resource_destination,
+                resource_name,
+                resource_name,
+                quantity);
+        }
 
-            int destination_before = manager_resource_destination.from_resource_name_get_resource_quantity (resource_name);
-            manager_resource_destination.from_resource_name_and_resource_quantity_add_resource (resource_name, quantity);
-            int destination_after = manager_resource_destination.from_resource_name_get_resource_quantity (resource_name);
+
+        public static void resource_transfer (
+            Manager_Resource manager_resource_source,
+            Manager_Resource manager_resource_destination,
+            string resource_name_source,
+            string resource_name_destination,
+            int quantity)
+        {
+            quantity = Math.Min (
+                manager_resource_source.from_resource_name_get_resource_quantity (resource_name_source),
+                quantity);
+
+            int destination_before = manager_resource_destination.from_resource_name_get_resource_quantity (
+                resource_name_destination);
+            manager_resource_destination.from_resource_name_and_resource_quantity_add_resource (
+                resource_name_destination, quantity);
+            int destination_after = manager_resource_destination.from_resource_name_get_resource_quantity (
+                resource_name_destination);
 
             int change = destination_after - destination_before;
 
-            manager_resource_source.from_resource_name_and_resource_quantity_add_resource (resource_name, -change);
+            manager_resource_source.from_resource_name_and_resource_quantity_add_resource (resource_name_source, -change);
         }
 
 
@@ -95,8 +118,11 @@ namespace NS_Manager_Resource
             return from_resource_name_get_resource_stack (resource_name).quantity;
         }
 
+
         public void from_resource_name_add_resource (string resource_name)
         {
+            Resource.from_resource_name_check_resource_name (resource_name);
+
             bool contain_resource = from_resource_name_contain_resource_stack (resource_name);
             if (contain_resource == true)
             {

@@ -25,7 +25,15 @@ namespace Blazora.Script
             await from_csv_load_recipe ();
             //Console.WriteLine ("after csv load");
             Game_Engine.self.manager_resource = stock_manager_resource_setup ();
-            //quickstart ();
+
+            List<Generator> list_generator_locally = Game_Engine.self.manager_generator.Values
+                .Where (generator => generator.must_craft_locally () == true)
+                .ToList ();
+            foreach (Generator generator_locally in list_generator_locally)
+            {
+                string toggle_id_transport_belt_1 = generator_locally.get_toggle_id_know ("transport_belt_1");
+                Game_Engine.self.manager_toggle.set (toggle_id_transport_belt_1, false);
+            }
         }
 
 
@@ -51,7 +59,6 @@ namespace Blazora.Script
             foreach (string resource_name in Resource.list_resource_name)
             {
                 stock_manager_resource.from_resource_name_add_resource (resource_name);
-                
             }
 
             // Mine
@@ -77,9 +84,13 @@ namespace Blazora.Script
             quickstart ("furnace_stone", 8);
             quickstart ("burner_drill", 4);
             quickstart ("assembling_machine_1", 4);
-            quickstart ("iron_gear", 0);
+            quickstart ("iron_gear", 8);
+            quickstart ("inserter_1", 6);
+            quickstart ("electronic_circuit", 8);
+            quickstart ("transport_belt_1", 6);
 
         }
+
 
         public static void quickstart (string resource_name, int quantity_min)
         {
@@ -96,32 +107,35 @@ namespace Blazora.Script
 
         public static void listener_flag_setup ()
         {
-            List<(string, string)> list_tuple_tool_before_plus_tool_after = new List<(string, string)> ()
+            List<(string, string)> list_tuple_resource_observed_plus_generator_resource_concerned = new List<(string, string)> ()
             {
-                ("fire", "furnace_stone"),
-                ("pickaxe", "burner_drill"),
-                ("hand", "assembling_machine_1")
+                ("furnace_stone", "fire"),
+                ("burner_drill", "pickaxe"),
+                ("assembling_machine_1", "hand"),
+                ("inserter_1", "inserter_1"),
+                ("transport_belt_1", "transport_belt_1")
             };
-            foreach ((string, string) tuple_tool_before_plus_tool_after in list_tuple_tool_before_plus_tool_after)
+            foreach ((string, string) resource_observed_plus_generator_resource_concerned in 
+                list_tuple_resource_observed_plus_generator_resource_concerned)
             {
                 listener_flag_setup (
-                    tuple_tool_before_plus_tool_after.Item1, 
-                    tuple_tool_before_plus_tool_after.Item2);
+                    resource_observed_plus_generator_resource_concerned.Item1,
+                    resource_observed_plus_generator_resource_concerned.Item2);
             }
         }
 
 
-        public static void listener_flag_setup (string tool_before, string tool_after)
+        public static void listener_flag_setup (string resource_observed, string generator_resource_concerned)
         {
-            string toggle_id = $"know_{tool_after}";
-            Game_Engine.self.manager_resource.from_resource_name_get_resource_stack (tool_after)
+            string toggle_id = $"know_{resource_observed}";
+            Game_Engine.self.manager_resource.from_resource_name_get_resource_stack (resource_observed)
                 .observable_quantity.changed += (v) =>
                 {
                     if (Game_Engine.self.manager_toggle.get_tog (toggle_id) != Toggle.Tog.is_true)
                     {
                         if (v > 0)
                         {
-                            Game_Action.action_flag_upgrade (tool_before, toggle_id);
+                            Game_Action.upgrade_tool (toggle_id, generator_resource_concerned);
                         }
                     }
                 };
@@ -149,6 +163,14 @@ namespace Blazora.Script
                 if ((string)record["can_craft_stock"] == "true")
                 {
                     Resource.list_can_craft_stock_resource_name.Add (resource_name);
+                }
+                if ((string)record["mine"] != "true" &&
+                    (string)record["unique"] != "true" &&
+                    (string)record["can_craft_stock"] != "true"
+                    )
+                {
+                    Resource.list_resource_name.Add (Resource.from_resource_name_get_complex_resource_name ("transport_belt_1", resource_name));
+                    Resource.list_resource_name.Add (Resource.from_resource_name_get_complex_resource_name ("inserter_1", resource_name));
                 }
             }
 
@@ -179,9 +201,6 @@ namespace Blazora.Script
 
             //Console.WriteLine ("end recipe csv load");
         }
-
-
-
 
 
 

@@ -20,24 +20,35 @@ namespace NS_Manager_Resource
             this.id = id_count++;
         }
 
-        public Resource_Stack get_stack_tool ()
+
+        public Resource_Stack get_stack_main_tool ()
         {
             Resource resource_tool = this.recipe.list_tool_kind[0];
             Resource_Stack stack_tool = this.manager_resource_tool.from_resource_name_get_resource_stack (resource_tool.resource_name);
             return stack_tool;
         }
 
+
+        public int get_main_tool_val ()
+        {
+            return get_stack_main_tool ().quantity;
+        }
+
+
+        public bool has_stack_tool (string resource_name_tool)
+        {
+            return this.manager_resource_tool.from_resource_name_contain_resource_stack (resource_name_tool);
+        }
+
+
         public int get_result_val ()
         {
             string result_resource_name = get_result_resource_name ();
             int result_quantity = this.recipe.mix_result.from_resource_name_get_resource_stack (result_resource_name).quantity;
-            return result_quantity * get_tool_val ();
+            return result_quantity * get_main_tool_val ();
         }
 
-        public int get_tool_val ()
-        {
-            return get_stack_tool ().quantity;
-        }
+
 
         public int get_loc_val (string resource_name)
         {
@@ -52,7 +63,7 @@ namespace NS_Manager_Resource
         public int get_loc_min (string resource_name)
         {
             int component_quantity = this.recipe.mix_component.from_resource_name_get_resource_stack (resource_name).quantity;
-            int tool_val = get_tool_val ();
+            int tool_val = get_main_tool_val ();
             if (tool_val == 0)
             {
                 tool_val = 1;
@@ -60,6 +71,11 @@ namespace NS_Manager_Resource
             return component_quantity * tool_val;
         }
 
+
+        public string get_toggle_id_know (string resource_name)
+        {
+            return $"Generator{this.id}_know_{resource_name}"; ;
+        }
 
 
         public static Generator from_recipe_create_generator (Recipe recipe)
@@ -85,6 +101,29 @@ namespace NS_Manager_Resource
                 .Select (resource => resource.resource_name)
                 .ToList ();
             this.manager_resource_tool.from_list_resource_name_setup (tool_list_resource_name);
+
+            if (must_craft_locally () == true)
+            {
+                foreach (string secondary_resource_name in component_list_resource_name)
+                {
+                    string complex_resource_name_transport_belt_1 = 
+                        Resource.from_resource_name_get_complex_resource_name (
+                            "transport_belt_1", secondary_resource_name);
+                    this.manager_resource_tool.from_resource_name_and_resource_quantity_set_resource_quantity (
+                        complex_resource_name_transport_belt_1, 0);
+                    //this.manager_resource_tool.listener_set ("transport_belt_1", complex_resource_name_transport_belt_1);
+
+                    string complex_resource_name_inserter_1 =
+                        Resource.from_resource_name_get_complex_resource_name (
+                            "inserter_1", secondary_resource_name);
+                    this.manager_resource_tool.from_resource_name_and_resource_quantity_set_resource_quantity (
+                        complex_resource_name_inserter_1, 0);
+                    //this.manager_resource_tool.listener_set ("inserter_1", complex_resource_name_inserter_1);
+                }
+                tool_list_resource_name.Add ("transport_belt_1");
+                tool_list_resource_name.Add ("inserter_1");
+            }
+
             this.manager_resource_tool.listener_setup (tool_list_resource_name);
         }
 
@@ -99,7 +138,7 @@ namespace NS_Manager_Resource
 
         public bool can_craft (Manager_Resource stock_manager_resource)
         {
-            Resource_Stack stack_tool = get_stack_tool ();
+            Resource_Stack stack_tool = get_stack_main_tool ();
 
             if (stack_tool.quantity == 0)
             {
@@ -131,8 +170,7 @@ namespace NS_Manager_Resource
 
         public bool must_craft_locally ()
         {
-            int count = Resource.list_can_craft_stock_resource_name.Count;
-            return (Resource.list_can_craft_stock_resource_name.Contains (get_stack_tool ().resource_name) == false);
+            return (Resource.list_can_craft_stock_resource_name.Contains (get_stack_main_tool ().resource_name) == false);
         }
 
 

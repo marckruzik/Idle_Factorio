@@ -18,6 +18,7 @@
 - Splash Screen, title
 - Tab about
 - copyrights
+- Google analytics
 
 --------------------------------------
 
@@ -33,7 +34,6 @@
 
 --------------------------------------
 
-- science
 
 --------------------------------------
 
@@ -41,6 +41,5 @@
 - save JSON
 - load JSON
 
-- Google analytics
 
 - feedback when impossible

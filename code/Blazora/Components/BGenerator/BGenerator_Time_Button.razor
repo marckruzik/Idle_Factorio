@@ -16,7 +16,7 @@
 
 
 
-<Cellicon picture_filename="time.png"
+<Cellicon picture_filename=@(Resource.from_resource_name_get_resource_filename ("time"))
             position=@(this.position)
             action=time_action
             val_authorize=@(is_time_action_ready ())

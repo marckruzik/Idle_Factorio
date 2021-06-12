@@ -3,13 +3,14 @@
 @implements IDisposable
 @using Blazora.Pages
 @using NS_Blazora_Basic
-@using script
+@using Script
 
 
 @code{
     
     [Parameter] public Position position { get; set; }
     [Parameter] public Game_Component parent { get; set; }
+    public Game_Component memorized_parent;
 
 
     Manager_Listener manager_listener = new Manager_Listener ();
@@ -48,6 +49,7 @@
         if (this.parent != null)
         {
             this.parent.list_child.Add (this);
+            this.memorized_parent = this;
             this.parent = null;
         }
     }

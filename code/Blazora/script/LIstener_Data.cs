@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Blazora.script
+namespace Blazora.Script
 {
     public interface IListener_Data
     {

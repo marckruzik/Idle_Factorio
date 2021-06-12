@@ -37,17 +37,16 @@ namespace Blazora.Script
             ObservableProperty<int> stack_resource_quantity_max = Resource.from_resource_name_get_stack_resource_quantity_max (resource_name);
             int stack_resource_quantity_max_future = stack_resource_quantity_max * 2;
 
-            int count = Resource.dico_resource_name_plus_stack_resource_quantity_max[resource_name].get_listener_count ();
-
             Resource.dico_resource_name_plus_stack_resource_quantity_max[resource_name].Set (stack_resource_quantity_max_future);
         }
 
 
-        public static void action_flag_upgrade (string tool_before, string toggle_id)
+
+        public static void upgrade_tool (string toggle_id, string generator_resource_concerned)
         {
             Game_Engine.self.manager_toggle.set (toggle_id, true);
             List<BGenerator> list_bgenerator = BGenerator.from_game_page_get_list_bgenerator ()
-                .Where (bgenerator => bgenerator.get_stack_tool ().resource_name == tool_before)
+                .Where (bgenerator => bgenerator.generator.has_stack_tool (generator_resource_concerned) == true)
                 .ToList ();
             foreach (BGenerator bgenerator in list_bgenerator)
             {
@@ -56,10 +55,24 @@ namespace Blazora.Script
         }
 
 
-
-
-
         public static void upgrade_tool (int generator_id, string tool_resource_name)
+        {
+            BGenerator bgenerator = BGenerator.from_generator_id_get_bgenerator (generator_id);
+            bgenerator.recipe.list_tool_kind[0] = Resource.from_resource_name_get_resource (tool_resource_name);
+            bgenerator_reload (generator_id);
+        }
+
+
+        public static void upgrade_accessory (int generator_id, string toggle_id)
+        {
+            Generator generator = Game_Engine.self.manager_generator.from_generator_id_get_generator (generator_id);
+            Game_Engine.self.manager_toggle.set (toggle_id, true);
+            bgenerator_reload (generator_id);
+        }
+
+
+
+        public static void bgenerator_reload (int generator_id)
         {
             BGenerator bgenerator = BGenerator.from_generator_id_get_bgenerator (generator_id);
 
@@ -73,8 +86,6 @@ namespace Blazora.Script
                 gc.listener_remove ();
             }
 
-            bgenerator.recipe.list_tool_kind[0] = Resource.from_resource_name_get_resource (tool_resource_name);
-
             bgenerator.state_change ();
 
             bgenerator.generator.from_recipe_setup_manager ();
@@ -83,7 +94,6 @@ namespace Blazora.Script
             bgenerator.generator.manager_resource_tool.set_resource_mix (tool_resource_mix);
 
             bgenerator.listener_setup ();
-
 
             foreach (Game_Component gc in bgenerator.ienumerable_get_child ())
             {

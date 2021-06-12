@@ -1,0 +1,105 @@
+﻿@inherits BGenerator_Component
+@using BlazorApp.Shared.Models
+@using NS_Manager_Resource
+@using NS_Game_Engine
+@using Pages
+@using Blazora.Script
+@using NS_Blazora_Basic
+
+@code {
+
+    [Parameter] public string main_resource_name { get; set; }
+    [Parameter] public string secondary_resource_name { get; set; }
+
+    
+    public ObservableProperty<int> job_percentage = new ObservableProperty<int> ("job_percentage", 0);
+}
+
+@{ 
+    display_name ();
+}
+
+@{ 
+    Resource_Stack stack_tool = get_stack_tool (get_complex_resource_name ());
+}
+
+<Cellicon picture_filename=@(Resource.from_resource_name_get_resource_filename (this.main_resource_name))
+            position=@(this.position)
+            action=@(() => increment ())
+            text_bottom_right=@($"{stack_tool.quantity}")
+            stack_val_current=@(stack_tool.observable_quantity)
+            stack_val_max=@(get_stack_quantity_max (this.main_resource_name))
+            />
+
+@if (this.main_resource_name == "transport_belt_1")
+{
+    Position pb_position = new Position (this.position.x, this.position.y, s, 8);
+    <div style="pointer-events: none;">
+        <ProgressBar 
+                position=@(pb_position)
+                val_current=this.job_percentage 
+                val_max=@(new ObservableProperty<int> ("ProgressBar_val_max", 100))
+                border=@(true)
+                background_color="rgba(211, 211, 211, 0.75)"
+                fill_color="rgba(0, 255, 0, 0.75)"
+                parent=this
+                />
+    </div>
+}
+
+
+@code{
+
+    public override void listener_setup ()
+    {
+        base.listener_setup ();
+        listener_add ($"BGenerator_{get_complex_resource_name ()}",
+            get_stack_tool (get_complex_resource_name ()).observable_quantity);
+    }
+
+
+    public override void graphical_update ()
+    {
+        base.graphical_update ();
+        job_percentage.Set (get_job_time_percentage ());
+    }
+
+    int previous_tim = 0;
+    public int get_job_time_percentage ()
+    {
+        int time = 10000;
+        int current = (int)((Game_Engine.self.clock * 16) % time);
+        int tim = (current*100) / time;
+        if (tim < previous_tim)
+        {
+            //((BGenerator_Line_Stock)this.memorized_parent).give_resource (this.secondary_resource_name);
+        }
+        previous_tim = tim;
+        return tim;
+    }
+
+
+
+
+    public string get_complex_resource_name ()
+    {
+        return Resource.from_resource_name_get_complex_resource_name (
+            this.main_resource_name, this.secondary_resource_name);
+    }
+
+
+    public void increment ()
+    {
+        Manager_Resource.resource_transfer (
+            Game_Engine.self.manager_resource,
+            this.generator.manager_resource_tool,
+            this.main_resource_name,
+            get_complex_resource_name (),
+            1);
+    }
+
+
+
+
+
+}
