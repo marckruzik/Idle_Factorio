@@ -62,12 +62,10 @@
                 action=@(() =>
                          {
                              Console.WriteLine ($"{resource_name}_in_tool_kind");
-                             give_resource (resource_name);
+                             give_resource (resource_name, true);
                          })
                 val_authorize=@(action_ready (resource_name))
                 text_bottom_right=@($"{get_loc_val (resource_name)}")
-                stack_val_current=@(get_loc_quantity (resource_name))
-                stack_val_max=@(get_stack_quantity_max (resource_name))
                 parent=this
               />
 
@@ -105,7 +103,7 @@
         {
             listener_add ("BGL loc_quantity", get_loc_quantity (resource_name));
             listener_add ("BGL stock_quantity", get_stock_quantity (resource_name));
-            listener_add ("BGL stack_max", get_stack_quantity_max (resource_name));
+            //listener_add ("BGL stack_max", get_stack_quantity_max (resource_name));
         }
 
         listener_add ("BGL tool", get_stack_tool ().observable_quantity);
@@ -114,20 +112,35 @@
 
     public int get_transfer_power (string secondary_resource_name)
     {
-        string complex_resource_name = 
+        string complex_resource_name =
             Resource.from_resource_name_get_complex_resource_name (
                 "inserter_1", secondary_resource_name);
         return 1 + get_stack_tool (complex_resource_name).quantity;
     }
 
 
-    public void give_resource (string resource_name)
+    public void give_resource (string resource_name, bool force_give)
     {
+        int quantity = get_transfer_power (resource_name);
+        if (force_give == false)
+        {
+            int quantity_source = Game_Engine.self.manager_resource.from_resource_name_get_resource_quantity (resource_name);
+            int quantity_destination = this.generator.manager_resource.from_resource_name_get_resource_quantity (resource_name);
+            if (quantity_source <= quantity_destination)
+            {
+                return;
+            }
+            if (quantity_source - quantity < quantity_destination + quantity)
+            {
+                quantity = (quantity_source - quantity_destination) / 2;
+            }
+        }
+
         Manager_Resource.resource_transfer (
             Game_Engine.self.manager_resource,
             this.generator.manager_resource,
             resource_name,
-            get_transfer_power (resource_name));
+            quantity);
     }
 
 
@@ -137,13 +150,13 @@
         {
             return false;
         }
-
+        /*
         if (get_loc_val (resource_name) == get_stack_quantity_max (resource_name) &&
             get_stack_quantity_max (resource_name) < get_loc_min (resource_name))
         {
             return false;
         }
-
+        */
         return true;
     }
 

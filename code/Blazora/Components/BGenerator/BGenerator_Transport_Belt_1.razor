@@ -32,7 +32,7 @@
             action=@(() => increment ())
             text_bottom_right=@($"{stack_tool.quantity}")
             stack_val_current=@(stack_tool.observable_quantity)
-            stack_val_max=@(get_stack_quantity_max (this.main_resource_name))
+            stack_val_max=@(new ObservableProperty<int> (16))
             />
 
 
@@ -90,7 +90,7 @@
         int tim = (current*100) / time;
         if (tim < previous_tim)
         {
-            ((BGenerator_Line_Stock)this.memorized_parent).give_resource (this.secondary_resource_name);
+            ((BGenerator_Line_Stock)this.memorized_parent).give_resource (this.secondary_resource_name, false);
         }
         previous_tim = tim;
         return tim;

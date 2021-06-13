@@ -1,4 +1,8 @@
 
+- transport belt, maximum 16
+- accessory, red when no item available
+
+
 
 --------------------------------------
 
@@ -7,9 +11,6 @@
 
 - FPS Counter, permanent top
 
-- inserter
-
-- transport belt
 
 
 

@@ -90,7 +90,9 @@ namespace NS_Manager_Resource
             Generator generator = new Generator ();
             generator.recipe = recipe;
             generator.manager_resource = new Manager_Resource ();
+            generator.manager_resource.chest_size = 999;
             generator.manager_resource_tool = new Manager_Resource ();
+            generator.manager_resource_tool.chest_size = 999;
 
             generator.from_recipe_setup_manager ();
 
