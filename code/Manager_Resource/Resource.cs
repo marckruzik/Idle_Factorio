@@ -44,6 +44,28 @@ namespace NS_Manager_Resource
             }
         }
 
+        public static List<string> from_resource_name_main_and_list_resource_name_get_list_resource_name_similar (
+            string resource_name_main, List<string> list_resource_name)
+        {
+            List<string> list_resource_name_similar = new List<string> ();
+            foreach (string resource_name in list_resource_name)
+            {
+                if (resource_name == resource_name_main)
+                {
+                    list_resource_name_similar.Add (resource_name);
+                }
+                if (Resource.from_resource_name_is_complex_resource_name (resource_name) == false)
+                {
+                    continue;
+                }
+                if (Resource.from_complex_resource_name_get_resource_name_main (resource_name) == resource_name_main ||
+                    Resource.from_complex_resource_name_get_resource_name_secondary (resource_name) == resource_name_main)
+                {
+                    list_resource_name_similar.Add (resource_name);
+                }
+            }
+            return list_resource_name_similar;
+        }
 
         public static void from_resource_name_check_resource_name (string resource_name)
         {
@@ -74,6 +96,11 @@ namespace NS_Manager_Resource
             return resource_name;
         }
 
+
+        public static bool from_resource_name_is_complex_resource_name (string resource_name)
+        {
+            return resource_name.Contains ("-") == true;
+        }
 
         public static string from_complex_resource_name_get_resource_name_main (string complex_resource_name)
         {

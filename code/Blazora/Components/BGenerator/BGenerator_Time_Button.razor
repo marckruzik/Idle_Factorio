@@ -39,10 +39,10 @@
 
         listener_add ("BGenerator_Time_Button tool", get_stack_tool ().observable_quantity);
         listener_add ("BGenerator_Time_Button stock_quantity", get_stock_quantity (get_result_resource_name ()));
-        listener_add ("BGenerator_Time_Button stock_max", get_stock_max (get_result_resource_name ()));
+        listener_add ("BGenerator_Time_Button stock_max", get_stack_quantity_max (get_result_resource_name ()));
         
         listener_add (() => Game_Action.from_recipe_get_job_time_percentage (this.recipe) != 0);
-        listener_add (() => this.generator.auto_on_current);
+        listener_add ("BGenerator_Time_Button auto_on", this.generator.auto_on_current);
 
         foreach (string resource_name in this.recipe.mix_component.get_list_resource_name ())
         {
@@ -163,7 +163,7 @@
         }
         else
         {
-            this.generator.auto_on_current = !this.generator.auto_on_current;
+            this.generator.auto_on_current.Set (!this.generator.auto_on_current);
         }
     }
 

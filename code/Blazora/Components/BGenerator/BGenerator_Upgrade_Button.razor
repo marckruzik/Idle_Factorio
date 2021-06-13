@@ -34,7 +34,8 @@
             text_middle_right="^"
             text_bottom_right=@($"Lv{stack_resource_quantity_max}")
             stack_val_current=@(get_stock_quantity (result_resource_name))
-            stack_val_max=@(get_stock_max (result_resource_name))
+            stack_val_max=@(get_stack_quantity_max (result_resource_name))
+            stack_val_max_coeff=@(Game_Engine.self.manager_resource.chest_size)
             parent=this
         />
 
@@ -48,7 +49,6 @@
         base.listener_setup ();
 
         listener_add ("BGenerator_Total_Info stock_quantity", get_stock_quantity (get_result_resource_name ()));
-        listener_add ("BGenerator_Total_Info stock_max", get_stock_max (get_result_resource_name ()));
         listener_add ("BGenerator_Total_Info stack_max", get_stack_quantity_max (get_result_resource_name ()));
     }
 

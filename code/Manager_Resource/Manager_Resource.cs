@@ -11,8 +11,6 @@ namespace NS_Manager_Resource
         Dictionary<string, Resource_Stack> dico_resource_name_plus_resource_stack = new Dictionary<string, Resource_Stack> ();
         public int chest_size = 1;
 
-        Dictionary<string, ObservableProperty<int>> dico_resource_name_plus_stock_quantity_max =
-            new Dictionary<string, ObservableProperty<int>> ();
 
         public string id = "MR_unknown";
 
@@ -109,7 +107,6 @@ namespace NS_Manager_Resource
         private void clear ()
         {
             this.dico_resource_name_plus_resource_stack.Clear ();
-            this.dico_resource_name_plus_stock_quantity_max.Clear ();
         }
 
 
@@ -132,59 +129,16 @@ namespace NS_Manager_Resource
             resource_stack.quantity = 0;
             this.dico_resource_name_plus_resource_stack.Add (resource_name, resource_stack);
 
-
-            int max = Resource.dico_resource_name_plus_stack_resource_quantity_max[resource_name] * this.chest_size;
-            this.dico_resource_name_plus_stock_quantity_max
-                .Add (resource_name, new ObservableProperty<int> (this.id + ":" + resource_name, max));
-        }
-
-
-        Dictionary<string, Action<int>> dico_resource_name_plus_action = new Dictionary<string, Action<int>> ();
-
-        public void listener_set (string resource_name)
-        {
-            Action<int> action = delegate (int v) 
-            {
-                this.dico_resource_name_plus_stock_quantity_max[resource_name]
-                    .Set (v * this.chest_size);
-                //Console.WriteLine ($"{resource_name} new : {v}");
-            };
-            dico_resource_name_plus_action.Add (resource_name, action);
-
-            ObservableProperty<int> obs = Resource.dico_resource_name_plus_stack_resource_quantity_max[resource_name];
-            obs.changed += action;
-
-            //Console.WriteLine ($"Listener for Manager_Resource {this.id} with [{obs.id}]{resource_name}");
-        }
-
-
-        public void listener_unset (string resource_name)
-        {
-            Action<int> action = dico_resource_name_plus_action[resource_name];
-            Resource.dico_resource_name_plus_stack_resource_quantity_max[resource_name].changed -= action;
-            dico_resource_name_plus_action.Remove (resource_name);
-        }
-
-
-
-        public void listener_display ()
-        {
-            foreach (ObservableProperty<int> obs in dico_resource_name_plus_stock_quantity_max.Values)
-            {
-                Console.WriteLine (obs.id);
-            }
         }
 
 
 
 
-        public void listener_setup (List<string> list_resource_name)
-        {
-            foreach (string resource_name in list_resource_name)
-            {
-                listener_set (resource_name);
-            }
-        }
+
+
+
+
+
 
 
         public void listener_clear ()
@@ -197,17 +151,6 @@ namespace NS_Manager_Resource
             foreach (ObservableProperty<int> observable in list_observable)
             {
                 observable.changed = null;
-            }
-
-            foreach (ObservableProperty<int> observable in this.dico_resource_name_plus_stock_quantity_max.Values)
-            {
-                observable.changed = null;
-            }
-
-            List<string> list_resource_name = dico_resource_name_plus_action.Keys.ToList ();
-            foreach (string resource_name in list_resource_name)
-            {
-                listener_unset (resource_name);
             }
 
         }
@@ -235,7 +178,7 @@ namespace NS_Manager_Resource
 
             Resource_Stack resource_stack = this.dico_resource_name_plus_resource_stack[resource_name];
 
-            int stock_max = from_resource_name_get_stock_resource_quantity_max (resource_name);
+            int stock_max = Resource.from_resource_name_get_stack_resource_quantity_max (resource_name) * this.chest_size;
 
             if (resource_quantity < 0)
             {
@@ -250,12 +193,6 @@ namespace NS_Manager_Resource
                 resource_stack.quantity = resource_quantity;
             }
             resource_stack.observable_quantity.Set (resource_stack.quantity);
-        }
-
-
-        public ObservableProperty<int> from_resource_name_get_stock_resource_quantity_max (string resource_name)
-        {
-            return dico_resource_name_plus_stock_quantity_max[resource_name];
         }
 
 

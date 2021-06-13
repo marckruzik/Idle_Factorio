@@ -23,6 +23,7 @@
 
     [Parameter] public ObservableProperty<int> stack_val_current { get; set; }
     [Parameter] public ObservableProperty<int> stack_val_max { get; set; }
+    [Parameter] public int stack_val_max_coeff { get; set; } = 1;
 
     public ObservableProperty<bool> hover { get; set; }
 
@@ -32,7 +33,7 @@
 
 
 @{ 
-    display_name ();
+    //display_name ();
 }
 
 
@@ -148,6 +149,7 @@
         <ProgressBar position=@(new Position (0, s-3, s, 2))
                         val_current=stack_val_current
                         val_max=stack_val_max
+                        val_max_coeff=stack_val_max_coeff
                         background_color="#FF0000"
                         fill_color="#00FF00" 
                         parent=this
@@ -176,8 +178,6 @@
     {
         base.listener_setup ();
 
-        //listener_add ("Cellicon val_current", this.stack_val_current);
-        //listener_add ("Cellicon val_max", this.stack_val_max);
         if (this.action != null)
         {
             listener_add ("Cellicon hover", this.hover);

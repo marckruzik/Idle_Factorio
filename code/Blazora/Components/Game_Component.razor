@@ -29,14 +29,14 @@
 @code {
 
 
-        public string from_position_get_style ()
-        {
-            return $"position: absolute;" +
-                    $"{(position != null ? $"left: {position.x}px" : "")};" +
-                    $"{(position != null ? $"top: {position.y}px" : "")};" +
-                    $"{(position != null ? $"width: {position.width}px" : "")};" +
-                    $"{(position != null ? $"height: {position.height}px" : "")};";
-        }
+    public string from_position_get_style ()
+    {
+        return $"position: absolute;" +
+                $"{(position != null ? $"left: {position.x}px" : "")};" +
+                $"{(position != null ? $"top: {position.y}px" : "")};" +
+                $"{(position != null ? $"width: {position.width}px" : "")};" +
+                $"{(position != null ? $"height: {position.height}px" : "")};";
+    }
 
 
     protected override void OnInitialized ()
@@ -46,15 +46,18 @@
         listener_setup ();
         Game_Page.list_component.Remove (this);
         Game_Page.list_component.Add (this);
-        if (this.parent != null)
+        if (this.parent != null &&
+            this.parent.list_child.Contains (this) == false)
         {
             this.parent.list_child.Add (this);
-            this.memorized_parent = this;
+            this.memorized_parent = this.parent;
             this.parent = null;
         }
     }
 
 
+    public int need_refresh_buffer_max = 0;
+    public int need_refresh_buffer = 0;
 
     public virtual void graphical_update ()
     {
@@ -65,8 +68,16 @@
             return;
         }
 
-        StateHasChanged ();
-        this.need_refresh = false;
+        if (this.need_refresh_buffer == 0)
+        {
+            StateHasChanged ();
+            this.need_refresh = false;
+            this.need_refresh_buffer = this.need_refresh_buffer_max;
+        }
+        else
+        {
+            this.need_refresh_buffer -= 1;
+        }
     }
 
 

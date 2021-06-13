@@ -13,7 +13,7 @@ namespace NS_Manager_Resource
         public Manager_Resource manager_resource_tool;
         public int id;
         public static int id_count = 0;
-        public bool auto_on_current = true;
+        public ObservableProperty<bool> auto_on_current = new ObservableProperty<bool> (true);
 
         public Generator ()
         {
@@ -35,10 +35,17 @@ namespace NS_Manager_Resource
         }
 
 
-        public bool has_stack_tool (string resource_name_tool)
+        public bool has_stack_tool_containing (string resource_name_tool)
         {
-            return this.manager_resource_tool.from_resource_name_contain_resource_stack (resource_name_tool);
+            List<string> list_resource_name_similar =
+                Resource.from_resource_name_main_and_list_resource_name_get_list_resource_name_similar (
+                    resource_name_tool,
+                    this.manager_resource_tool.get_resource_mix ().get_list_resource_name ());
+
+            return list_resource_name_similar.Count > 0;
         }
+
+
 
 
         public int get_result_val ()
@@ -95,7 +102,6 @@ namespace NS_Manager_Resource
         {
             List<string> component_list_resource_name = this.recipe.mix_component.get_list_resource_name ();
             this.manager_resource.from_list_resource_name_setup (component_list_resource_name);
-            this.manager_resource.listener_setup (component_list_resource_name);
 
             List<string> tool_list_resource_name = this.recipe.list_tool_kind
                 .Select (resource => resource.resource_name)
@@ -120,11 +126,8 @@ namespace NS_Manager_Resource
                         complex_resource_name_inserter_1, 0);
                     //this.manager_resource_tool.listener_set ("inserter_1", complex_resource_name_inserter_1);
                 }
-                tool_list_resource_name.Add ("transport_belt_1");
-                tool_list_resource_name.Add ("inserter_1");
             }
 
-            this.manager_resource_tool.listener_setup (tool_list_resource_name);
         }
 
 
@@ -146,7 +149,7 @@ namespace NS_Manager_Resource
             }
 
             string result_resource_name = get_result_resource_name ();
-            int result_quantity_max = stock_manager_resource.from_resource_name_get_stock_resource_quantity_max (result_resource_name);
+            int result_quantity_max = Resource.from_resource_name_get_stack_resource_quantity_max (result_resource_name) * stock_manager_resource.chest_size;
             int result_quantity = stock_manager_resource.from_resource_name_get_resource_quantity (result_resource_name);
             
             if (result_quantity >= result_quantity_max)

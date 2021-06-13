@@ -19,8 +19,8 @@ namespace Blazora.Script
                 .from_recipe_get_generator (recipe)
                 .get_result_resource_name ();
 
-            int stock_resource_quantity_max = Game_Engine.self.manager_resource.from_resource_name_get_stock_resource_quantity_max (
-                resource_name);
+            int stock_resource_quantity_max = Resource.from_resource_name_get_stack_resource_quantity_max (
+                resource_name) * Game_Engine.self.manager_resource.chest_size;
             int stock_resource_quantity = Game_Engine.self.manager_resource.from_resource_name_get_resource_quantity (resource_name);
 
             return (stock_resource_quantity >= stock_resource_quantity_max);
@@ -37,7 +37,22 @@ namespace Blazora.Script
             ObservableProperty<int> stack_resource_quantity_max = Resource.from_resource_name_get_stack_resource_quantity_max (resource_name);
             int stack_resource_quantity_max_future = stack_resource_quantity_max * 2;
 
-            Resource.dico_resource_name_plus_stack_resource_quantity_max[resource_name].Set (stack_resource_quantity_max_future);
+            if (resource_name != "transport_belt_1" && resource_name != "inserter_1")
+            {
+                Resource.dico_resource_name_plus_stack_resource_quantity_max[resource_name].Set (stack_resource_quantity_max_future);
+            }
+            else
+            {
+                List<string> list_resource_name_similar =
+                    Resource.from_resource_name_main_and_list_resource_name_get_list_resource_name_similar (
+                        resource_name,
+                        Resource.list_resource_name);
+                foreach (string resource_name_similar in list_resource_name_similar)
+                {
+                    Resource.dico_resource_name_plus_stack_resource_quantity_max[resource_name_similar]
+                        .Set (stack_resource_quantity_max_future);
+                }
+            }
         }
 
 
@@ -46,7 +61,7 @@ namespace Blazora.Script
         {
             Game_Engine.self.manager_toggle.set (toggle_id, true);
             List<BGenerator> list_bgenerator = BGenerator.from_game_page_get_list_bgenerator ()
-                .Where (bgenerator => bgenerator.generator.has_stack_tool (generator_resource_concerned) == true)
+                .Where (bgenerator => bgenerator.generator.has_stack_tool_containing (generator_resource_concerned) == true)
                 .ToList ();
             foreach (BGenerator bgenerator in list_bgenerator)
             {

@@ -27,6 +27,7 @@ namespace Blazora.Pages
         public static Game_Page self;
 
         public ObservableProperty<int> stat_average = new ObservableProperty<int> ("stat_average", 0);
+        public ObservableProperty<int> clock_second = new ObservableProperty<int> ("clock_second", 0);
 
         protected override async Task OnInitializedAsync ()
         {
@@ -89,6 +90,7 @@ namespace Blazora.Pages
                     total = 0;
                     number = 0;
                     //Console.WriteLine ($"Game_Page Game_Component count: {Game_Page.list_component.Count}");
+                    this.clock_second.Set ((int)current_second);
                 }
                 await Task.Delay (this.graphical_interval);
             }
@@ -121,6 +123,8 @@ namespace Blazora.Pages
             this.timer_logic.Dispose ();
             this.timer_logic = null;
             this.stopwatch = null;
+            this.stat_average.changed = null;
+            this.clock_second.changed = null;
         }
 
 

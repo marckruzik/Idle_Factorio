@@ -1,4 +1,4 @@
-﻿@inherits BGenerator_Component
+﻿@inherits BGenerator_Accessory
 @using BlazorApp.Shared.Models
 @using NS_Manager_Resource
 @using NS_Game_Engine
@@ -8,16 +8,20 @@
 
 @code {
 
-    [Parameter] public string main_resource_name { get; set; }
-    [Parameter] public string secondary_resource_name { get; set; }
-
-    
     public ObservableProperty<int> job_percentage = new ObservableProperty<int> ("job_percentage", 0);
+
 }
 
 @{ 
     display_name ();
 }
+
+
+
+@{ 
+    job_update ();
+}
+
 
 @{ 
     Resource_Stack stack_tool = get_stack_tool (get_complex_resource_name ());
@@ -31,72 +35,73 @@
             stack_val_max=@(get_stack_quantity_max (this.main_resource_name))
             />
 
-@if (this.main_resource_name == "transport_belt_1")
-{
+
+@{
     Position pb_position = new Position (this.position.x, this.position.y, s, 8);
-    <div style="pointer-events: none;">
-        <ProgressBar 
-                position=@(pb_position)
-                val_current=this.job_percentage 
-                val_max=@(new ObservableProperty<int> ("ProgressBar_val_max", 100))
-                border=@(true)
-                background_color="rgba(211, 211, 211, 0.75)"
-                fill_color="rgba(0, 255, 0, 0.75)"
-                parent=this
-                />
-    </div>
 }
+
+<div style="pointer-events: none;">
+    <ProgressBar 
+            position=@(pb_position)
+            val_current=this.job_percentage 
+            val_max=@(new ObservableProperty<int> ("ProgressBar_val_max", 100))
+            border=@(true)
+            background_color="rgba(211, 211, 211, 0.50)"
+            fill_color="rgba(0, 255, 0, 0.75)"
+            parent=this
+            />
+</div>
+
+
 
 
 @code{
 
+
     public override void listener_setup ()
     {
         base.listener_setup ();
-        listener_add ($"BGenerator_{get_complex_resource_name ()}",
-            get_stack_tool (get_complex_resource_name ()).observable_quantity);
+        listener_add ("BGenerator_Transport_Belt_1 clock_second", Game_Page.self.clock_second);
     }
 
 
     public override void graphical_update ()
     {
         base.graphical_update ();
-        job_percentage.Set (get_job_time_percentage ());
     }
+
+
+    public void job_update ()
+    {
+        if (get_stack_tool (get_complex_resource_name ()).quantity > 0)
+        {
+            job_percentage.Set ((get_job_time_percentage () / 10) * 10);
+        }
+    }
+
 
     int previous_tim = 0;
     public int get_job_time_percentage ()
     {
-        int time = 10000;
+        float perc = Math.Min (16, get_stack_tool (get_complex_resource_name ()).quantity) / 16.0f;
+
+        int time = (int)(5000 + (1 - BezierBlend (perc)) * 5000);
         int current = (int)((Game_Engine.self.clock * 16) % time);
         int tim = (current*100) / time;
         if (tim < previous_tim)
         {
-            //((BGenerator_Line_Stock)this.memorized_parent).give_resource (this.secondary_resource_name);
+            ((BGenerator_Line_Stock)this.memorized_parent).give_resource (this.secondary_resource_name);
         }
         previous_tim = tim;
         return tim;
     }
 
 
-
-
-    public string get_complex_resource_name ()
+    float BezierBlend(float t)
     {
-        return Resource.from_resource_name_get_complex_resource_name (
-            this.main_resource_name, this.secondary_resource_name);
+        return t * t * (3.0f - 2.0f * t);
     }
 
-
-    public void increment ()
-    {
-        Manager_Resource.resource_transfer (
-            Game_Engine.self.manager_resource,
-            this.generator.manager_resource_tool,
-            this.main_resource_name,
-            get_complex_resource_name (),
-            1);
-    }
 
 
 

@@ -8,6 +8,7 @@
     [Parameter] public string fill_color { get; set; }
     [Parameter] public bool border { get; set; }
     [Parameter] public ObservableProperty<int> val_max { get; set; } = new ObservableProperty<int> ("ProgressBar_val_max", 100);
+    [Parameter] public int val_max_coeff { get; set; } = 1;
     [Parameter] public ObservableProperty<int> val_current { get; set; }
 
 
@@ -72,12 +73,12 @@
         {
             val = 0;
         }
-        else if (val > this.val_max)
+        else if (val > this.val_max * this.val_max_coeff)
         {
-            val = this.val_max;
+            val = this.val_max * this.val_max_coeff;
         }
 
-        float percentage = val_now / (float)this.val_max;
+        float percentage = val_now / (float)(this.val_max * this.val_max_coeff);
 
         float content_width_original = percentage * (this.position.width);
         content_width_original = (float)Math.Ceiling (content_width_original);

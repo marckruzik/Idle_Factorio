@@ -11,6 +11,7 @@ using CsvHelper.Configuration;
 using System.Net.Http;
 using NS_Blazora_Basic;
 using System.Net.Http.Headers;
+using Blazora.Components.BGenerator;
 
 namespace Blazora.Script
 {
@@ -85,12 +86,41 @@ namespace Blazora.Script
             quickstart ("burner_drill", 4);
             quickstart ("assembling_machine_1", 4);
             quickstart ("iron_gear", 8);
-            quickstart ("inserter_1", 6);
+            quickstart ("transport_belt_1", 8);
+            quickstart ("inserter_1", 8);
             quickstart ("electronic_circuit", 8);
-            quickstart ("transport_belt_1", 6);
 
+            quickstart_set_transport_belt_1 ();
         }
 
+
+        private static void quickstart_set_transport_belt_1 ()
+        {
+            string resource_name = "transport_belt_1";
+            List<BGenerator> list_bgenerator = BGenerator.from_game_page_get_list_bgenerator ()
+                .Where (bgenerator => bgenerator.generator.has_stack_tool_containing (resource_name) == true)
+                .ToList ();
+            foreach (BGenerator bgenerator in list_bgenerator)
+            {
+                List<string> list_resource_name_similar =
+                    Resource.from_resource_name_main_and_list_resource_name_get_list_resource_name_similar (
+                        resource_name,
+                        bgenerator.generator.manager_resource_tool.get_resource_mix ().get_list_resource_name ());
+                foreach (string resource_name_similar in list_resource_name_similar)
+                {
+                    if (bgenerator.generator.manager_resource_tool
+                        .from_resource_name_contain_resource_stack (resource_name_similar) == false)
+                    {
+                        continue;
+                    }
+                    bgenerator.generator.manager_resource_tool
+                        .from_resource_name_and_resource_quantity_add_resource (
+                            resource_name_similar, 1);
+                }
+
+                bgenerator.state_change ();
+            }
+        }
 
         public static void quickstart (string resource_name, int quantity_min)
         {

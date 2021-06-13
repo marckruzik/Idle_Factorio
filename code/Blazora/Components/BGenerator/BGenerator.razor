@@ -142,19 +142,6 @@
     {
         base.listener_setup ();
 
-        //Console.WriteLine ("listener setup");
-        //listener_add ("BGenerator tool", get_stack_tool ().observable_quantity);
-        //listener_add ("BGenerator stock_quantity", get_stock_quantity (get_result_resource_name ()));
-        //listener_add ("BGenerator stock_max", get_stock_max (get_result_resource_name ()));
-        //listener_add ("BGenerator stack_max", get_stack_quantity_max (get_result_resource_name ()));
-        //listener_add (() => Game_Action.from_recipe_get_job_time_percentage (this.recipe) != 0);
-
-        foreach (string resource_name in this.recipe.mix_component.get_list_resource_name ())
-        {
-            //listener_add ($"BGenerator loc_quantity {resource_name}", get_loc_quantity (resource_name));
-            //listener_add (get_stock_quantity (resource_name));
-        }
-
     }
 
 

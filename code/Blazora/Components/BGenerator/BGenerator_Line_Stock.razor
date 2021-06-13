@@ -33,39 +33,27 @@
                 />
 
 
-    List<(int, string)> list_tup = new List<(int, string)> ()
+    if (Game_Engine.self.manager_toggle.is_true ($"know_transport_belt_1") == true)
     {
-        (1, "transport_belt_1"),
-        (2, "inserter_1"),
-    };
-
-    foreach ((int, string) tup in list_tup)
-    {
-        int x = tup.Item1;
-        string tool_resource_name = tup.Item2;
-
-        if (Game_Engine.self.manager_toggle.is_true ($"know_{tool_resource_name}") == true)
-        {
-            string local_toggle_id = this.generator.get_toggle_id_know (tool_resource_name);
-            if (Game_Engine.self.manager_toggle.is_true (local_toggle_id) == false)
-            {
-            <Cellicon picture_filename=@(Resource.from_resource_name_get_resource_filename (tool_resource_name))
-                position=@(new Position (s * x, s * i, s, s))
-                text_middle_right="^"
-                action=@(() => Game_Action.upgrade_accessory (this.generator_id, local_toggle_id))
-                />
-            }
-            else
-            {
-            <BGenerator_Transport_Belt_1 
-                position=@(new Position (s * x, s * i, s, s))
-                main_resource_name=@(tool_resource_name)
-                secondary_resource_name=@(resource_name)
-                parent=this
-                />
-            }
-        }
+        <BGenerator_Transport_Belt_1
+            position=@(new Position (s * 1, s * i, s, s))
+            main_resource_name=@("transport_belt_1")
+            secondary_resource_name=@(resource_name)
+            parent=this
+            />
     }
+    
+
+    if (Game_Engine.self.manager_toggle.is_true ($"know_inserter_1") == true)
+    {
+        <BGenerator_Inserter_1
+            position=@(new Position (s * 2, s * i, s, s))
+            main_resource_name=@("inserter_1")
+            secondary_resource_name=@(resource_name)
+            parent=this
+            />
+    }
+    
 
 
 
@@ -77,9 +65,15 @@
                              give_resource (resource_name);
                          })
                 val_authorize=@(action_ready (resource_name))
-                text_bottom_right=@($"{get_loc_val (resource_name)}/{get_loc_min (resource_name)}")
+                text_bottom_right=@($"{get_loc_val (resource_name)}")
                 stack_val_current=@(get_loc_quantity (resource_name))
                 stack_val_max=@(get_stack_quantity_max (resource_name))
+                parent=this
+              />
+
+    <Cellicon 
+                position=@(new Position (s * 4, s * i, s, s))
+                text_bottom_left=@($"/{get_loc_min (resource_name)}")
                 parent=this
               />
 
