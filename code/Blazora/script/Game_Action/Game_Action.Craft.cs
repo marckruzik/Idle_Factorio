@@ -48,11 +48,24 @@ namespace Blazora.Script
             Action action = delegate ()
             {
                 Game_Engine.self.manager_resource.from_resource_mix_add_resource (mix_result);
+                game_stat_add (mix_result);
             };
 
             Job job = Game_Engine.self.manager_job.from_action_and_time_total_add_job (action, recipe.time);
             job.id = from_recipe_get_job_id (recipe);
         }
 
+
+
+
+        public static void game_stat_add (Resource_Mix resource_mix)
+        {
+            foreach (Resource_Stack resource_stack in resource_mix.list_resource_stack)
+            {
+                Game_Stat.self.stat_add (resource_stack.resource_name, resource_stack.quantity);
+                Console.WriteLine (Game_Stat.self[resource_stack.resource_name]);
+            }
+        }
     }
+
 }

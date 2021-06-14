@@ -79,18 +79,18 @@
 }
 
 
+    <div style="margin-left: 36px;">
 
+        @foreach (Generator generator in Game_Engine.self.manager_generator.Values)
+        {
+            <CascadingValue Value=generator.id >
+                <BGenerator />
+            </CascadingValue>
 
-    @foreach (Generator generator in Game_Engine.self.manager_generator.Values)
-    {
-        <CascadingValue Value=generator.id >
-            <BGenerator /> 
-        </CascadingValue>
+            <div><br /></div>
+        }
 
-        <div><br /></div>
-    }
-
-
+    </div>
 </div>
 
 

@@ -12,6 +12,7 @@ using System.Net.Http;
 using NS_Blazora_Basic;
 using System.Net.Http.Headers;
 using Blazora.Components.BGenerator;
+using Blazora.Script;
 
 namespace Blazora.Script
 {
@@ -34,6 +35,14 @@ namespace Blazora.Script
             {
                 string toggle_id_transport_belt_1 = generator_locally.get_toggle_id_know ("transport_belt_1");
                 Game_Engine.self.manager_toggle.set (toggle_id_transport_belt_1, false);
+            }
+
+            Game_Stat.self = new Game_Stat ();
+            Game_Stat.self.stat_create ("time_played");
+
+            foreach (string resource_name in Resource.list_resource_name)
+            {
+                Game_Stat.self.stat_create (resource_name);
             }
         }
 

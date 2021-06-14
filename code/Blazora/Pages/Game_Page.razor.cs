@@ -7,6 +7,7 @@ using System.Timers;
 using System.Diagnostics;
 using Blazora.Components;
 using NS_Blazora_Basic;
+using Blazora.Script;
 
 namespace Blazora.Pages
 {
@@ -91,6 +92,7 @@ namespace Blazora.Pages
                     number = 0;
                     //Console.WriteLine ($"Game_Page Game_Component count: {Game_Page.list_component.Count}");
                     this.clock_second.Set ((int)current_second);
+                    Game_Stat.self.stat_add ("time_played", 1);
                 }
                 await Task.Delay (this.graphical_interval);
             }

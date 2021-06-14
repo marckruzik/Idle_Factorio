@@ -15,6 +15,7 @@ namespace NS_Game_Engine
         public Manager_Generator manager_generator;
         public Manager_Job manager_job;
         public Manager_Toggle manager_toggle;
+        public Manager_Quest manager_quest;
 
         public static bool initialized = false;
 
