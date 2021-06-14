@@ -5,6 +5,10 @@
     <RazorLangVersion>3.0</RazorLangVersion>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Content Remove="wwwroot\data\quest.csv" />
+  </ItemGroup>
+
 
   <ItemGroup>
     <PackageReference Include="CsvHelper" Version="27.1.0" />
@@ -19,6 +23,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Include="wwwroot\data\quest.csv" />
     <None Include="wwwroot\data\recipe.csv" />
     <None Include="wwwroot\data\resource.csv" />
     <None Include="wwwroot\images\sprite-sheet-3d3a8d8b3ece0e13191a2ea142d21131.png" />

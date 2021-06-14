@@ -63,7 +63,6 @@ namespace Blazora.Script
             foreach (Resource_Stack resource_stack in resource_mix.list_resource_stack)
             {
                 Game_Stat.self.stat_add (resource_stack.resource_name, resource_stack.quantity);
-                Console.WriteLine (Game_Stat.self[resource_stack.resource_name]);
             }
         }
     }

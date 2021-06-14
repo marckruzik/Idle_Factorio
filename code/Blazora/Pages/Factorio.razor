@@ -59,6 +59,8 @@
         await setup ();
 
         Game_Setup.listener_flag_setup ();
+
+        this.clock_second.changed += (v) => Game_Engine.self.manager_quest.logical_update ();
     }
 
 

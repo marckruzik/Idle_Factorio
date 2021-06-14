@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using NS_Game_Engine.NS_Quest;
 using NS_Manager_Resource;
 
 
@@ -31,10 +32,11 @@ namespace NS_Game_Engine
 
             Game_Engine.self = new Game_Engine ();
 
-            Game_Engine.self.manager_resource = create_manager_resource ();
+            //Game_Engine.self.manager_resource = create_manager_resource ();
             Game_Engine.self.manager_generator = create_manager_generator ();
             Game_Engine.self.manager_job = create_manager_job ();
             Game_Engine.self.manager_toggle = new Manager_Toggle ();
+            Game_Engine.self.manager_quest = new Manager_Quest ();
 
 
         }
