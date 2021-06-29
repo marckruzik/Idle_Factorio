@@ -26,10 +26,18 @@
 }
 else
 {
-    <div style="
+    <style>
+        #panel_end td:nth-child(2)
+        {
+            width: 120px;
+        }
+    </style>
+
+    <div id="panel_end" style="
         background-color: #BBFF9E;
         border: 1px solid black;
         padding: 16px;
+        width: 324px;
         ">
     <div style="font-size: 30px; text-align: center;">
         YOU WON
@@ -39,7 +47,7 @@ else
     <table>
         @foreach ((string, string) name_val in this.list_name_val)
         {
-            <tr><td style="text-align: right;">@name_val.Item1</td><td>&nbsp;&nbsp;&nbsp;&nbsp;@name_val.Item2</td>
+            <tr><td style="text-align: right;">@(@name_val.Item1)</td><td>&nbsp;&nbsp;&nbsp;@((MarkupString)name_val.Item2)</td>
             </tr>
         }
 
@@ -88,10 +96,11 @@ else
 
         foreach (string resource_name in Resource.get_list_resource_name_craftable ())
         {
+            string img = $"<img style=\"width:16px;height:16px;\" src=\"images/{Resource.from_resource_name_get_resource_filename (resource_name)}\" />";
             list_name_val.Add
                 ((
                 $"{Resource.from_resource_name_to_resource_name_readable (resource_name)} crafted",
-                Game_Stat.self[resource_name].ToString ()
+                $"{img} {Game_Stat.self[resource_name]}"
                 ));
         }
     }

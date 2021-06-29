@@ -22,95 +22,89 @@
 
 @{ 
 
-
-
-
     int chest_height = (3 + this.recipe.get_component_count ()) * s;
-
+    
+    int start_line = this.recipe.get_component_count () - 1;
 }
-
-
-
 
 <div style="
     width: 256px;
     height: @($"{chest_height}px");
     position: relative;
     ">
-    @{ 
-        Resource_Stack stack_tool = get_stack_tool ();
-    }
 
-    @if (stack_tool.resource_name == "pickaxe")
-    {
-        <BGenerator_Header_Pickaxe parent=this />
-    }
-    else if (stack_tool.resource_name == "burner_drill")
-    {
-        <BGenerator_Header_Drill parent=this />
-    }
-    else if (stack_tool.resource_name == "hand" || stack_tool.resource_name == "fire")
-    {
-        <BGenerator_Header_Hand parent=this />
-    }
-    else
-    {
-        <BGenerator_Header_Machine parent=this />
-    }
-
-
-
-
-
-    <!-- Line 2 -->
-
-    @{ int start_line = this.recipe.get_component_count () - 1;}
-
-
-    <BGenerator_Upgrade_Button 
-              position=@(new Position (s*7, s*(start_line+0), s, s))
-              parent=this
+    <Cellicon 
+            picture_filename=@(Resource.from_resource_name_get_resource_filename (get_result_resource_name ()))
+            position=@(new Position (s * 0, s*(start_line+1), s, s))
             />
 
+    <div style="
+        position: relative;
+        left: @($"{s}px");
+        ">
+        @{
+            Resource_Stack stack_tool = get_stack_tool ();
+        }
+
+        @if (stack_tool.resource_name == "pickaxe")
+        {
+            <BGenerator_Header_Pickaxe parent=this />
+        }
+        else if (stack_tool.resource_name == "burner_drill")
+        {
+            <BGenerator_Header_Drill parent=this />
+        }
+        else if (stack_tool.resource_name == "hand" || stack_tool.resource_name == "fire")
+        {
+            <BGenerator_Header_Hand parent=this />
+        }
+        else
+        {
+            <BGenerator_Header_Machine parent=this />
+        }
 
 
-    <!-- Line 3 -->
-
-    
-
-    <BGenerator_Chest 
-           position=@(new Position (s*0, s*(start_line+1), s*8, s*1))
-           parent=this
-           />
-
-    
-    <!-- Line 4 -->
 
 
-    <BGenerator_Time_Button 
-                            position=@(new Position (s*0, s*(start_line+2), s, s))
-                            parent=this
-                            />
 
-    @{ 
-        int quarter = s / 4;
-    }
-
-    <BGenerator_ProgressBar 
-                 position=@(new Position (s*1, s*(start_line+2)+quarter, s*6, s-quarter*2))
-                 parent=this
-                />
+        <!-- Line 2 -->
 
 
-    <BGenerator_Total_Info 
-                position=@(new Position (s*7, s*(start_line+2), s, s))
-                parent=this
-                />
+
+        <BGenerator_Upgrade_Button position=@(new Position (s*7, s*(start_line+0), s, s))
+                                   parent=this />
+
+
+
+        <!-- Line 3 -->
+
+
+
+        <BGenerator_Chest position=@(new Position (s*0, s*(start_line+1), s*8, s*1))
+                          parent=this />
+
+
+        <!-- Line 4 -->
+
+
+        <BGenerator_Time_Button position=@(new Position (s*0, s*(start_line+2), s, s))
+                                parent=this />
+
+        @{
+            int quarter = s / 4;
+        }
+
+        <BGenerator_ProgressBar position=@(new Position (s*1, s*(start_line+2)+quarter, s*6, s-quarter*2))
+                                parent=this />
+
+
+        <BGenerator_Total_Info position=@(new Position (s*7, s*(start_line+2), s, s))
+                               parent=this />
 
 
     </div>
 
-
+</div>
 
 
 

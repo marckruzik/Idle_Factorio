@@ -6,7 +6,6 @@
 - resource, global red when none
 
 
-- won panel narrower
 
 --------------------------------------
 
@@ -22,6 +21,7 @@
 - Tab about
 - copyrights
 - Google analytics
+- End Panel credits
 
 --------------------------------------
 

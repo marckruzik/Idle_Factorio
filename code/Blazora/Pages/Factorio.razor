@@ -37,22 +37,22 @@
 <h3>Factorio</h3>
     
     <button @onclick=@(() => Game_Setup.quickstart ()) >Quickstart</button>
-    <button @onclick=@(() => { Factorio.nb += 1; Game_Page.self.change_state (); }) >End</button>
+    <button @onclick=@(() => { force_end (); }) >End</button>
 
     <br /><br />
 
 @code{
 
-        public async Task setup ()
+    public async Task setup ()
+    {
+        if (Game_Setup.initialized == false)
         {
-            if (Game_Setup.initialized == false)
-            {
-                await Game_Setup.setup ();
-                Game_Setup.initialized = true;
+            await Game_Setup.setup ();
+            Game_Setup.initialized = true;
 
-                Console.WriteLine ("Page setup finished");
-            }
+            Console.WriteLine ("Page setup finished");
         }
+    }
 
 
     protected override async Task OnInitializedAsync ()
@@ -61,7 +61,7 @@
 
         await base.OnInitializedAsync ();
         await setup ();
-        
+
 
         Game_Setup.listener_flag_setup ();
 
@@ -81,6 +81,15 @@
     }
 
 
+    public void force_end ()
+    {
+        Game_Engine.self.manager_quest.Values
+            .Where (quest => quest.state != Quest.State.unlocked)
+            .ToList ()
+            .ForEach (quest => quest.state = Quest.State.unlocked);
+    }
+
+
     protected override void OnInitialized ()
     {
         base.OnInitialized ();
@@ -95,7 +104,7 @@
 }
 
 
-    <div style="margin-left: 36px;">
+    <div style="">
 
         @{ 
             List<Generator> list_generator_authorized = Game_Engine.self.manager_generator.Values
