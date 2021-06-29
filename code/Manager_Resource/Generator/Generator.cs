@@ -35,7 +35,7 @@ namespace NS_Manager_Resource
         }
 
 
-        public bool has_stack_tool_containing (string resource_name_tool)
+        public bool has_stack_tool_with_name_similar (string resource_name_tool)
         {
             List<string> list_resource_name_similar =
                 Resource.from_resource_name_main_and_list_resource_name_get_list_resource_name_similar (

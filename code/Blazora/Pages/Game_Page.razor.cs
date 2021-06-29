@@ -36,6 +36,7 @@ namespace Blazora.Pages
             StartTimer ();
 
             graphical_thread_task ();
+            Console.WriteLine ("graphical_thread_task next");
 
             await Task.CompletedTask;
         }
@@ -66,11 +67,17 @@ namespace Blazora.Pages
         }
 
 
+        public void change_state ()
+        {
+            StateHasChanged ();
+        }
+
         long total = 0;
         long last_second = 0;
         int number = 0;
         async Task graphical_thread_task ()
         {
+            Console.WriteLine ("graphical_thread_task start");
             while (true)
             {
                 if (this.graphical_running == false)
@@ -92,7 +99,10 @@ namespace Blazora.Pages
                     number = 0;
                     //Console.WriteLine ($"Game_Page Game_Component count: {Game_Page.list_component.Count}");
                     this.clock_second.Set ((int)current_second);
-                    Game_Stat.self.stat_add ("time_played", 1);
+                    if (Game_Stat.self != null)
+                    {
+                        Game_Stat.self.stat_add ("time_played", 1);
+                    }
                 }
                 await Task.Delay (this.graphical_interval);
             }
@@ -109,6 +119,7 @@ namespace Blazora.Pages
         public virtual void graphical_update ()
         {
             //Console.WriteLine ("graphical update");
+            
             Game_Engine.self.graphical_update ();
 
             foreach (Game_Component game_component in Game_Page.list_component)
@@ -121,6 +132,7 @@ namespace Blazora.Pages
 
         public virtual void Dispose ()
         {
+            Console.WriteLine ("Game_Page Dispose");
             this.graphical_running = false;
             this.timer_logic.Dispose ();
             this.timer_logic = null;

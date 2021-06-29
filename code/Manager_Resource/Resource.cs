@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Text;
 using System.Linq;
 using NS_Blazora_Basic;
+using System.Text.RegularExpressions;
+using System.Globalization;
 
 namespace NS_Manager_Resource
 {
@@ -112,10 +114,31 @@ namespace NS_Manager_Resource
             return complex_resource_name.Split ("-")[1];
         }
 
+
         public static string from_resource_name_get_complex_resource_name (
             string resource_name_a, string resource_name_b)
         {
             return $"{resource_name_a}-{resource_name_b}";
+        }
+
+
+        public static List<string> get_list_resource_name_craftable ()
+        {
+            return Resource.list_resource_name
+                .Where (resource_name => Resource.from_resource_name_is_complex_resource_name (resource_name) == false)
+                .Where (resource_name => Resource.list_mine_resource_name.Contains (resource_name) == false)
+                .Where (resource_name => Resource.list_unique_resource_name.Contains (resource_name) == false)
+                .ToList ();
+        }
+
+
+        public static string from_resource_name_to_resource_name_readable (string resource_name)
+        {
+            string resource_name_readable = resource_name.Replace ("_", " ");
+            resource_name_readable = new Regex (@"\d+$").Replace (resource_name_readable, "");
+            resource_name_readable = resource_name_readable.Trim ();
+            resource_name_readable = CultureInfo.CurrentCulture.TextInfo.ToTitleCase (resource_name_readable);
+            return resource_name_readable;
         }
     }
 }

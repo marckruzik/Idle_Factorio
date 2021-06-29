@@ -45,7 +45,7 @@ namespace Blazora.Script
                 Resource.list_resource_name.
                 ToDictionary (x => x, x => new ObservableProperty<int> ("R_" + x, 1));
 
-            //Console.WriteLine ("csv resource finished");
+            Console.WriteLine ("csv resource finished");
         }
 
     }

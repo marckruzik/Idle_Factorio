@@ -1,15 +1,17 @@
 
-- transport belt, maximum 16
-- accessory, red when no item available
+
+- transport_belt, advantage destination (from 1>0 to 0>1)
+
+- resource, orange when insufficant
+- resource, global red when none
 
 
+- won panel narrower
 
 --------------------------------------
 
 
-- clear button
 
-- FPS Counter, permanent top
 
 
 
@@ -29,11 +31,6 @@
 --------------------------------------
 
 
-- quest
-
-- win condition
-
---------------------------------------
 
 
 --------------------------------------
@@ -44,3 +41,9 @@
 
 
 - feedback when impossible
+
+- FPS Counter, permanent top
+- transfer resource equilibrium between askers
+- clear button
+- belt and inserter, orange when insufficant
+- tool, orange when insufficant

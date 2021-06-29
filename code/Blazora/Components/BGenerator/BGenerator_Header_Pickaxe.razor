@@ -50,6 +50,7 @@
                 position=@(new Position (s * 6, s * (this.recipe.get_component_count () - 1), s, s))
                 text_middle_right="^"
                 action=@(() => Game_Action.upgrade_tool (this.generator_id, "burner_drill"))
+                val_authorize=@(is_action_authorized ())
                 />
 }
 
@@ -62,5 +63,18 @@
         this.id = $"BGenerator_Header_Pickaxe [{get_result_resource_name ()}]";
         base.OnInitialized ();
     }
+
+    public override void listener_setup ()
+    {
+        base.listener_setup ();
+        listener_add ("BGenerator_Header_Pickaxe tool", Game_Engine.self.manager_resource.from_resource_name_get_resource_stack ("burner_drill").observable_quantity);
+    }
+
+    public bool is_action_authorized ()
+    { 
+        return Game_Engine.self.manager_resource.from_resource_name_get_resource_quantity (
+            "burner_drill") >= 1;
+    }
+
 
 }

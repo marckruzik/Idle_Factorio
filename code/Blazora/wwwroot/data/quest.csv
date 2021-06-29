@@ -1,2 +1,15 @@
-id,message,mix_resource_related,mix_objective,gain
-1,Reach 1 iron ore to unlock,iron_ore_mine*1,iron_ore*1,coal_ore
+id,message,mix_objective,gain
+1,Mine 4 Iron Ore to unlock,iron_ore*4,coal_ore
+2,Mine 6 Coal Ore to unlock,coal_ore*6,iron_plate
+3,Reach Iron Plate chest Level 2 to unlock (upgrade the chest when it is full),level_reached:iron_plate*2,stone_ore
+4,Mine 10 Stone Ore to unlock (upgrade the chest when it is full),stone_ore*10,furnace_stone
+5,Equip 2 Stone Furnace to the iron plate fire to unlock,special:furnace_stone*2,iron_gear
+6,Craft 3 Iron Gear to unlock,iron_gear*3,burner_drill
+7,"Equip all 3 mines (iron, coal, stone) with at least a drill to unlock",special:burner_drill*3,transport_belt_1
+8,Equip the Iron Plate with at least 2 Transport Belt for Iron Ore and 2 Transport Belt for Coal Ore to unlock (Transport Belts transfer resources automatically),special:transport_belt_1*1,copper_ore
+9,Mine 128 Copper Ore to unlock,copper_ore*128,copper_plate
+10,Craft 6 Copper Plate to unlock,copper_plate*6,copper_cable
+11,Craft 12 Copper Cable to unlock,copper_cable*12,electronic_circuit
+12,Craft 4 Electronic Circuit to unlock,electronic_circuit*4,inserter_1
+13,Equip the Iron Plate with at least 2 Inserters for Iron Ore and 2 Inserters for Coal Ore to unlock (Inserters transfer more resources with each click and transport belts),special:inserter_1*2,assembling_machine_1
+14,Reach Assembling Machine chest Level 2 to unlock,level_reached:assembling_machine_1*2,endgame

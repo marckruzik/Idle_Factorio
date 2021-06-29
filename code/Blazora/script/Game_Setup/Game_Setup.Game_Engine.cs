@@ -1,5 +1,6 @@
 ﻿using NS_Game_Engine;
 using NS_Manager_Resource;
+using System;
 
 namespace Blazora.Script
 {
@@ -19,7 +20,6 @@ namespace Blazora.Script
             Manager_Resource stock_manager_resource = new Manager_Resource ();
             stock_manager_resource.id = "MR_Game_Engine";
 
-            //Console.WriteLine ("stock_manager_resource_setup");
 
             // Configuration
             stock_manager_resource.chest_size = Resource.chest_size;
@@ -37,6 +37,8 @@ namespace Blazora.Script
             }
 
             Game_Engine.self.manager_resource = stock_manager_resource;
+
+            Console.WriteLine ("stock_manager_resource_setup finished");
         }
 
 

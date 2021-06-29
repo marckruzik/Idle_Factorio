@@ -10,7 +10,7 @@
 
     public ObservableProperty<int> job_percentage = new ObservableProperty<int> ("job_percentage", 0);
 
-    public int stack_max = 16;
+    public int stack_max = 32;
 
 }
 
@@ -87,7 +87,7 @@
     {
         float perc = Math.Min (16, get_stack_tool (get_complex_resource_name ()).quantity) / 16.0f;
 
-        int time = (int)(5000 + (1 - BezierBlend (perc)) * 5000);
+        int time = (int)(1000 + (1 - BezierBlend (perc)) * 5000);
         int current = (int)((Game_Engine.self.clock * 16) % time);
         int tim = (current*100) / time;
         if (tim < previous_tim)

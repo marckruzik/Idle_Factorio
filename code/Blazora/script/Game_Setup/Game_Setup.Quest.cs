@@ -22,18 +22,17 @@ namespace Blazora.Script
                 string id = (string)record["id"];
                 string message = (string)record["message"];
 
-                string mix_resource_related_txt = (string)record["mix_resource_related"];
-                Resource_Mix resource_mix_related = 
-                    Resource_Mix.from_resource_mix_text_get_resource_mix (mix_resource_related_txt);
-
-                string mix_objective_txt = (string)record["mix_objective"];
-                Resource_Mix resource_mix_objective =
-                    Resource_Mix.from_resource_mix_text_get_resource_mix (mix_objective_txt);
-                Objective objective = Objective.from_resource_mix_get_objective (resource_mix_objective);
+                string objective_txt = (string)record["mix_objective"];
+                Objective objective = Objective.from_objective_txt_get_objective (objective_txt);
+                
+                Resource_Mix resource_mix_related = objective.resource_mix;
 
                 string gain = (string)record["gain"];
-                Recipe recipe = Game_Engine.self.manager_generator.from_recipe_result_resource_name_get_recipe (gain);
-
+                Recipe recipe = null;
+                if (gain != "endgame")
+                {
+                    recipe = Game_Engine.self.manager_generator.from_recipe_result_resource_name_get_recipe (gain);
+                }
                 Quest quest = new Quest ();
                 quest.id = id;
                 quest.message = message;
@@ -46,6 +45,8 @@ namespace Blazora.Script
             }
 
             Game_Engine.self.manager_quest["1"].state = Quest.State.started;
+
+            Console.WriteLine ("load quest finished");
         }
 
 

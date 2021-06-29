@@ -20,15 +20,17 @@ namespace NS_Game_Engine.NS_Quest
         }
         public State state;
 
-        public void logical_update ()
+        public bool logical_update ()
         {
             if (this.state == State.started)
             {
                 if (this.objective.is_accomplished () == true)
                 {
                     Game_Engine.self.manager_quest.quest_solve (this);
+                    return true;
                 }
             }
+            return false;
         }
     }
 }

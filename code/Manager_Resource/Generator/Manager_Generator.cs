@@ -13,12 +13,19 @@ namespace NS_Manager_Resource
             return this[recipe.get_text ()];
         }
 
+
         public Recipe from_recipe_result_resource_name_get_recipe (string recipe_result_resource_name)
+        {
+            return from_recipe_result_resource_name_get_generator (recipe_result_resource_name)
+                .recipe;
+        }
+
+
+        public Generator from_recipe_result_resource_name_get_generator (string recipe_result_resource_name)
         {
             return this.Values
                 .FirstOrDefault (
-                    generator => generator.recipe.get_first_result_resource_name () == recipe_result_resource_name)
-                .recipe;
+                    generator => generator.recipe.get_first_result_resource_name () == recipe_result_resource_name);
         }
 
 

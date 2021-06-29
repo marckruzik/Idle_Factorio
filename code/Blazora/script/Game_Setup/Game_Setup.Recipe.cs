@@ -23,7 +23,7 @@ namespace Blazora.Script
                 //break;
             }
 
-            //Console.WriteLine ("csv recipe finished");
+            Console.WriteLine ("csv recipe finished");
         }
 
     }

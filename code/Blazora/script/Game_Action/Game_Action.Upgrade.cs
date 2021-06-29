@@ -61,7 +61,7 @@ namespace Blazora.Script
         {
             Game_Engine.self.manager_toggle.set (toggle_id, true);
             List<BGenerator> list_bgenerator = BGenerator.from_game_page_get_list_bgenerator ()
-                .Where (bgenerator => bgenerator.generator.has_stack_tool_containing (generator_resource_concerned) == true)
+                .Where (bgenerator => bgenerator.generator.has_stack_tool_with_name_similar (generator_resource_concerned) == true)
                 .ToList ();
             foreach (BGenerator bgenerator in list_bgenerator)
             {
@@ -75,6 +75,11 @@ namespace Blazora.Script
             BGenerator bgenerator = BGenerator.from_generator_id_get_bgenerator (generator_id);
             bgenerator.recipe.list_tool_kind[0] = Resource.from_resource_name_get_resource (tool_resource_name);
             bgenerator_reload (generator_id);
+            Manager_Resource.resource_transfer (
+                Game_Engine.self.manager_resource,
+                bgenerator.generator.manager_resource_tool,
+                tool_resource_name,
+                1);
         }
 
 
