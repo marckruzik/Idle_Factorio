@@ -28,15 +28,13 @@
 }
 
 <div style="
-    width: 256px;
+    width: @($"{s*9}px");
     height: @($"{chest_height}px");
     position: relative;
     ">
 
-    <Cellicon 
-            picture_filename=@(Resource.from_resource_name_get_resource_filename (get_result_resource_name ()))
-            position=@(new Position (s * 0, s*(start_line+1), s, s))
-            />
+    <Cellicon picture_filename=@(Resource.from_resource_name_get_resource_filename (get_result_resource_name ()))
+              position=@(new Position (s * 0, s*(start_line+1), s, s)) />
 
     <div style="
         position: relative;

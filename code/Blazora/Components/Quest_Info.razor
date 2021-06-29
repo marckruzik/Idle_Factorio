@@ -23,7 +23,7 @@
     width:@($"{Program.cell_size*8}px");
     padding: 16px;
     border: 1px solid black;
-    background-color: #FFF7D1;
+    background-color: @(get_disabled () ? "#FFF7D1" : "#DCF9CF");
     margin-left: @($"{Program.cell_size}px");
     ">
 
@@ -60,9 +60,10 @@
         margin-top: 8px;
         ">
         <button @onclick=unlock disabled=@(get_disabled ())
-            style="
+                style="
                 width: 100%;
                 height: 32px;
+                background-color: @(get_disabled () ? "" : "#7ADD4F");
             ">
             Unlock
         </button>

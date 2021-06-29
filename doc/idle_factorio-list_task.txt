@@ -2,8 +2,6 @@
 
 - transport_belt, advantage destination (from 1>0 to 0>1)
 
-- resource, orange when insufficant
-- resource, global red when none
 
 
 

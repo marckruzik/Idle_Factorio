@@ -130,9 +130,9 @@
 
     public string get_background_color_authorized ()
     {
-        string authorized_auto = "#8BFF5A";
-        string authorized_auto_impossible = "#FF924F";
-        string authorized_nonauto = "#9D99FF";
+        string authorized_auto = Game_Component.color_light_green;
+        string authorized_auto_impossible = Game_Component.color_light_orange;
+        string authorized_nonauto = Game_Component.color_light_blue;
 
         if (is_auto_available () == false)
         {

@@ -29,6 +29,11 @@ namespace Blazora.Script
 
         public static void action_upgrade (Recipe recipe)
         {
+            if (action_upgrade_is_ready (recipe) == false)
+            {
+                return;
+            }
+
             string resource_name = Game_Engine.self
                .manager_generator
                .from_recipe_get_generator (recipe)

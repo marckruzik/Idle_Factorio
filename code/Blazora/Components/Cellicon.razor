@@ -18,7 +18,7 @@
     [Parameter] public string text_bottom_right { get; set; } = "";
 
     [Parameter] public string background_color_default { get; set; } = "transparent";
-    [Parameter] public string background_color_authorized { get; set; } = "#9D99FF";
+    [Parameter] public string background_color_authorized { get; set; } = Game_Component.color_light_blue;
     [Parameter] public bool border { get; set; } = false;
 
     [Parameter] public ObservableProperty<int> stack_val_current { get; set; }
@@ -221,7 +221,7 @@
             }
             else
             {
-                return "#A33E42";
+                return Game_Component.color_light_red;
             }
         }
         else

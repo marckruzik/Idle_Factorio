@@ -26,10 +26,21 @@
 
     string resource_name = component_stack.resource_name;
 
+    string global_color;
+    if (get_stock_val (resource_name) > 0)
+    {
+        global_color = "transparent";
+    }
+    else
+    {
+        global_color = Game_Component.color_light_red;
+    }
+
     // Global stock
     <Cellicon picture_filename=@(Resource.from_resource_name_get_resource_filename (resource_name))
                 position=@(new Position (s * 0, s * i, s, s))
                 text_bottom_right=@($"{get_stock_val (resource_name)}")
+                background_color_default=@(global_color)
                 />
 
 
@@ -55,7 +66,15 @@
     }
     
 
-
+    string local_color;
+    if (get_loc_val (resource_name) >= get_loc_min (resource_name))
+    {
+        local_color = Game_Component.color_light_blue;
+    }
+    else
+    {
+        local_color = Game_Component.color_light_orange;
+    }
 
     <Cellicon picture_filename=@(Resource.from_resource_name_get_resource_filename (resource_name))
                 position=@(new Position (s * 3, s * i, s, s))
@@ -64,8 +83,8 @@
                              Console.WriteLine ($"{resource_name}_in_tool_kind");
                              give_resource (resource_name, true);
                          })
-                val_authorize=@(action_ready (resource_name))
                 text_bottom_right=@($"{get_loc_val (resource_name)}")
+                background_color_authorized=@(local_color)
                 parent=this
               />
 
@@ -132,7 +151,7 @@
             }
             if (quantity_source - quantity < quantity_destination + quantity)
             {
-                quantity = (quantity_source - quantity_destination) / 2;
+                quantity = (int)Math.Ceiling((quantity_source - quantity_destination) / 2.0f);
             }
         }
 
