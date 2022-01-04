@@ -1,0 +1,245 @@
+﻿@inherits Game_Component
+
+@using BlazorApp.Shared.Models
+@using NS_Idle_Factorio_Basic 
+
+@code{
+
+    [Parameter] public string picture_filename { get; set; }
+
+    [Parameter] public System.Action action { get; set; }
+    [Parameter] public bool val_authorize { get; set; } = true;
+
+    [Parameter] public string text_top_left { get; set; } = "";
+    [Parameter] public string text_middle_left { get; set; } = "";
+    [Parameter] public string text_middle_right { get; set; } = "";
+    [Parameter] public string text_top_right { get; set; } = "";
+    [Parameter] public string text_bottom_left { get; set; } = "";
+    [Parameter] public string text_bottom_right { get; set; } = "";
+
+    [Parameter] public string background_color_default { get; set; } = "transparent";
+    [Parameter] public string background_color_authorized { get; set; } = Game_Component.color_light_blue;
+    [Parameter] public bool border { get; set; } = false;
+
+    [Parameter] public ObservableProperty<int> stack_val_current { get; set; }
+    [Parameter] public ObservableProperty<int> stack_val_max { get; set; }
+    [Parameter] public int stack_val_max_coeff { get; set; } = 1;
+
+    public ObservableProperty<bool> hover { get; set; }
+
+
+
+}
+
+
+@{ 
+    //display_name ();
+}
+
+
+
+@{ 
+    if (action != null)
+    {
+        border = true;
+    }
+
+    int s = position.width;
+
+}
+
+
+<div style="@(from_position_get_style ())">
+
+    <!-- background -->
+
+
+    <div class="layer" style="background-color: @(get_background_color());" />
+
+    @if (action != null)
+    {
+        <div class="layer" style="background-color:@(this.hover?.Value == true ? "rgba(255, 255, 255, 0.3)" : "transparent");" />
+    }
+
+
+    <!-- picture -->
+    @if (picture_filename != null)
+    {
+        <img class="layer" style=""
+                src="images/@picture_filename" />
+    }
+
+
+    <!-- value top left -->
+    @if (text_top_left != "")
+    {
+        <div class="layer">
+            <div class="text_wb" style="
+            top: 2px;
+            left: 2px;
+            ">
+                @text_top_left
+            </div>
+        </div>
+    }
+    <!-- value top right -->
+    @if (text_top_right != "")
+    {
+        <div class="layer">
+            <div class="text_wb" style="
+            top: 2px;
+            right: 2px;
+            ">
+                @text_top_right
+            </div>
+        </div>
+    }
+    <!-- value middle left -->
+    @if (text_middle_left != "")
+    {
+        <div class="layer">
+            <div class="text_wb" style="
+            @(position != null ? $"top: {(int)(position.height*0.4)}px;" : "")
+            left: 2px;
+            ">
+                @text_middle_left
+            </div>
+        </div>
+    }
+    <!-- value middle right -->
+    @if (text_middle_right != "")
+    {
+        <div class="layer">
+            <div class="text_wb" style="
+            @(position != null ? $"top: {(int)(position.height*0.4)}px;" : "")
+            right: 2px;
+            ">
+                @text_middle_right
+            </div>
+        </div>
+    }
+    <!-- value bottom left -->
+    @if (text_bottom_left != "")
+    {
+        <div class="layer">
+            <div class="text_wb" style="
+            bottom: 4px;
+            left: 2px;
+            ">
+                @text_bottom_left
+            </div>
+        </div>
+    }
+    <!-- value bottom right -->
+    @if (text_bottom_right != "")
+    {
+        <div class="layer">
+            <div class="text_wb" style="
+            bottom: 4px;
+            right: 2px;
+            ">
+                @text_bottom_right
+            </div>
+        </div>
+    }
+
+    <!-- Stack bar -->
+    @if (stack_val_current != null)
+    {
+        <ProgressBar position=@(new Position (0, s-3, s, 2))
+                        val_current=stack_val_current
+                        val_max=stack_val_max
+                        val_max_coeff=stack_val_max_coeff
+                        background_color="#FF0000"
+                        fill_color="#00FF00" 
+                        parent=this
+                     />
+    }
+
+    <!-- border -->
+    @if (border == true)
+    {
+        <div class="layer" style="outline: 1px solid black; outline-offset: -1px;" />
+    }
+
+    <!-- action -->
+    @if (action != null)
+    {
+        <div class="layer activable" style="" @onclick="@action_click" @onmouseover="mouse_in" @onmouseout="mouse_out" />
+    }
+
+
+</div>
+
+@code {
+
+
+    public override void listener_setup ()
+    {
+        base.listener_setup ();
+
+        if (this.action != null)
+        {
+            listener_add ("Cellicon hover", this.hover);
+        }
+    }
+
+
+    protected override void OnInitialized()
+    {
+        if (this.position != null)
+        {
+            this.id = $"Cellicon (x:{this.position.x},y:{this.position.y})";
+        }
+        else
+        {
+            this.id = $"Cellicon (x:?,y:?)";
+        }
+        base.OnInitialized ();
+    }
+
+
+    public void mouse_in ()
+    {
+        this.hover?.Set (true);
+    }
+
+
+    public void mouse_out ()
+    {
+        this.hover?.Set (false);
+    }
+
+
+    public string get_background_color ()
+    {
+        if (this.action != null)
+        {
+            if (this.val_authorize == true)
+            {
+                return this.background_color_authorized;
+            }
+            else
+            {
+                return Game_Component.color_light_red;
+            }
+        }
+        else
+        {
+            return this.background_color_default;
+        }
+    }
+
+
+    public void action_click ()
+    {
+        if (this.val_authorize == false)
+        {
+            return;
+        }
+        this.action ();
+    }
+
+
+
+}

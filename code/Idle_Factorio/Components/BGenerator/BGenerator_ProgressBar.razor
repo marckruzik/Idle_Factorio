@@ -1,0 +1,52 @@
+﻿@inherits BGenerator_Component
+@using BlazorApp.Shared.Models
+@using NS_Manager_Resource
+@using NS_Game_Engine
+@using Pages
+@using Idle_Factorio.Script
+@using NS_Idle_Factorio_Basic
+
+@code {
+
+
+    public ObservableProperty<int> job_percentage = new ObservableProperty<int> ("job_percentage", 0);
+
+
+}
+
+@{ 
+    display_name ();
+}
+
+
+
+<ProgressBar 
+                position=@(this.position)
+                val_current=this.job_percentage 
+                val_max=@(new ObservableProperty<int> ("ProgressBar_val_max", 100))
+                border=@(true)
+                background_color="lightgrey"
+                fill_color="forestgreen"
+                parent=this
+            />
+
+
+@code{
+
+
+    public override void graphical_update ()
+    {
+        base.graphical_update ();
+        job_percentage.Set (Game_Action.from_recipe_get_job_time_percentage (this.recipe));
+    }
+
+
+    protected override void OnInitialized()
+    {
+        this.id = $"BGenerator_ProgressBar [{this.recipe.get_first_result_resource_name ()}]";
+        base.OnInitialized ();
+    }
+
+
+
+}

@@ -1,0 +1,223 @@
+﻿@using BlazorApp.Shared.Models
+@using NS_Game_Engine
+@implements IDisposable
+@using Idle_Factorio.Pages
+@using NS_Idle_Factorio_Basic
+@using Script
+
+
+@code{
+    
+    [Parameter] public Position position { get; set; }
+    [Parameter] public Game_Component parent { get; set; }
+    public Game_Component memorized_parent;
+
+
+    Manager_Listener manager_listener = new Manager_Listener ();
+    
+    public bool need_refresh = true;
+
+    public string id = "GC_Unknown";
+
+    public List<Game_Component> list_child = new List<Game_Component> ();
+
+    public static string color_light_green = "#8BFF5A";
+    public static string color_light_orange = "#FF924F";
+    public static string color_light_blue = "#9D99FF";
+    public static string color_light_red = "#A33E42";
+
+}
+
+
+
+
+
+@code {
+
+
+    public string from_position_get_style ()
+    {
+        return $"position: absolute;" +
+                $"{(position != null ? $"left: {position.x}px" : "")};" +
+                $"{(position != null ? $"top: {position.y}px" : "")};" +
+                $"{(position != null ? $"width: {position.width}px" : "")};" +
+                $"{(position != null ? $"height: {position.height}px" : "")};";
+    }
+
+
+    protected override void OnInitialized ()
+    {
+        base.OnInitialized ();
+        listener_remove ();
+        listener_setup ();
+        Game_Page.list_component.Remove (this);
+        Game_Page.list_component.Add (this);
+        if (this.parent != null &&
+            this.parent.list_child.Contains (this) == false)
+        {
+            this.parent.list_child.Add (this);
+            this.memorized_parent = this.parent;
+            this.parent = null;
+        }
+    }
+
+
+    public int need_refresh_buffer_max = 0;
+    public int need_refresh_buffer = 0;
+
+    public virtual void graphical_update ()
+    {
+        listener_update ();
+
+        if (this.need_refresh == false)
+        {
+            return;
+        }
+
+        if (this.need_refresh_buffer == 0)
+        {
+            StateHasChanged ();
+            this.need_refresh = false;
+            this.need_refresh_buffer = this.need_refresh_buffer_max;
+        }
+        else
+        {
+            this.need_refresh_buffer -= 1;
+        }
+    }
+
+
+    public void self_child_display ()
+    {
+        Console.WriteLine (this.id);
+        foreach (Game_Component gc in ienumerable_get_child ())
+        {
+            Console.WriteLine (gc.id);
+        }
+    }
+
+    public void display_name ()
+    {
+        //Console.WriteLine ("(R) " + this.id);
+    }
+
+
+    public IEnumerable<Game_Component> ienumerable_get_child ()
+    {
+        foreach (Game_Component gc in this.list_child)
+        {
+            yield return gc;
+            foreach (Game_Component g in gc.ienumerable_get_child ())
+            {
+                yield return g;
+            }
+        }
+
+    }
+
+
+    public virtual void listener_setup ()
+    {
+        listener_remove ();
+    }
+
+
+
+
+
+    private List<IListener_Data> list_listener_data = new List<IListener_Data> ();
+
+    public void listener_add<T> (string info, ObservableProperty<T> observable)
+    {
+        listener_add (info, observable, set_need_refresh);
+    }
+
+
+    public void listener_add<T> (string info, ObservableProperty<T> observable, Action<T> action)
+    {
+        if (observable == null)
+        {
+            return;
+        }
+        observable.changed += action;
+
+        //Console.WriteLine ($"Listener for Game_Component {this.id} with [{observable.id}]{info} (total listener: {observable.get_listener_count ()})");
+
+        this.list_listener_data.Add (new Listener_Data<T> (typeof(T), observable, action));
+    }
+
+
+    public virtual void set_need_refresh ()
+    {
+        this.need_refresh = true;
+    }
+
+    public virtual void set_need_refresh<T> (T val)
+    {
+        set_need_refresh ();
+    }
+
+
+    public void listener_add<T> (Func<T> func)
+    {
+        this.manager_listener.add (func);
+    }
+
+    public void listener_update ()
+    {
+        bool need_update = this.manager_listener.need_update ();
+        if (need_update == true)
+        {
+            set_need_refresh ();
+        }
+    }
+
+    public void listener_remove ()
+    {
+        listener_remove<int> ();
+        listener_remove<string> ();
+        listener_remove<bool> ();
+        this.list_listener_data.Clear ();
+
+
+        this.manager_listener.clear ();
+    }
+
+
+    public void listener_remove<T> ()
+    {
+        foreach (IListener_Data listener_data in this.list_listener_data)
+        {
+            if (listener_data.typ != typeof (T))
+            {
+                continue;
+            }
+            Listener_Data<T> li = listener_data as Listener_Data<T>;
+            li.observable.changed -= li.action;
+        }
+    }
+
+
+
+
+
+    public void listener_replace ()
+    {
+        listener_remove ();
+        listener_setup ();
+    }
+
+
+
+    public void state_change ()
+    {
+        StateHasChanged ();
+    }
+
+
+    public virtual void Dispose ()
+    {
+        Game_Page.list_component.Remove (this);
+        listener_remove ();
+    }
+}

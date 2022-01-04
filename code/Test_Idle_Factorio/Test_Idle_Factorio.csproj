@@ -13,7 +13,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Blazora\Blazora.csproj" />
+    <ProjectReference Include="..\Idle_Factorio\Idle_Factorio.csproj" />
     <ProjectReference Include="..\Game_Engine\Game_Engine.csproj" />
     <ProjectReference Include="..\Manager_Resource\Manager_Resource.csproj" />
   </ItemGroup>

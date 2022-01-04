@@ -1,0 +1,90 @@
+﻿@inherits BGenerator_Component
+@using BlazorApp.Shared.Models
+@using NS_Manager_Resource
+@using NS_Game_Engine
+@using Idle_Factorio.Script
+ 
+
+@code{
+
+}
+@{ 
+    display_name ();
+}
+
+
+<BGenerator_Line_Stock parent=this />
+
+@{ 
+    Resource_Stack stack_tool = get_stack_tool ();
+
+}
+
+
+    <Cellicon 
+              picture_filename=@(Resource.from_resource_name_get_resource_filename (stack_tool.resource_name))
+              position=@(new Position (s * 5, s * (this.recipe.get_component_count () - 1), s, s))
+              text_middle_right=""
+              />
+
+
+@if (stack_tool.resource_name == "fire" && Game_Engine.self.manager_toggle.is_true ("know_furnace_stone") == true)
+{
+    <Cellicon 
+              picture_filename=@(Resource.from_resource_name_get_resource_filename ("furnace_stone"))
+              position=@(new Position (s * 6, s * (this.recipe.get_component_count () - 1), s, s))
+              text_middle_right="^"
+              action=@(() => Game_Action.upgrade_tool (this.generator_id, "furnace_stone"))
+              val_authorize=@(is_action_authorized ())
+              />
+}
+else if (stack_tool.resource_name == "hand" && Game_Engine.self.manager_toggle.is_true ("know_assembling_machine_1") == true)
+{
+    <Cellicon 
+              picture_filename=@(Resource.from_resource_name_get_resource_filename ("assembling_machine_1"))
+              position=@(new Position (s * 6, s * (this.recipe.get_component_count () - 1), s, s))
+              text_middle_right="^"
+              action=@(() => Game_Action.upgrade_tool (this.generator_id, "assembling_machine_1"))
+              val_authorize=@(is_action_authorized ())
+              />
+}
+
+
+@code{
+
+    protected override void OnInitialized ()
+    {
+        this.id = $"BGenerator_Header_Hand [{get_result_resource_name ()}]";
+        base.OnInitialized ();
+    }
+
+
+    public override void listener_setup ()
+    {
+        base.listener_setup ();
+        if (get_stack_tool ().resource_name == "fire")
+        {
+            listener_add ("BGenerator_Header_Hand tool", Game_Engine.self.manager_resource.from_resource_name_get_resource_stack ("furnace_stone").observable_quantity);
+        }
+        else
+        {
+            listener_add ("BGenerator_Header_Hand tool", Game_Engine.self.manager_resource.from_resource_name_get_resource_stack ("assembling_machine_1").observable_quantity);
+        }
+    }
+
+
+    public bool is_action_authorized ()
+    {
+        if (get_stack_tool ().resource_name == "fire")
+        {
+            return Game_Engine.self.manager_resource.from_resource_name_get_resource_quantity (
+                "furnace_stone") >= 1;
+        }
+        else
+        {
+            return Game_Engine.self.manager_resource.from_resource_name_get_resource_quantity (
+                "assembling_machine_1") >= 1;
+        }
+    }
+
+}

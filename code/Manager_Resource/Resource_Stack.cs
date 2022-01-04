@@ -1,5 +1,5 @@
 ﻿using System;
-using NS_Blazora_Basic;
+using NS_Idle_Factorio_Basic;
 
 namespace NS_Manager_Resource
 {

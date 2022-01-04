@@ -1,0 +1,63 @@
+﻿@inherits BGenerator_Component
+@using BlazorApp.Shared.Models
+@using NS_Manager_Resource
+@using NS_Game_Engine
+@using Pages
+@using Idle_Factorio.Script
+@using NS_Idle_Factorio_Basic
+
+@code {
+
+}
+
+@{ 
+    display_name ();
+}
+
+
+@{ 
+    string result_resource_name = get_result_resource_name ();
+    int stack_resource_quantity_max = Resource.from_resource_name_get_stack_resource_quantity_max (result_resource_name);
+   
+}
+
+
+<Cellicon picture_filename=@(Resource.from_resource_name_get_resource_filename (result_resource_name))
+            position=@(this.position)
+            action=@(() => 
+                    {
+                        //Console.WriteLine ("resource upgrade");
+                        Game_Action.action_upgrade (this.recipe);
+                    })
+            val_authorize=@(Game_Action.action_upgrade_is_ready (this.recipe))
+            text_top_right=@($"{stack_resource_quantity_max*2}")
+            text_middle_right="^"
+            text_bottom_right=@($"Lv{stack_resource_quantity_max}")
+            stack_val_current=@(get_stock_quantity (result_resource_name))
+            stack_val_max=@(get_stack_quantity_max (result_resource_name))
+            stack_val_max_coeff=@(Game_Engine.self.manager_resource.chest_size)
+            parent=this
+        />
+
+
+@code{
+
+
+
+    public override void listener_setup ()
+    {
+        base.listener_setup ();
+
+        listener_add ("BGenerator_Total_Info stock_quantity", get_stock_quantity (get_result_resource_name ()));
+        listener_add ("BGenerator_Total_Info stack_max", get_stack_quantity_max (get_result_resource_name ()));
+    }
+
+
+
+    protected override void OnInitialized ()
+    {
+        this.id = $"BGenerator_Total_Info [{this.recipe.get_first_result_resource_name ()}]";
+        base.OnInitialized ();
+    }
+
+}

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Linq;
-using NS_Blazora_Basic;
+using NS_Idle_Factorio_Basic;
 using System.Text.RegularExpressions;
 using System.Globalization;
 

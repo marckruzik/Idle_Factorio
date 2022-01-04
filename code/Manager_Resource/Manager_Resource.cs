@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using NS_Blazora_Basic;
+using NS_Idle_Factorio_Basic;
 using System.Linq;
 
 namespace NS_Manager_Resource

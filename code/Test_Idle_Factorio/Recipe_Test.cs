@@ -1,6 +1,9 @@
+using Idle_Factorio.Script;
 using NS_Manager_Resource;
 using NUnit.Framework;
 using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Test_Idle_Factorio
 {
@@ -9,10 +12,34 @@ namespace Test_Idle_Factorio
         [SetUp]
         public void Setup ()
         {
+            Resource.list_resource_name = new List<string> ()
+            {
+                "iron_ore",
+                "coal_ore",
+                "iron_plate",
+                "stone_ore",
+                "furnace_stone",
+                "iron_gear",
+                "burner_drill",
+                "transport_belt_1",
+                "copper_ore",
+                "copper_plate",
+                "copper_cable",
+                "electronic_circuit",
+                "inserter_1",
+                "assembling_machine_1",
+                "coal_ore_mine",
+                "iron_ore_mine",
+                "stone_ore_mine",
+                "copper_ore_mine",
+                "pickaxe",
+                "hand",
+                "fire"
+            };
         }
 
         [TestCase ("coal_ore")]
-        [TestCase ("wood_ore")]
+        [TestCase ("iron_ore")]
         public void when_resource_name_is_correct (string resource_name)
         {
             Assert.DoesNotThrow (() => { Resource.from_resource_name_check_resource_name (resource_name); });
@@ -43,7 +70,7 @@ namespace Test_Idle_Factorio
 
 
         [TestCase ("coal_ore")]
-        [TestCase ("wood_ore")]
+        [TestCase ("iron_ore")]
         public void when_resource_text__get_resource (string ressource_text)
         {
             Resource resource = Resource.from_resource_text_get_resource (ressource_text);
@@ -99,8 +126,8 @@ namespace Test_Idle_Factorio
         }
 
 
-        [TestCase ("coal_ore * 1 + wood_ore * 2", "coal_ore", 1, "wood_ore", 2)]
-        [TestCase ("coal_ore*1+wood_ore*2", "coal_ore", 1, "wood_ore", 2)]
+        [TestCase ("coal_ore * 1 + iron_ore * 2", "coal_ore", 1, "iron_ore", 2)]
+        [TestCase ("coal_ore*1+iron_ore*2", "coal_ore", 1, "iron_ore", 2)]
         public void when_resource_mix_text2__get_resource_mix (
             string resource_mix_text, string name1, int quantity1, string name2, int quantity2)
         {

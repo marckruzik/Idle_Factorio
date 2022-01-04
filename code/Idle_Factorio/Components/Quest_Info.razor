@@ -1,0 +1,104 @@
+﻿@inherits Game_Component
+@using BlazorApp.Shared.Models
+@using NS_Manager_Resource
+@using NS_Game_Engine.NS_Quest
+@using Pages
+@using NS_Idle_Factorio_Basic
+@using NS_Game_Engine
+
+
+@code{
+    [Parameter] public Quest quest { get; set; }
+}
+
+@{ 
+    //listener_setup ();
+    //this.quest.logical_update ();
+}
+
+
+<div style="
+    @(from_position_get_style ())
+    position: initial;
+    width:@($"{Program.cell_size*8}px");
+    padding: 16px;
+    border: 1px solid black;
+    background-color: @(get_disabled () ? "#FFF7D1" : "#DCF9CF");
+    margin-left: @($"{Program.cell_size}px");
+    ">
+
+    <div style="">
+        <div style="
+            position:relative;
+            width:@($"{Program.cell_size}px");
+            height:@($"{Program.cell_size}px");
+            display: inline-block;
+            ">
+            @{
+                int i = 0;
+                List<string> list_related_resource_name = this.quest.resource_mix_related.get_list_resource_name ();
+            }
+            @foreach (Resource_Stack resource_stack in this.quest.resource_mix_related.list_resource_stack)
+            {
+                <Cellicon picture_filename=@(Resource.from_resource_name_get_resource_filename (resource_stack.resource_name))
+                          position=@(new Position (0, i * Program.cell_size, Program.cell_size, Program.cell_size)) 
+                          text_bottom_right=@($"{resource_stack.quantity}")
+                          />
+                i++;
+            }
+        </div>
+        <div style="
+            width: 200px;
+            display: inline-block;
+            vertical-align: top;
+            margin-left: 8px;
+            ">
+            @(this.quest.message)
+        </div>
+    </div>
+    <div style="
+        margin-top: 8px;
+        ">
+        <button @onclick=unlock disabled=@(get_disabled ())
+                style="
+                width: 100%;
+                height: 32px;
+                background-color: @(get_disabled () ? "" : "#7ADD4F");
+            ">
+            Unlock
+        </button>
+    </div>
+
+
+</div>
+
+
+@code{
+    
+    public override void listener_setup ()
+    {
+        base.listener_setup ();
+        string resource_name = this.quest.resource_mix_related.get_list_resource_name ()[0];
+        listener_add ("Quest_Info", Game_Engine.self.manager_resource
+            .from_resource_name_get_resource_stack (resource_name).observable_quantity);
+    }
+
+
+    public void unlock ()
+    {
+        this.quest.state = Quest.State.unlocked;
+        Quest quest_next = Game_Engine.self.manager_quest.from_quest_get_quest_next (this.quest);
+        if (quest_next != null)
+        {
+            quest_next.state = Quest.State.started;
+        }
+        Game_Page.self.change_state ();
+    }
+
+
+    public bool get_disabled ()
+    {
+        return this.quest.state != Quest.State.finished;
+    }
+}
+

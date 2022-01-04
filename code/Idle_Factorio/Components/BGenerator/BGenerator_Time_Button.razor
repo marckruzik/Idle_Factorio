@@ -1,0 +1,182 @@
+﻿@inherits BGenerator_Component
+@using BlazorApp.Shared.Models
+@using NS_Manager_Resource
+@using NS_Game_Engine
+@using Pages
+@using Idle_Factorio.Script
+@using NS_Idle_Factorio_Basic
+
+@code {
+
+}
+
+@{ 
+    display_name ();
+}
+
+
+
+<Cellicon picture_filename=@(Resource.from_resource_name_get_resource_filename ("time"))
+            position=@(this.position)
+            action=time_action
+            val_authorize=@(is_time_action_ready ())
+            text_bottom_right=@(get_recipe_time_str ())
+            text_top_right=@(get_onoff_str ())
+            background_color_authorized=@(get_background_color_authorized ())
+            />
+
+
+@{ auto_craft (); }
+
+
+@code{
+
+
+
+    public override void listener_setup ()
+    {
+        base.listener_setup ();
+
+        listener_add ("BGenerator_Time_Button tool", get_stack_tool ().observable_quantity);
+        listener_add ("BGenerator_Time_Button stock_quantity", get_stock_quantity (get_result_resource_name ()));
+        listener_add ("BGenerator_Time_Button stock_max", get_stack_quantity_max (get_result_resource_name ()));
+        
+        listener_add (() => Game_Action.from_recipe_get_job_time_percentage (this.recipe) != 0);
+        listener_add ("BGenerator_Time_Button auto_on", this.generator.auto_on_current);
+
+        foreach (string resource_name in this.recipe.mix_component.get_list_resource_name ())
+        {
+            listener_add ($"BGenerator_Time_Button loc_quantity {resource_name}", get_loc_quantity (resource_name));
+        }
+
+    }
+
+
+
+    protected override void OnInitialized()
+    {
+        this.id = $"BGenerator_Time_Button [{this.recipe.get_first_result_resource_name ()}]";
+        base.OnInitialized ();
+    }
+
+
+
+    public override void graphical_update ()
+    {
+        base.graphical_update ();
+    }
+
+    public void auto_craft ()
+    {
+        if (is_auto_available () == true)
+        {
+            if (Game_Action.from_recipe_get_job (this.recipe) == null)
+            {
+                if (get_onoff_str () == "on")
+                {
+                    if (Game_Action.from_recipe_is_craft_ready (this.recipe) == true)
+                    {
+                        Game_Action.from_recipe_craft (this.recipe);
+                    }
+                }
+            }
+        }
+    }
+
+
+    public string get_recipe_time_str ()
+    {
+        int dividor = 60;
+        if (this.recipe.time % dividor == 0)
+        {
+            return $"{this.recipe.time / dividor}";
+        }
+        else
+        {
+            float divided = ((float)this.recipe.time) / dividor;
+            divided = (float)Math.Round (divided, 1);
+            return $"{divided}";
+        }
+    }
+
+
+    public bool is_auto_available ()
+    {
+        return get_stack_tool ().resource_name == "furnace_stone" ||
+            get_stack_tool ().resource_name == "burner_drill" ||
+            get_stack_tool ().resource_name == "assembling_machine_1";
+    }
+
+
+    public string get_onoff_str ()
+    {
+        if (is_auto_available () == false)
+        {
+            return "";
+        }
+        else
+        {
+            if (this.generator.auto_on_current == true)
+            {
+                return "on";
+            }
+            else
+            {
+                return "off";
+            }
+        }
+    }
+
+
+    public string get_background_color_authorized ()
+    {
+        string authorized_auto = Game_Component.color_light_green;
+        string authorized_auto_impossible = Game_Component.color_light_orange;
+        string authorized_nonauto = Game_Component.color_light_blue;
+
+        if (is_auto_available () == false)
+        {
+            return authorized_nonauto;
+        }
+        if (get_onoff_str () == "off")
+        {
+            return authorized_nonauto;
+        }
+
+        if (Game_Action.from_recipe_get_job (this.recipe) == null &&
+            Game_Action.from_recipe_is_craft_ready (this.recipe) == false)
+        {
+            return authorized_auto_impossible;    
+        }
+
+        return authorized_auto;
+    }
+
+
+
+
+    public void time_action ()
+    {
+        if (is_auto_available () == false)
+        {
+            Game_Action.from_recipe_craft (this.recipe);
+        }
+        else
+        {
+            this.generator.auto_on_current.Set (!this.generator.auto_on_current);
+        }
+    }
+
+
+    public bool is_time_action_ready ()
+    {
+        if (is_auto_available () == false)
+        {
+            return Game_Action.from_recipe_is_craft_ready (this.recipe);
+        }
+        else
+        {
+            return true;
+        }
+    }
+}

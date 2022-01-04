@@ -6,7 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Blazora_Basic\Blazora_Basic.csproj" />
+    <ProjectReference Include="..\Idle_Factorio_Basic\Idle_Factorio_Basic.csproj" />
   </ItemGroup>
 
 </Project>

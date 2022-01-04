@@ -1,0 +1,63 @@
+﻿@inherits BGenerator_Component
+@using BlazorApp.Shared.Models
+@using NS_Manager_Resource
+@using NS_Game_Engine
+@using Pages
+@using Idle_Factorio.Script
+@using NS_Idle_Factorio_Basic
+
+
+
+@code{
+
+    [Parameter] public string main_resource_name { get; set; }
+    [Parameter] public string secondary_resource_name { get; set; }
+
+}
+
+
+
+
+
+@code{
+
+
+    public override void listener_setup ()
+    {
+        base.listener_setup ();
+        string complex_resource_name = get_complex_resource_name ();
+        listener_add ($"BGenerator_{complex_resource_name}",
+            get_stack_tool (complex_resource_name).observable_quantity);
+    }
+
+
+    protected override void OnInitialized ()
+    {
+        this.id = $"BGenerator_Accessory [{get_complex_resource_name ()}]";
+        base.OnInitialized ();
+    }
+
+
+
+
+
+    public string get_complex_resource_name ()
+    {
+        return Resource.from_resource_name_get_complex_resource_name (
+            this.main_resource_name, this.secondary_resource_name);
+    }
+
+
+    public virtual void increment ()
+    {
+        Manager_Resource.resource_transfer (
+            Game_Engine.self.manager_resource,
+            this.generator.manager_resource_tool,
+            this.main_resource_name,
+            get_complex_resource_name (),
+            1);
+    }
+
+
+
+}

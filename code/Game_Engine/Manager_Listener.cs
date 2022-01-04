@@ -1,5 +1,5 @@
 ﻿using System;
-using NS_Blazora_Basic;
+using NS_Idle_Factorio_Basic;
 using System.Collections.Generic;
 
 namespace NS_Game_Engine

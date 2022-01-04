@@ -1,0 +1,39 @@
+
+
+# Code
+run tests
+rename project
+remove unused pages
+comments
+
+# Capture
+basic interface iron ore
+basic interface iron plate
+basic interface drill
+animated gif
+interface progression
+victory panel
+
+# Azure
+Azure website name
+
+# credits Marc Kruzik
+credits sentence
+LinkedIn url Marc Kruzik
+photo Marc Kruzik
+
+
+# GitHub
+description
+animated gif
+interface progression
+
+# Google Analytics
+Property
+Snippet
+
+# Marc Kruzik site
+article
+
+# Reddit
+thread

@@ -1,0 +1,30 @@
+﻿@inherits BGenerator_Accessory
+@using BlazorApp.Shared.Models
+@using NS_Manager_Resource
+@using NS_Game_Engine
+@using Pages
+@using Idle_Factorio.Script
+@using NS_Idle_Factorio_Basic
+
+
+
+
+
+@{ 
+    display_name ();
+}
+
+
+@{ 
+    Resource_Stack stack_tool = get_stack_tool (get_complex_resource_name ());
+}
+
+
+
+<Cellicon picture_filename=@(Resource.from_resource_name_get_resource_filename (this.main_resource_name))
+            position=@(this.position)
+            action=@(() => increment ())
+            text_bottom_right=@($"{stack_tool.quantity}")
+            />
+
+
