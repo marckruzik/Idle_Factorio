@@ -32,31 +32,42 @@
 <FPS_Counter />
 
 
-<div class="noselect">
+<div>
 
 <h3>Idle Factorio</h3>
     
     <p>
-        Welcome to Idle Factorio! This is a fangame inspired by the factory management video game <href="http://www.factorio.com" target="_blank">Factorio</href>.
+        Welcome to Idle Factorio! This is a fangame inspired by the factory management video game <a href="http://www.factorio.com" target="_blank">Factorio</a>.
         <br />
-        Idle Factorio is a game made by Marc Kruzik. You can get the source code on GitHub.
         <br />
         How to play:
         <ul>
-            <li>Get resources by clicking on the clock symbol (you can click on several clocks at the same time).</li>            
-            <li>Transfer resources on a fire camp or assembly to fuse resources together.</li>
-            <li>Use drills to automate ore mining, furnaces to automate smelting, and assembly machines to automate assembly.</li>
-            <li>Use Transport Belts to automate resource transfer.</li>
-            <li>Use Inserters to transfer more resources with each click and each Transport Belt.</li>
-            <li>Choose wisely when to spend resources to create tools, and when to spare them for later!</li>
+            <li>Get resources by clicking on the <img class="smicon" src="images/time.png"> clock symbol (you can click on several <img class="smicon" src="images/time.png"> clocks at the same time).</li>            
+            <li>Transfer <img class="smicon" src="images/iron_ore.png"> <img class="smicon" src="images/coal_ore.png"> resources on a <img class="smicon" src="images/fire.png"> fire camp or <img class="smicon" src="images/hand.png"> hand assembling to fuse resources together.</li>
+            <li>Use <img class="smicon" src="images/burner_drill.png"> drills to automate <img class="smicon" src="images/iron_ore_mine.png"> ore mining, <img class="smicon" src="images/furnace_stone.png"> furnaces to automate <img class="smicon" src="images/fire.png"> smelting, and <img class="smicon" src="images/assembling_machine_1.png"> assembling machines to automate <img class="smicon" src="images/hand.png"> hand assembling.</li>
+            <li>Use <img class="smicon" src="images/transport_belt_1.png"> Transport Belts to automate resource transfer.</li>
+            <li>Use <img class="smicon" src="images/inserter_1.png"> Inserters to transfer more resources with each click and each Transport Belt.</li>
+            <li>Choose wisely when to spend resources to create tools, and when to spare resources for later!</li>
             <li>(the game has currently no save system, so you should avoid to close the tab)</li>
         </ul>
     </p>
     <p>Share the game on Reddit, Facebook, Twitter, and everywhere else!</p>
+    <p>
+        Idle Factorio is a game made by 
+        <img class="smicon" src="images/marc_kruzik_2021-round-48px.png"> Marc Kruzik (
+        <img class="smicon" src="images/linkedin_logo.png"> <a href="https://www.linkedin.com/in/marckruzik" target="_blank">LinkedIn</a>, 
+        <img class="smicon" src="images/twitter_logo.png"> <a href="https://twitter.com/MarcKruzik" target="_blank">Twitter</a>,  
+        <img class="smicon" src="images/website_logo.png"> <a href="http://www.marckruzik.fr" target="_blank">Website</a>), 
+        using 100% <img class="smicon" src="images/blazor.png"> Blazor (no JavaScript, no CSS animations). 
+        You can get the source code on <img class="smicon" src="images/github_logo.png"> <a href="https://github.com/marckruzik/Idle_Factorio" target="_blank">GitHub</a>.
+    </p>
 
+    <p>Have fun!</p>
+
+    <!--
     <button @onclick=@(() => Game_Setup.quickstart ()) >Quickstart</button>
     <button @onclick=@(() => { force_end (); }) >End</button>
-
+    -->
     <br /><br />
 
 @code{
@@ -122,7 +133,7 @@
 }
 
 
-    <div style="">
+    <div class="noselect" style="">
 
         @{ 
             List<Generator> list_generator_authorized = Game_Engine.self.manager_generator.Values
