@@ -3,6 +3,12 @@
 Welcome to Idle Factorio! This is a fangame inspired by the factory management video game <a href="http://www.factorio.com" target="_blank">Factorio</a>.
 <br />
 <br />
+<img src="readme_pic/animation.gif">
+<br />
+<br />
+<a href="https://idlefactorio.azurewebsites.net">Play the game here</a>
+<br />
+<br />
 How to play:
 <ul>
 	<li>Get resources by clicking on the <img class="smicon" src="readme_pic/time.png"> clock symbol (you can click on several <img class="smicon" src="readme_pic/time.png"> clocks at the same time).</li>            
@@ -17,8 +23,8 @@ How to play:
 <p>Share the game on Reddit, Facebook, Twitter, and everywhere else!</p>
 <p>
 Idle Factorio is a game made by 
-![](readme_pic/marc_kruzik_2021-round-20px.png) Marc Kruzik
-([![](readme_pic/linkedin_logo.png) LinkedIn](https://www.linkedin.com/in/marckruzik), 
+<img class="smicon" src="readme_pic/marc_kruzik_2021-round-20px.png"> Marc Kruzik
+(<img class="smicon" src="readme_pic/linkedin_logo.png"> <a href="https://www.linkedin.com/in/marckruzik" target="_blank">LinkedIn</a>, 
 <img class="smicon" src="readme_pic/twitter_logo.png"> <a href="https://twitter.com/MarcKruzik" target="_blank">Twitter</a>,  
 <img class="smicon" src="readme_pic/website_logo.png"> <a href="http://www.marckruzik.fr" target="_blank">Website</a>), 
 using 100% <img class="smicon" src="readme_pic/blazor.png"> Blazor (no JavaScript, no CSS animations). 
